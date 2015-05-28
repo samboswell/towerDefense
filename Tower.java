@@ -1,16 +1,17 @@
 public class Tower {
-    int[] range; // [minX, maxX, minY, maxY] 
-    int damage;
-    int cost;
-    int speed;
-    int xCoordinate;
-    int yCoordinate;
-    public Tower(int[] range, int damage, int cost, int speed, int xCoordinate,
-                 int yCoordinate) {
-        this.range = range;
-        this.damage = damage;
-        this.cost = cost;
-        this.speed = speed;
+    
+    private int[] range;
+    private int damage;
+    private int cost;
+    private int speed;
+    private int xCoordinate;
+    private int yCoordinate;
+    
+    public Tower(int xCoordinate, int yCoordinate) {
+        this.range = new int[]{1,3,1,3}; // [minX, maxX, minY, maxY]
+        this.damage = 20;
+        this.cost = 12;
+        this.speed = 10;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
     }
@@ -44,9 +45,8 @@ public class Tower {
     
     // just for testing ###############################################
     public static void main(String[] args) {
-        int[] a = {1,2,1,2};
-        Tower t = new Tower(a,5,10,5,0,0);
+        Tower t = new Tower(0,0);
         System.out.println(t.getCost());
-        System.out.println(t.getRange());
+        System.out.println(t.getX());
     }
 }
