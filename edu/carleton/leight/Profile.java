@@ -22,7 +22,9 @@ public class Profile {
 
     public int getGold() {return this.gold;}
 
-    public int getHighScore() {return this.highScore;}
+    public int getHighScore() {
+        int userHighScore = this.highScore;
+        return this.highScore;}
 
     public boolean canPlaceTower() {return this.canBePlaced;}
 
@@ -32,5 +34,15 @@ public class Profile {
         //Subtracts money from the player's total gold amount, and places a tower in the chosen spot.
     }
 
+    // just for testing ###############################################
+    public static void main(String[] args) {
+        Tower[] towerList = new Tower[1];
+        Profile p = new Profile(2,200,14203,true,towerList);
+        System.out.println(p.getLives());
+        System.out.println(p.getGold());
+        System.out.println(p.getHighScore());
+        System.out.println(p.canPlaceTower());
+        System.out.println(p.getUserTowers());
+    }
 
 }
