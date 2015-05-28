@@ -1,3 +1,6 @@
+package edu.carleton.leight;
+
+
 public class Enemy {
     
     private boolean isFinished;

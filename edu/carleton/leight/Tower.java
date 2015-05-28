@@ -1,3 +1,6 @@
+package edu.carleton.leight;
+
+
 public class Tower {
     
     private int[] range;
