@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="play" layoutX="102.0" layoutY="172.0" mnemonicParsing="false" text="Play">
+         <font>
+            <Font name="Ayuthaya" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="102.0" layoutY="261.0" mnemonicParsing="false" text="About">
+         <font>
+            <Font name="Ayuthaya" size="13.0" />
+         </font>
+      </Button>
+      <TextField layoutX="50.0" layoutY="14.0" prefHeight="56.0" prefWidth="500.0" text="Circle Defend'r">
+         <font>
+            <Font name="Ayuthaya" size="50.0" />
+         </font>
+      </TextField>
+      <Circle fill="#cd1b1b" layoutX="356.0" layoutY="236.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+   </children>
+</Pane>
