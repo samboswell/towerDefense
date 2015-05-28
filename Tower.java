@@ -47,5 +47,6 @@ public class Tower {
         int[] a = {1,2,1,2};
         Tower t = new Tower(a,5,10,5,0,0);
         System.out.println(t.getCost());
+        System.out.println(t.getRange());
     }
 }
