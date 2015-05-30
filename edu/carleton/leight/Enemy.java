@@ -37,7 +37,11 @@ public class Enemy {
     public int getY() {
         return this.yCoordinate;
     }
-    
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     // just for testing ###############################################
     public static void main(String[] args) {
         Enemy e = new Enemy(false,100,5,10,0,0);

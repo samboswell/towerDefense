@@ -1,27 +1,55 @@
 package edu.carleton.leight;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-
-    private int gold;
+    private Profile profile;
     private List<Enemy> enemies;
 
-    public GameManager( int gold, int numEnemies) {
-        this.gold = gold;
-        this.enemies = enemies;
+    public GameManager() {
+        profile = new Profile(10, 20);
+        mainLoop();
+    }
+    public void upgrade(Tower tower) {}
+    public void attackEnemy(Tower tower, Enemy enemy) {
+        enemy.setHealth(tower.getDamage());
     }
 
-    public void upgrade(Tower tower) {}
-    public void attackEnemy(Enemy enemy) {}
+    public void attackEnemies() {
+        List<Tower> userTowers = this.profile.getUserTowers();
+        for (Tower tower : userTowers) {
+            List<Enemy> enemiesInRange = getEnemiesInRange();
+            for (Enemy enemy : enemiesInRange) {
+                attackEnemy(tower, enemy);
+            }
+        }
+    }
+
     // public List<Enemy> getEnemiesInRange(Tower tower) {
     // enemies = getCurrentEnemies();
     // enemiesInRange = reduce to only enemies in range.
     // return this.enemiesInRange;
     // }
-    public int deadEnemy(Enemy enemy) {return this.gold;}
+    public void deadEnemy(Enemy enemy) {}
     public void sellTower() {}
-    public void placeTower(Tower tower, int xCoordinate, int yCoordinate) {}
-    public List<Enemy> getCurrentEnemies() {return this.enemies;}
+    public List<Enemy> getCurrentEnemies() {
+        return this.enemies;
+    }
+    public List<Enemy> getEnemiesInRange() {
+
+
+        List<Enemy> enemiesInRange = new ArrayList<>();
+        //###########################
+        //should check if enemies are in correct squares and return a list of
+        //enemies that are in the correct squares.
+        return enemiesInRange;
+    }
+    public void mainLoop() {
+//        while (true) {
+//            attackEnemy();
+//            updateEnemyPositions();
+//        }
+    }
 }

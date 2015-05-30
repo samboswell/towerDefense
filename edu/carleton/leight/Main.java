@@ -4,28 +4,41 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.security.acl.Group;
+
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
-        Parent root = (Parent)loader.load();
-        //I tried adding a button to root afterwards, and it didn't work.
-        //We might need to do that in scene-builder
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+        Parent root = (Parent) loader.load();
 
-        GameScreen gameScreen = createDefaultGameScreen();
-        //
+
+
+//        Button btn1 = new Button();
+//        btn1.setText("build tower");
+//        btn1.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                System.out.println("Hello World!");
+//            }
+//        });
+
 
         primaryStage.setTitle("Circle Defend'r");
         primaryStage.setScene(new Scene(root, 700, 500));
+//        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

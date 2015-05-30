@@ -1,21 +1,20 @@
 package edu.carleton.leight;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Profile {
 
     private int lives;
     private int gold;
     private int highScore;
-    private boolean canBePlaced;
-    private Tower[] userTowers;
+    private List<Tower> userTowers;
 
-    public Profile(int lives, int gold, int highScore, boolean canBePlaced,
-                   Tower[] userTowers) {
+    public Profile(int lives, int gold) {
         this.lives = lives;
         this.gold = gold;
-        this.highScore = highScore;
-        this.canBePlaced = canBePlaced;
-        this.userTowers = userTowers;
+        this.highScore = 0;
+        this.userTowers = new ArrayList<>();
     }
 
     public int getLives() {return this.lives;}
@@ -26,22 +25,29 @@ public class Profile {
         int userHighScore = this.highScore;
         return this.highScore;}
 
-    public boolean canPlaceTower() {return this.canBePlaced;}
-
-    public Tower[] getUserTowers() {return this.userTowers;}
+    public List<Tower> getUserTowers() {return this.userTowers;}
 
     public void buyTower(){
-        //Subtracts money from the player's total gold amount, and places a tower in the chosen spot.
+        //########################################
+        //get x and y coordinates from user input in javaFX
+        int x = 0;
+        int y = 0;
+        Tower tower = new Tower(x,y);
+
+        int towerCost = tower.getCost();
+        this.userTowers.add(tower);
+        this.gold -= towerCost;
+
     }
+
 
     // just for testing ###############################################
     public static void main(String[] args) {
         Tower[] towerList = new Tower[1];
-        Profile p = new Profile(2,200,14203,true,towerList);
+        Profile p = new Profile(2,200);
         System.out.println(p.getLives());
         System.out.println(p.getGold());
         System.out.println(p.getHighScore());
-        System.out.println(p.canPlaceTower());
         System.out.println(p.getUserTowers());
     }
 
