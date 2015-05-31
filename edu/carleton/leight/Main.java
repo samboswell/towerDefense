@@ -1,24 +1,14 @@
 package edu.carleton.leight;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
+import javafx.animation.PathTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-
+import javafx.util.Duration;
+import javafx.scene.Group;
 
 
 
@@ -29,48 +19,48 @@ public class Main extends Application {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent root = (Parent) loader.load();
 //
-        AnchorPane root = new AnchorPane();
-
-
-//        Button btn1 = new Button();
-//        btn1.setText("build tower");
-//        btn1.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                System.out.println("Hello World!");
-//            }
-//        });
-
-        Circle c1 = new Circle(10.0);
-
-        double x = 10.0;
-        double y = 10.0;
-
-
-        c1.setCenterX(x + 1);
-        c1.setCenterY(y + 1);
-
-
-        root.getChildren().add(c1);
-
-
-
-
-
-//        while (x < 100 && y < 100) {
-//            btn1.setLayoutX(x + 1);
-//            btn1.setLayoutY(y + 1);
-//            btn1.setCenterX();
-//
-//        }
+        Group root = new Group();
+        Scene scene = new Scene(root, 700, 500);
         primaryStage.setTitle("Circle Defend'r");
-        primaryStage.setScene(new Scene(root, 700, 500));
+        primaryStage.setScene(scene);
         primaryStage.show();
+        animate(root);
+
+    }
+
+    private void animate(Group group) {
+        for (int delay = 0; delay < 5; delay++ ) {
+            Circle circle = new Circle(300, 550, 15);
+            circle.setFill(Color.RED);
+            Path path = getPath();
+            group.getChildren().add(path);
+            group.getChildren().add(circle);
+            PathTransition transition = getPathTransition(circle, path, delay);
+            transition.play();
+        }
+    }
 
 
+    //thanks to the following guide on how to use path transitions:
+    // http://www.javaworld.com/article/2074529/core-java/javafx-2-animation--path-transitions.html
+    private PathTransition getPathTransition(Shape shape, Path path, int delay) {
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setNode(shape);
+        pathTransition.setPath(path);
+        pathTransition.setDuration(Duration.seconds(10.0));
+        pathTransition.setDelay(Duration.seconds(delay));
+//        pathTransition.setCycleCount(Timeline.INDEFINITE);
+        return pathTransition;
+    }
 
-//        primaryStage.setResizable(false);
-
+    private Path getPath() {
+        final Path path = new Path();
+        path.getElements().add(new MoveTo(300, 550));
+        path.getElements().add(new LineTo(300, 240));
+        path.getElements().add(new LineTo(220, 240));
+        path.getElements().add(new LineTo(220, -50));
+        path.setOpacity(0.0); // comment this out if you want to show the path
+        return path;
     }
 
     public GameScreen createDefaultGameScreen() {
