@@ -1,5 +1,6 @@
 package edu.carleton.leight;
 
+import java.util.List;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
@@ -14,27 +15,42 @@ import javafx.scene.Group;
 
 public class Main extends Application {
 
+    private GameManager gameManager;
+
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent root = (Parent) loader.load();
-//
+
+        this.gameManager = new GameManager();
+
         Group root = new Group();
         Scene scene = new Scene(root, 700, 500);
         primaryStage.setTitle("Circle Defend'r");
         primaryStage.setScene(scene);
         primaryStage.show();
-        animate(root);
+        buildTower(root);
+        animateEnemies(root);
+
+        //we need to somehow get a main
 
     }
 
-    private void animate(Group group) {
+    private void buildTower(Group group) {
+        Rectangle rectangle = new Rectangle(250, 200, 15, 15);
+        group.getChildren().add(rectangle);
+    }
+
+    private void animateEnemies(Group group) {
         for (int delay = 0; delay < 5; delay++ ) {
-            Circle circle = new Circle(300, 550, 15);
-            circle.setFill(Color.RED);
-            Path path = getPath();
-            group.getChildren().add(path);
+            Circle circle = new Circle(300, 550, 15, Color.RED);
             group.getChildren().add(circle);
+            this.gameManager.addEnemy(new Enemy(false,100,5,10,0,0));
+
+            Path path = getEnemyPath();
+            group.getChildren().add(path);
+
             PathTransition transition = getPathTransition(circle, path, delay);
             transition.play();
         }
@@ -53,8 +69,8 @@ public class Main extends Application {
         return pathTransition;
     }
 
-    private Path getPath() {
-        final Path path = new Path();
+    private Path getEnemyPath() {
+        Path path = new Path();
         path.getElements().add(new MoveTo(300, 550));
         path.getElements().add(new LineTo(300, 240));
         path.getElements().add(new LineTo(220, 240));

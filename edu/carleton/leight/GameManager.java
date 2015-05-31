@@ -9,7 +9,8 @@ public class GameManager {
     private List<Enemy> enemies;
 
     public GameManager() {
-        profile = new Profile(10, 20);
+        this.profile = new Profile(10, 20);
+        this.enemies = new ArrayList();
         mainLoop();
     }
     public void upgrade(Tower tower) {}
@@ -46,6 +47,11 @@ public class GameManager {
         //enemies that are in the correct squares.
         return enemiesInRange;
     }
+
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
     public void mainLoop() {
 //        while (true) {
 //            attackEnemy();
