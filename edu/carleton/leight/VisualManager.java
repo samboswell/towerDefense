@@ -51,8 +51,9 @@ public class VisualManager implements EventHandler<KeyEvent> {
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
     private void updateAnimation() {
-        
+
         removingEnemies();
+
     }
 
     public void removingEnemies(){
@@ -63,11 +64,14 @@ public class VisualManager implements EventHandler<KeyEvent> {
 
             if(enemy.isFinished()){
                 gameManager.removeEnemyIfFinished();
+                int playerLives = Profile.getLives();
                 Profile().lives--;
-                this.livesLabel.setText(String.format("Lives: %d", this.lives));
+                this.livesLabel.setText(String.format("Lives: %d", Profile.getLives()));
             }
         }
     }
+
+
 
     @Override
     public void handle(KeyEvent keyEvent) {

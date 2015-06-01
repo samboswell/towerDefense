@@ -42,9 +42,9 @@ public class Main extends Application {
 
     private void animateEnemies(Group group) {
         for (int delay = 0; delay < 5; delay++ ) {
-            Circle circle = new Circle(300, 550, 15, Color.RED);
+            Circle circle = new Circle(300,550,15,Color.RED);
             group.getChildren().add(circle);
-            this.gameManager.addEnemy(new Enemy(false,100,5,10,0,0));
+            this.gameManager.addEnemy(new Enemy(false,100,5,10,0,0,Color.RED));
 
             Path path = getEnemyPath();
             group.getChildren().add(path);
