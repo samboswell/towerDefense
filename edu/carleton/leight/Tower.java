@@ -1,7 +1,7 @@
 package edu.carleton.leight;
 
 
-public class Tower {
+public class Tower extends Sprite {
     
     private int[] range;
     private int damage;
@@ -10,13 +10,13 @@ public class Tower {
     private int xCoordinate;
     private int yCoordinate;
     
-    public Tower(int xCoordinate, int yCoordinate) {
+    public Tower() {
         this.range = new int[]{1,3,1,3}; // [minX, maxX, minY, maxY]
         this.damage = 20;
         this.cost = 12;
         this.speed = 10;
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+//        this.xCoordinate = xCoordinate;
+//        this.yCoordinate = yCoordinate;
     }
     public int[] getRange() {
         return this.range;
@@ -30,12 +30,8 @@ public class Tower {
     public int getSpeed() {
         return this.speed;
     }
-    public int getX() {
-        return this.xCoordinate;
-    }
-    public int getY() {
-        return this.yCoordinate;
-    }
+//    public int getX() {return this.xCoordinate;}
+//    public int getY() {return this.yCoordinate;}
     public String getStats() {
         //this is probably incomplete ######################################
         int coveredRange = range[1]*range[3] - range[0]*range[2];
@@ -48,7 +44,7 @@ public class Tower {
     
     // just for testing ###############################################
     public static void main(String[] args) {
-        Tower t = new Tower(0,0);
+        Tower t = new Tower();
         System.out.println(t.getCost());
         System.out.println(t.getX());
     }
