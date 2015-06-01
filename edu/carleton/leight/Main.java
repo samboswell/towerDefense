@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Timer;
