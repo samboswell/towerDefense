@@ -1,22 +1,19 @@
 package edu.carleton.leight;
 
-import java.util.List;
-
 import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
 
 
 
 public class Main extends Application {
 
     private GameManager gameManager;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -36,6 +33,7 @@ public class Main extends Application {
         //we need to somehow get a main
 
     }
+
 
     private void buildTower(Group group) {
         Rectangle rectangle = new Rectangle(250, 200, 15, 15);

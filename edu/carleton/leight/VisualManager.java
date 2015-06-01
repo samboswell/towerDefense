@@ -10,7 +10,7 @@ import javafx.scene.input.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VisualController implements EventHandler<KeyEvent> {
+public class VisualManager implements EventHandler<KeyEvent> {
     private GameManager gameManager;
     private int score;
     private boolean paused;
@@ -23,7 +23,8 @@ public class VisualController implements EventHandler<KeyEvent> {
     private Button livesLabel;
 
 
-    public Controller() {
+    public VisualManager() {
+        this.gameManager = new GameManager();
         this.paused = false;
         this.score = 0;
     }
@@ -49,15 +50,22 @@ public class VisualController implements EventHandler<KeyEvent> {
         this.timer = new java.util.Timer();
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
+    private void updateAnimation() {
+        
+        removingEnemies();
+    }
 
-    private void updateAnimation(){
-        for Enemy enemy : gameManager.enem
+    public void removingEnemies(){
+        for(Enemy enemy : gameManager.getCurrentEnemies()) {
 
 
-        if enemy.isFinished() {
-            gameManager.removeEnemyIfFinished();
-            Profile().lives --;
-            this.livesLabel.setText(String.format("Lives: %d", this.lives));
+
+
+            if(enemy.isFinished()){
+                gameManager.removeEnemyIfFinished();
+                Profile().lives--;
+                this.livesLabel.setText(String.format("Lives: %d", this.lives));
+            }
         }
     }
 

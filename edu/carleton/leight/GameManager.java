@@ -48,6 +48,16 @@ public class GameManager {
         return enemiesInRange;
     }
 
+    //Iterates through enemies to find an enemy from the list of enemies
+    // that is finished, then removes it from the list.
+    public void removeEnemyIfFinished() {
+        for(Enemy enemy : enemies) {
+            if (enemy.isFinished()) {
+                enemies.remove(enemies.indexOf(enemy));
+            }
+        }
+    }
+
     public void addEnemy(Enemy enemy) {
         enemies.add(enemy);
     }
