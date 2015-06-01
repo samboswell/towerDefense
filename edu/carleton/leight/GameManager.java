@@ -26,18 +26,10 @@ public class GameManager {
     private Profile profile;
     private List<Enemy> enemies;
 
-
-    /// DELETE THIS ###############################
-    private Rectangle rect ;
-    ///###############################
-
     public GameManager() {
         this.profile = new Profile(10, 20);
         this.enemies = new ArrayList();
 
-        /// DELETE THIS ###############################
-        rect = new Rectangle(100,100);
-        ///###############################
     }
     public void upgrade(Tower tower) {}
     public void attackEnemy(Tower tower, Enemy enemy) {
@@ -61,9 +53,6 @@ public class GameManager {
     // }
     public void deadEnemy(Enemy enemy) {}
     public void sellTower() {}
-    public List<Enemy> getCurrentEnemies() {
-        return this.enemies;
-    }
     public List<Enemy> getEnemiesInRange() {
 
 
@@ -86,28 +75,5 @@ public class GameManager {
 
     public void addEnemy(Enemy enemy) {
         enemies.add(enemy);
-    }
-
-    private void setUpAnimationTimer() {
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        updateAnimation();
-                    }
-                });
-            }
-        };
-
-        final long startTimeInMilliseconds = 0;
-        final long repetitionPeriodInMilliseconds = 100;
-        long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
-        this.timer = new java.util.Timer();
-        this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
-    }
-
-    private void updateAnimation() {
-
-        this.rect.setX(this.rect.getX() + 1.0);
     }
 }

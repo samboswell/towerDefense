@@ -1,6 +1,7 @@
 package edu.carleton.leight;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class Enemy {
     
@@ -8,21 +9,21 @@ public class Enemy {
     private int health;
     private int speed;
     private int value;
-    private int xCoordinate;
-    private int yCoordinate;
+    private double xCoordinate;
+    private double yCoordinate;
 
     private final int RADIUS = 10;
-    private Color color;
+    private Circle circle;
     
     public Enemy (boolean isFinished, int health, int speed, int value, 
-                     int xCoordinate, int yCoordinate,  Color color) {
+                     double xCoordinate, double yCoordinate, Circle circle) {
         this.isFinished = isFinished;
         this.health = health;
         this.speed = speed;
         this.value = value;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.color = color;
+        this.circle = circle;
     }
     public boolean isFinished() {
         return this.isFinished;
@@ -36,12 +37,22 @@ public class Enemy {
     public int getValue() {
         return this.value;
     }
-    public int getX() {
+    public double getX() {
         return this.xCoordinate;
     }
-    public int getY() {
+    public double getY() {
         return this.yCoordinate;
     }
+    public Circle getCircle() {
+        return this.circle;
+    }
+    public void setX(double xCoordinate) {
+        this.xCoordinate = xCoordinate;
+    }
+    public void setY(double yCoordinate) {
+        this.yCoordinate = yCoordinate;
+    }
+
 
     public void setHealth(int health) {
         this.health = health;
@@ -49,8 +60,5 @@ public class Enemy {
 
     // just for testing ###############################################
     public static void main(String[] args) {
-        Enemy e = new Enemy(false,100,5,10,0,0, Color.RED);
-        System.out.println(e.isFinished());
-        System.out.println(e.getHealth());
     }
 }

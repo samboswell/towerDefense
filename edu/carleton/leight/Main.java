@@ -17,19 +17,23 @@ import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.List;
+import java.time.Instant;
 
 
 public class Main extends Application {
-    final private double FRAMES_PER_SECOND = 60.0;
+    final private double FRAMES_PER_SECOND = 40.0;
 
+    long startTime;
     private Timer timer;
     private GameManager gameManager;
     private Stage primaryStage;
-    private List<Circle> enemies;
+    private List<Enemy> enemies;
+    private Group root;
 
     @FXML private Button play;
 
@@ -37,16 +41,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent root = (Parent) loader.load();
-
+        this.enemies = new ArrayList<>();
         this.gameManager = new GameManager();
         this.primaryStage = primaryStage;
-        Group root = new Group();
+        root = new Group();
         Scene scene = new Scene(root, 700, 500);
         primaryStage.setTitle("Circle Defend'r");
         primaryStage.setScene(scene);
         primaryStage.show();
-        buildTower(root);
-        createEnemies(root);
+        buildTower();
+        createEnemy();
 //        animateEnemies(root);
 
 
@@ -72,9 +76,9 @@ public class Main extends Application {
     }
 
 
-    private void buildTower(Group group) {
+    private void buildTower() {
         Rectangle rectangle = new Rectangle(250, 200, 15, 15);
-        group.getChildren().add(rectangle);
+        this.root.getChildren().add(rectangle);
     }
 
 //    private void animateEnemies(Group group) {
@@ -116,15 +120,17 @@ public class Main extends Application {
 //        return path;
 //    }
 
-    private void createEnemies(Group group) {
-        enemies = new ArrayList<>();
+    private void createEnemy() {
         Circle circle = new Circle(300,550,15,Color.RED);
-        enemies.add(circle);
-        group.getChildren().add(circle);
-        this.gameManager.addEnemy(new Enemy(false,100,5,10,0,0,Color.RED));
+        this.root.getChildren().add(circle);
+        Enemy enemy = new Enemy(false,100,5,10,300,550,circle);
+        this.enemies.add(enemy);
     }
 
     private void setUpAnimationTimer() {
+
+        this.startTime = System.nanoTime();
+
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 Platform.runLater(new Runnable() {
@@ -135,6 +141,8 @@ public class Main extends Application {
             }
         };
 
+
+
         final long startTimeInMilliseconds = 0;
         final long repetitionPeriodInMilliseconds = 100;
         long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
@@ -143,7 +151,23 @@ public class Main extends Application {
     }
 
     private void updateAnimation() {
-        for (Circle circle : enemies) {
+        final int enemyDelay = 75;
+
+        //get a time delay from start of animation
+        long delay = (System.nanoTime() - this.startTime)/10000000;
+        for (int i = 1; i < 5; i++) {
+            //delay enemy creation
+            if (delay > i*enemyDelay && delay < i*enemyDelay + 5) {
+                //we only want to create 1 enemy at a time
+                if (enemies.size() == i) {
+                    createEnemy();
+                }
+            }
+        }
+
+
+        for (Enemy enemy : enemies) {
+            Circle circle = enemy.getCircle();
             if (circle.getCenterY() > 240 ) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
@@ -153,7 +177,13 @@ public class Main extends Application {
             else if (circle.getCenterY() <= 240 && circle.getCenterX() <= 220 ) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
+            updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
         }
+    }
+
+    public void updateCoordinates(Enemy enemy, double x, double y) {
+        enemy.setX(x);
+        enemy.setY(y);
     }
 
 
