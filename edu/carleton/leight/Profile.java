@@ -28,7 +28,7 @@ public class Profile {
     public List<Tower> getUserTowers() {return this.userTowers;}
 
     public void buyTower(){
-        Tower tower = new Tower();
+        Tower tower = new Tower(0,0);
 
         int towerCost = tower.getCost();
         this.userTowers.add(tower);

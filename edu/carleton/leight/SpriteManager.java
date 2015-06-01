@@ -35,7 +35,7 @@ public class SpriteManager extends Application {
 
         this.sprites = new ArrayList<Sprite>();
 
-        Sprite tower = new Tower();
+        Sprite tower = new Tower(0,0);
         tower.setLocation(250.0, 200.0);
         root.getChildren().add(tower);
         this.sprites.add(tower);
