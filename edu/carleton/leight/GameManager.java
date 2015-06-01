@@ -236,6 +236,10 @@ public class GameManager extends Application {
         enemies.add(enemy);
     }
 
+    public List<Enemy> getEnemies() {
+        return this.enemies;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
