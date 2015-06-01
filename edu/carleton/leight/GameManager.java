@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.Group;
+import javafx.scene.input.*;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.Parent;
@@ -35,25 +36,20 @@ public class GameManager extends Application {
     private Group root;
     private Profile profile;
 
-    @FXML private Button play;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent root = (Parent) loader.load();
         this.profile = new Profile(10, 20);
-        this.enemies = new ArrayList<>();
+        this.enemies = new ArrayList();
         this.primaryStage = primaryStage;
-        root = new Group();
+        this.root = new Group();
+
         Scene scene = new Scene(root, 700, 500);
         primaryStage.setTitle("Circle Defend'r");
         primaryStage.setScene(scene);
         primaryStage.show();
         buildTower();
-        createEnemy();
-//        animateEnemies(root);
-
-
         setUpAnimationTimer();
 
 
@@ -65,6 +61,14 @@ public class GameManager extends Application {
             }
         });
 
+        Rectangle r = new Rectangle(100.0,100.0);
+        root.getChildren().add(r);
+        r.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(mouseEvent.getX()+" "+mouseEvent.getY());
+            }
+        });
 
 //        this.play.setOnAction(new EventHandler<ActionEvent>() {
 //
@@ -155,7 +159,7 @@ public class GameManager extends Application {
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-        for (int i = 1; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             //delay enemy creation
             if (delay > i*enemyDelay && delay < i*enemyDelay + 5) {
                 //we only want to create 1 enemy at a time
@@ -232,13 +236,6 @@ public class GameManager extends Application {
         }
     }
 
-    public void addEnemy(Enemy enemy) {
-        enemies.add(enemy);
-    }
-
-    public List<Enemy> getEnemies() {
-        return this.enemies;
-    }
 
     public static void main(String[] args) {
         launch(args);
