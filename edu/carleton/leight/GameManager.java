@@ -36,32 +36,19 @@ public class GameManager {
         enemy.setHealth(tower.getDamage());
     }
 
-    public void attackEnemies() {
-        List<Tower> userTowers = this.profile.getUserTowers();
-        for (Tower tower : userTowers) {
-            List<Enemy> enemiesInRange = getEnemiesInRange();
-            for (Enemy enemy : enemiesInRange) {
-                attackEnemy(tower, enemy);
-            }
-        }
-    }
+//    public void attackEnemies() {
+//        List<Tower> userTowers = this.profile.getUserTowers();
+//        for (Tower tower : userTowers) {
+//            List<Enemy> enemiesInRange = getEnemiesInRange();
+//            for (Enemy enemy : enemiesInRange) {
+//                attackEnemy(tower, enemy);
+//            }
+//        }
+//    }
 
-    // public List<Enemy> getEnemiesInRange(Tower tower) {
-    // enemies = getCurrentEnemies();
-    // enemiesInRange = reduce to only enemies in range.
-    // return this.enemiesInRange;
-    // }
     public void deadEnemy(Enemy enemy) {}
     public void sellTower() {}
-    public List<Enemy> getEnemiesInRange() {
 
-
-        List<Enemy> enemiesInRange = new ArrayList<>();
-        //###########################
-        //should check if enemies are in correct squares and return a list of
-        //enemies that are in the correct squares.
-        return enemiesInRange;
-    }
 
     //Iterates through enemies to find an enemy from the list of enemies
     // that is finished, then removes it from the list.
