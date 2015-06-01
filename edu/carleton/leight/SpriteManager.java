@@ -40,7 +40,7 @@ public class SpriteManager extends Application {
         root.getChildren().add(tower);
         this.sprites.add(tower);
 
-        Sprite enemy = new Enemy();
+//        Sprite enemy = new Enemy();
 
 
         primaryStage.setScene(scene);

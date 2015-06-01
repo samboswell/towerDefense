@@ -45,7 +45,5 @@ public class Tower extends Sprite {
     // just for testing ###############################################
     public static void main(String[] args) {
         Tower t = new Tower();
-        System.out.println(t.getCost());
-        System.out.println(t.getX());
     }
 }

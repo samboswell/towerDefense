@@ -28,11 +28,7 @@ public class Profile {
     public List<Tower> getUserTowers() {return this.userTowers;}
 
     public void buyTower(){
-        //########################################
-        //get x and y coordinates from user input in javaFX
-        int x = 0;
-        int y = 0;
-        Tower tower = new Tower(x,y);
+        Tower tower = new Tower();
 
         int towerCost = tower.getCost();
         this.userTowers.add(tower);
