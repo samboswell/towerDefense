@@ -54,8 +54,6 @@ public class Tower extends Sprite {
     }
 
      public List<Enemy> getEnemiesInRange(List<Enemy> enemiesAlive) {
-        //get tower coordinates
-        //compare enemy coordinates
          List<Enemy> enemiesInRange = new ArrayList<>();
          xCoordinate = this.getX();
          yCoordinate = this.getY();
@@ -64,8 +62,8 @@ public class Tower extends Sprite {
          double maxXRange = this.getX() + this.getRange();
          double maxYRange = this.getY() + this.getRange();
          for (Enemy enemy: enemiesAlive) {
-             if (enemy.getX() > minXRange && enemy.getX() < maxXRange &&
-                 enemy.getY() > minYRange && enemy.getY() < maxYRange) {
+             if ((enemy.getX() > minXRange && enemy.getX() < maxXRange) &&
+                 (enemy.getY() > minYRange && enemy.getY() < maxYRange)) {
                  enemiesInRange.add(enemy);
              }
          }

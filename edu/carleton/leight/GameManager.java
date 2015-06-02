@@ -72,8 +72,8 @@ public class GameManager extends Application {
         rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                int column = (int) mouseEvent.getX()/50;
-                int row = (int) mouseEvent.getY()/50;
+                int column = (int) mouseEvent.getX() / 50;
+                int row = (int) mouseEvent.getY() / 50;
                 //######################
                 //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
                 //so tower's can't be marked when built
@@ -86,13 +86,6 @@ public class GameManager extends Application {
             }
         });
 
-//        this.play.setOnAction(new EventHandler<ActionEvent>() {
-//
-//            @Override
-//            public void handle(ActionEvent event) {
-//                System.out.println("Hello World!");
-//            }
-//        });
     }
 
 
@@ -104,8 +97,8 @@ public class GameManager extends Application {
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
         ImageView towerView = new ImageView(towerImage);
-        towerView.setX(x-25);
-        towerView.setY(y-25);
+        towerView.setX(x - 25);
+        towerView.setY(y - 25);
         this.root.getChildren().add(towerView);
 
         //model
@@ -114,44 +107,6 @@ public class GameManager extends Application {
         // ##################### mark location on gamescreen
     }
 
-//    private void animateEnemies(Group group) {
-//        for (int delay = 0; delay < 5; delay++ ) {
-//
-//            enemies = new ArrayList<>();
-//            Circle circle = new Circle(300,550,15,Color.RED);
-//            enemies.add(circle);
-//            group.getChildren().add(circle);
-//            this.gameManager.addEnemy(new Enemy(false,100,5,10,0,0,Color.RED));
-//
-//            Path path = getEnemyPath();
-//            group.getChildren().add(path);
-//            PathTransition transition = getPathTransition(circle, path, delay);
-//            transition.play();
-//        }
-//    }
-
-
-//    //thanks to the following guide on how to use path transitions:
-//    // http://www.javaworld.com/article/2074529/core-java/javafx-2-animation--path-transitions.html
-//    private PathTransition getPathTransition(Shape shape, Path path, int delay) {
-//        PathTransition pathTransition = new PathTransition();
-//        pathTransition.setNode(shape);
-//        pathTransition.setPath(path);
-//        pathTransition.setDuration(Duration.seconds(10.0));
-//        pathTransition.setDelay(Duration.seconds(delay));
-////        pathTransition.setCycleCount(Timeline.INDEFINITE);
-//        return pathTransition;
-//    }
-//
-//    private Path getEnemyPath() {
-//        Path path = new Path();
-//        path.getElements().add(new MoveTo(300, 550));
-//        path.getElements().add(new LineTo(300, 240));
-//        path.getElements().add(new LineTo(220, 240));
-//        path.getElements().add(new LineTo(220, -50));
-//        path.setOpacity(0.0); // comment this out if you want to show the path
-//        return path;
-//    }
 
     private void createEnemy() {
         //view
@@ -189,8 +144,6 @@ public class GameManager extends Application {
             }
         };
 
-
-
         final long startTimeInMilliseconds = 0;
         final long repetitionPeriodInMilliseconds = 100;
         long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
@@ -221,19 +174,24 @@ public class GameManager extends Application {
             Circle circle = enemy.getCircle();
 
             //set path
-            if (circle.getCenterY() >= 250 ) {
+            if (circle.getCenterY() >= 250) {
                 circle.setCenterY(circle.getCenterY() - 2);
-            }
-            else if (circle.getCenterY() <= 250 && circle.getCenterX() >= 150) {
+            } else if (circle.getCenterY() <= 250 && circle.getCenterX() >= 150) {
                 circle.setCenterX(circle.getCenterX() - 2);
-            }
-            else if (circle.getCenterY() <= 250 && circle.getCenterX() <= 150) {
+            } else if (circle.getCenterY() <= 250 && circle.getCenterX() <= 150) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
         }
 
+        // FIX THIS ###################################
+        for (Tower tower : towers) {
+            List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+            Enemy enemy = enemiesInRange.get(1);
+            attackEnemy(tower, enemy);
+            System.out.println(enemiesInRange);
+        }
     }
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
@@ -264,6 +222,13 @@ public class GameManager extends Application {
 
     public void upgrade(Tower tower) {}
 
+    public void attackEnemy(Tower tower, Enemy enemy) {
+        List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+        if (enemiesInRange.contains(enemy)) {
+            deadEnemy(enemiesInRange.get(0));
+            removeEnemyIfFinished();
+        }
+    }
 
     public void deadEnemy(Enemy enemy) {
         // Enemy finished the path before getting killed
@@ -275,8 +240,7 @@ public class GameManager extends Application {
             profile.setGold(profile.getGold() + enemy.getGold());
             profile.setHighScore(profile.getHighScore() + enemy.getValue());
         }
-        //removeEnemy(enemy);
-        root.getChildren().remove(enemy);
+        removeEnemy(enemy);
     }
     public void sellTower() {}
 
