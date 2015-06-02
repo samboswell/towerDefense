@@ -193,7 +193,7 @@ public class GameManager extends Application {
         long delay = (System.nanoTime() - this.startTime)/10000000;
         for (int i = 0; i < 5; i++) {
             //delay enemy creation
-            if (delay > i*enemyDelay && delay < i*enemyDelay + 5) {
+            if (delay > i*enemyDelay && delay < i*enemyDelay + 15) {
                 //we only want to create 1 enemy at a time
                 if (enemies.size() == i) {
                     createEnemy();
