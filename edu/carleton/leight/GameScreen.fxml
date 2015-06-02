@@ -9,12 +9,12 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="400.0" fitWidth="495.0" pickOnBounds="true" preserveRatio="true" />
-      <Pane layoutX="559.0" prefHeight="500.0" prefWidth="100.0">
+      <Pane layoutX="500.0" prefHeight="400.0" prefWidth="100.0">
          <children>
-            <Button layoutX="8.0" layoutY="141.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="86.0" text="Buy Tower" />
+            <Button layoutX="8.0" layoutY="141.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="86.0" text="Tower" />
             <Button layoutX="20.0" layoutY="340.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Pause" />
             <Label layoutX="3.0" layoutY="14.0" text="Gold:" />
             <Label layoutX="2.0" layoutY="45.0" text="Lives:" />
@@ -25,7 +25,7 @@
             <Button layoutX="21.0" layoutY="305.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Menu" />
             <ImageView fitHeight="68.0" fitWidth="56.0" layoutX="23.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/TowerImage.png" />
+                  <Image url="@TowerImage.png" />
                </image>
             </ImageView>
          </children>
