@@ -3,7 +3,6 @@ package edu.carleton.leight;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -14,6 +13,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class GameManager extends Application {
     private Profile profile;
     private GameScreen gameScreen;
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
     //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
@@ -46,6 +49,47 @@ public class GameManager extends Application {
         this.gameScreen = new GameScreen( getDefaultGameGrid(),
                 getStats(), this.profile, this.root);
         this.gameScreen.drawPath();
+
+        //note: this rect should be created after everything
+        Rectangle rect = new Rectangle(600.0, 500.0);
+        rect.setOpacity(0.0); //hide clickable box
+        this.root.getChildren().add(rect);
+
+
+        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+                50,50,false,false);
+        ImageView towerView = new ImageView(towerImage);
+        towerView.setX(625);
+        towerView.setY(150);
+        this.root.getChildren().add(towerView);
+        Button btn = new Button();
+        btn.setText("Build Tower");
+        btn.setLayoutX(600.0);
+        btn.setLayoutY(200.0);
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        int column = (int) mouseEvent.getX() / 50;
+                        int row = (int) mouseEvent.getY() / 50;
+                        //######################
+                        //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
+                        //so towers can't be marked on gameBoard when built and
+                        //we can't set placeable to false
+                        int[][] gameGrid = getDefaultGameGrid();
+
+                        //only build if not on path
+                        if (gameGrid[row][column] == 0) {
+                            buildTower(mouseEvent.getX(), mouseEvent.getY());
+                        }
+                    }
+                });
+            }
+        });
+
+        this.root.getChildren().add(btn);
 
         Scene scene = new Scene(root, 700, 500);
         this.primaryStage.setTitle("Circle Defend'r");
@@ -62,32 +106,6 @@ public class GameManager extends Application {
             }
         });
 
-
-        //note: this rect should be created after everything
-        Rectangle rect = new Rectangle(600.0, 500.0);
-        rect.setOpacity(0.0); //hide clickable box
-        this.root.getChildren().add(rect);
-
-        boolean placeable  = true;
-        if (placeable) {
-            rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    int column = (int) mouseEvent.getX() / 50;
-                    int row = (int) mouseEvent.getY() / 50;
-                    //######################
-                    //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
-                    //so towers can't be marked on gameBoard when built and
-                    //we can't set placeable to false
-                    int[][] gameGrid = getDefaultGameGrid();
-
-                    //only build if not on path
-                    if (gameGrid[row][column] == 0) {
-                        buildTower(mouseEvent.getX(), mouseEvent.getY());
-                    }
-                }
-            });
-        }
     }
 
 
@@ -161,7 +179,7 @@ public class GameManager extends Application {
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             //delay enemy creation
             if (delay > i*enemyDelay && delay < i*enemyDelay + 15) {
                 //we only want to create 1 enemy at a time
