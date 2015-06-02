@@ -34,7 +34,7 @@ public class GameManager extends Application {
     long startTime;
     private Timer timer;
     private Stage primaryStage;
-    private List<Enemy> enemies;
+    private List<Enemy> enemiesAlive;
     private List<Tower> towers;
     private Group root;
     private Profile profile;
@@ -45,7 +45,7 @@ public class GameManager extends Application {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent root = (Parent) loader.load();
         this.profile = new Profile(10, 20);
-        this.enemies = new ArrayList();
+        this.enemiesAlive = new ArrayList();
         this.towers = new ArrayList();
         this.gameScreen = createDefaultGameScreen();
         this.primaryStage = primaryStage;
@@ -159,8 +159,20 @@ public class GameManager extends Application {
         this.root.getChildren().add(circle);
 
         //model
-        Enemy enemy = new Enemy(false,100,5,10,300,550,circle);
-        this.enemies.add(enemy);
+        Enemy enemy = new Enemy(300,550,circle);
+        this.enemiesAlive.add(enemy);
+    }
+
+    public List<Enemy> getAliveEnemies() {
+        return this.enemiesAlive;
+    }
+
+    public void addEnemy(Enemy enemy) {
+        enemiesAlive.add(enemy);
+    }
+
+    public void removeEnemy(Enemy enemy) {
+        enemiesAlive.remove(enemy);
     }
 
     private void setUpAnimationTimer() {
@@ -195,14 +207,17 @@ public class GameManager extends Application {
             //delay enemy creation
             if (delay > i*enemyDelay && delay < i*enemyDelay + 15) {
                 //we only want to create 1 enemy at a time
-                if (enemies.size() == i) {
+                if (enemiesAlive.size() == i) {
                     createEnemy();
                 }
             }
         }
+        // remove later
+        if (enemiesAlive.size() == 5) {
+            removeEnemy(enemiesAlive.get(4));
+        }
 
-
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : enemiesAlive) {
             Circle circle = enemy.getCircle();
 
             //set path
@@ -218,6 +233,7 @@ public class GameManager extends Application {
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
         }
+
     }
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
@@ -261,16 +277,28 @@ public class GameManager extends Application {
 //        }
 //    }
 
-    public void deadEnemy(Enemy enemy) {}
+    public void deadEnemy(Enemy enemy) {
+        // Enemy finished the path before getting killed
+        if (enemy.isFinished()) {
+            profile.setLives((profile.getLives() - 1));
+        }
+        // Enemy is killed, gold and points rewarded
+        else {
+            profile.setGold(profile.getGold() + enemy.getGold());
+            profile.setHighScore(profile.getHighScore() + enemy.getValue());
+        }
+        //removeEnemy(enemy);
+        root.getChildren().remove(enemy);
+    }
     public void sellTower() {}
 
 
     //Iterates through enemies to find an enemy from the list of enemies
     // that is finished, then removes it from the list.
     public void removeEnemyIfFinished() {
-        for(Enemy enemy : enemies) {
+        for(Enemy enemy : enemiesAlive) {
             if (enemy.isFinished()) {
-                enemies.remove(enemies.indexOf(enemy));
+                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
             }
         }
     }

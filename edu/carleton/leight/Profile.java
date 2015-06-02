@@ -19,11 +19,15 @@ public class Profile {
 
     public int getLives() {return this.lives;}
 
+    public void setLives(int lives) {this.lives = lives;}
+
     public int getGold() {return this.gold;}
 
-    public int getHighScore() {
-        int userHighScore = this.highScore;
-        return this.highScore;}
+    public void setGold(int gold) {this.gold = gold;}
+
+    public int getHighScore() {return this.highScore;}
+
+    public void setHighScore(int highScore) {this.highScore = highScore;}
 
     public List<Tower> getUserTowers() {return this.userTowers;}
 

@@ -47,7 +47,7 @@ public class Tower extends Sprite {
 //        return stats;
 //    }
 
-     public List<Enemy> getEnemiesInRange(List<Enemy> enemies) {
+     public List<Enemy> getEnemiesInRange(List<Enemy> enemiesAlive) {
         //get tower coordinates
         //compare enemy coordinates
          List<Enemy> enemiesInRange = new ArrayList<>();
@@ -57,7 +57,7 @@ public class Tower extends Sprite {
          double minYRange = this.getY() - this.getRange();
          double maxXRange = this.getX() + this.getRange();
          double maxYRange = this.getY() + this.getRange();
-         for (Enemy enemy: enemies) {
+         for (Enemy enemy: enemiesAlive) {
              if (enemy.getX() > minXRange && enemy.getX() < maxXRange &&
                  enemy.getY() > minYRange && enemy.getY() < maxYRange) {
                  enemiesInRange.add(enemy);
@@ -69,12 +69,8 @@ public class Tower extends Sprite {
     
     // just for testing ###############################################
     public static void main(String[] args) {
-        List<Enemy> enemies = new ArrayList<Enemy>();
-        Circle circle = new Circle(15);
-        Enemy blah = new Enemy(false,100,5,10,300,550,circle);
-        enemies.add(blah);
-        Enemy blah2 = new Enemy(false, 100,5,10,301,551,circle);
-        enemies.add(blah);
+        GameManager gameManager = new GameManager();
+        List<Enemy> enemies = gameManager.getAliveEnemies();
         Tower tower = new Tower(300,550);
         List<Enemy> enemiesRange = tower.getEnemiesInRange(enemies);
         System.out.println(enemies.size());
