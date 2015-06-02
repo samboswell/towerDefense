@@ -37,7 +37,7 @@ public class GameManager extends Application {
     public void start(Stage primaryStage) throws Exception{
     //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
     //    Parent root = (Parent) loader.load();
-        this.profile = new Profile(10, 20);
+        this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<Enemy>();
         this.towers = new ArrayList<Tower>();
         this.primaryStage = primaryStage;
