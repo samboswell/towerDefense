@@ -263,19 +263,7 @@ public class GameManager extends Application {
     }
 
     public void upgrade(Tower tower) {}
-    public void attackEnemy(Tower tower, Enemy enemy) {
-        enemy.setHealth(tower.getDamage());
-    }
 
-//    public void attackEnemies() {
-//        List<Tower> userTowers = this.profile.getUserTowers();
-//        for (Tower tower : userTowers) {
-//            List<Enemy> enemiesInRange = getEnemiesInRange();
-//            for (Enemy enemy : enemiesInRange) {
-//                attackEnemy(tower, enemy);
-//            }
-//        }
-//    }
 
     public void deadEnemy(Enemy enemy) {
         // Enemy finished the path before getting killed

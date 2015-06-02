@@ -65,6 +65,21 @@ public class Tower extends Sprite {
          }
          return enemiesInRange;
      }
+
+    public void attackEnemy(Enemy enemy) {
+
+        //enemy.setHealth(this.getDamage());
+    }
+
+//    public void attackEnemies() {
+//        List<Tower> userTowers = this.profile.getUserTowers();
+//        for (Tower tower : userTowers) {
+//            List<Enemy> enemiesInRange = getEnemiesInRange();
+//            for (Enemy enemy : enemiesInRange) {
+//                attackEnemy(tower, enemy);
+//            }
+//        }
+//    }
     
     
     // just for testing ###############################################
