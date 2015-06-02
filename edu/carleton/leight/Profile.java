@@ -23,6 +23,13 @@ public class Profile {
 
     public int getGold() {return this.gold;}
 
+    public String getStats() {
+        String stats = "Lives: " + this.lives + "\n";
+        stats += "High Score: " + this.highScore + "\n";
+        stats += "Gold: " + this.gold + "\n";
+        return stats;
+    }
+
     public void setGold(int gold) {this.gold = gold;}
 
     public int getHighScore() {return this.highScore;}

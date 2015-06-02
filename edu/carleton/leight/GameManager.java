@@ -3,6 +3,7 @@ package edu.carleton.leight;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -30,7 +31,7 @@ public class GameManager extends Application {
     private List<Tower> towers;
     private Group root;
     private Profile profile;
-    private GameScreen gameScreen;
+    private Label stats;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -39,9 +40,12 @@ public class GameManager extends Application {
         this.profile = new Profile(10, 20);
         this.enemiesAlive = new ArrayList();
         this.towers = new ArrayList();
-        this.gameScreen = createDefaultGameScreen();
         this.primaryStage = primaryStage;
         this.root = new Group();
+        this.stats = new Label(this.profile.getStats());
+
+        //note:this should be added before everything else
+        this.root.getChildren().add(stats);
 
         Scene scene = new Scene(root, 700, 500);
         primaryStage.setTitle("Circle Defend'r");
@@ -58,32 +62,39 @@ public class GameManager extends Application {
             }
         });
 
-        Rectangle rect = new Rectangle(600.0,500.0);
+
+        //note: this rect should be created after everything
+        Rectangle rect = new Rectangle(600.0, 500.0);
         rect.setOpacity(0.0); //hide clickable box
-        root.getChildren().add(rect);
-        rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int column = (int) mouseEvent.getX() / 50;
-                int row = (int) mouseEvent.getY() / 50;
-                //######################
-                //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
-                //so tower's can't be marked when built
-                GameScreen gameScreen = createDefaultGameScreen();
+        this.root.getChildren().add(rect);
 
-                //only build if not on path
-                if (gameScreen.getGrid()[row][column] != 1) {
-                    buildTower(mouseEvent.getX(), mouseEvent.getY());
+        boolean placeable  = true;
+        if (placeable) {
+            rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    int column = (int) mouseEvent.getX() / 50;
+                    int row = (int) mouseEvent.getY() / 50;
+                    //######################
+                    //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
+                    //so tower's can't be marked on gameBoard when built and
+                    //we can't set placeable to false
+                    GameScreen gameScreen = createDefaultGameScreen();
+
+                    //only build if not on path
+                    if (gameScreen.getGrid()[row][column] == 0) {
+                        buildTower(mouseEvent.getX(), mouseEvent.getY());
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 
 
-    private void buildTower(double xCoordinate, double yCoordinate) {
-        double x = xCoordinate - xCoordinate % 50;
-        double y = yCoordinate - yCoordinate % 50;
+    private void buildTower(double rawX, double rawY) {
+        //snaps tower to 50 by 50 blocks
+        double x = rawX - rawX % 50;
+        double y = rawY - rawY % 50;
 
         //view
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
@@ -96,6 +107,7 @@ public class GameManager extends Application {
         //model
         Tower tower = new Tower(x,y);
         this.towers.add(tower);
+        this.profile.setGold(this.profile.getGold()-tower.getCost());
         // ##################### mark location on gamescreen
     }
 
@@ -182,6 +194,7 @@ public class GameManager extends Application {
             }
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
+            updateStats();
 
         }
 
@@ -202,6 +215,15 @@ public class GameManager extends Application {
         enemy.setY(y);
     }
 
+    public void updateStats() {
+        this.root.getChildren().remove(this.stats);
+        String newStats = "Lives: " + this.profile.getLives() +"\n";
+        newStats += "High Score: " + this.profile.getLives() +"\n";
+        newStats += "Gold: " + this.profile.getLives();
+        this.stats = new Label(newStats);
+        this.root.getChildren().add(this.stats);
+    }
+
 
     public GameScreen createDefaultGameScreen() {
         //1 means the square is used already
@@ -219,8 +241,7 @@ public class GameManager extends Application {
         };
 
         int[] path = new int[]{1,1,1,1,1,1,1};
-        GameScreen gameScreen = new GameScreen(grid,path,"hi");
-        return gameScreen;
+        return new GameScreen(grid,path,"hi");
     }
     //Given a tower, finds the list of enemies in range and attacks the closest
     //enemy. If the enemy's health falls below 0, enemy is removed.
