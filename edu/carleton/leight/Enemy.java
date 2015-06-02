@@ -1,6 +1,5 @@
 package edu.carleton.leight;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Enemy {
@@ -13,7 +12,6 @@ public class Enemy {
     private double xCoordinate;
     private double yCoordinate;
 
-    private final int RADIUS = 10;
     private Circle circle;
     
     public Enemy (double xCoordinate, double yCoordinate, Circle circle) {
@@ -27,9 +25,12 @@ public class Enemy {
         this.circle = circle;
     }
     public boolean isFinished() {
-        // if enemy is off map, return true
-        // else, return false ****#########EDITEDITEDIT###########***********
-        return this.isFinished;
+        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
+            this.isFinished = true;
+            return true;
+        }
+        this.isFinished = false;
+        return false;
     }
     public int getHealth() {
         return this.health;
@@ -40,7 +41,6 @@ public class Enemy {
     public int getValue() {
         return this.value;
     }
-
     public int getGold() {
         return this.gold;
     }
@@ -50,21 +50,20 @@ public class Enemy {
     public double getY() {
         return this.yCoordinate;
     }
+
     public Circle getCircle() {
         return this.circle;
     }
     public void setX(double xCoordinate) {
+        if (xCoordinate < 0.0 || xCoordinate > 400) {
+        }
         this.xCoordinate = xCoordinate;
     }
     public void setY(double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    // just for testing ###############################################
-    public static void main(String[] args) {
+    public void setHealth(int health, int damage) {
+        this.health = health-damage;
     }
 }

@@ -18,7 +18,7 @@ public class Tower extends Sprite {
     private List<Projectile> projectiles;
     
     public Tower(double xCoordinate, double yCoordinate) {
-        this.range = 10.0; // [minX, maxX, minY, maxY]
+        this.range = 100.0; // [minX, maxX, minY, maxY]
         this.damage = 20;
         this.cost = 50;
         this.speed = 1.0;

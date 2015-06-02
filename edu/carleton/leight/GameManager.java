@@ -1,31 +1,23 @@
 package edu.carleton.leight;
 
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
-import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.Parent;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.List;
-import java.time.Instant;
 
 
 public class GameManager extends Application {
@@ -42,8 +34,8 @@ public class GameManager extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-//        Parent root = (Parent) loader.load();
+    //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+    //    Parent root = (Parent) loader.load();
         this.profile = new Profile(10, 20);
         this.enemiesAlive = new ArrayList();
         this.towers = new ArrayList();
@@ -122,7 +114,7 @@ public class GameManager extends Application {
         return this.enemiesAlive;
     }
 
-    public void removeEnemy(Enemy enemy) {
+    public void removeEnemyFromGame(Enemy enemy) {
         //view
         root.getChildren().remove(enemy.getCircle());
 
@@ -153,6 +145,7 @@ public class GameManager extends Application {
 
     private void updateAnimation() {
         final int enemyDelay = 75;
+        final int towerDelay = 100;
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
@@ -171,9 +164,15 @@ public class GameManager extends Application {
 //        }
 
         for (Enemy enemy : enemiesAlive) {
+            //checks to see if the enemy is finished with the path,
+            //then removes the enemy from the list.
+            if (enemy.isFinished()) {
+                howDidEnemyDie(enemy);
+            }
             Circle circle = enemy.getCircle();
 
-            //set path
+            //Sets the path for the enemies to move along. Updates coordinates
+            //after the enemy moves.
             if (circle.getCenterY() >= 250) {
                 circle.setCenterY(circle.getCenterY() - 2);
             } else if (circle.getCenterY() <= 250 && circle.getCenterX() >= 150) {
@@ -183,14 +182,18 @@ public class GameManager extends Application {
             }
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
+
         }
 
-        // FIX THIS ###################################
+        // Iterates through the list of towers to find the enemies in range
+        // for each tower. Each tower attacks the first enemy in its list.
         for (Tower tower : towers) {
             List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
-            Enemy enemy = enemiesInRange.get(1);
+            if (enemiesInRange.size()>0) {
+            Enemy enemy = enemiesInRange.get(0);
             attackEnemy(tower, enemy);
             System.out.println(enemiesInRange);
+            }
         }
     }
 
@@ -219,18 +222,21 @@ public class GameManager extends Application {
         GameScreen gameScreen = new GameScreen(grid,path,"hi");
         return gameScreen;
     }
-
-    public void upgrade(Tower tower) {}
-
+    //Given a tower, finds the list of enemies in range and attacks the closest
+    //enemy. If the enemy's health falls below 0, enemy is removed.
     public void attackEnemy(Tower tower, Enemy enemy) {
         List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
-        if (enemiesInRange.contains(enemy)) {
-            deadEnemy(enemiesInRange.get(0));
-            removeEnemyIfFinished();
-        }
-    }
+        Enemy attackedEnemy = enemiesInRange.get(0);
+        attackedEnemy.setHealth(attackedEnemy.getHealth(),tower.getDamage());
+            if(attackedEnemy.getHealth()<=0) {
+                howDidEnemyDie(attackedEnemy);
+            }
 
-    public void deadEnemy(Enemy enemy) {
+    }
+    // Given an enemy, decides whether the enemy has finished the path
+    // or if the user has killed the enemy. Punishes and rewards respectively.
+    // Then removes the enemy from the game.
+    public void howDidEnemyDie(Enemy enemy) {
         // Enemy finished the path before getting killed
         if (enemy.isFinished()) {
             profile.setLives((profile.getLives() - 1));
@@ -240,7 +246,7 @@ public class GameManager extends Application {
             profile.setGold(profile.getGold() + enemy.getGold());
             profile.setHighScore(profile.getHighScore() + enemy.getValue());
         }
-        removeEnemy(enemy);
+        removeEnemyFromGame(enemy);
     }
     public void sellTower() {}
 
@@ -250,6 +256,14 @@ public class GameManager extends Application {
     public void removeEnemyIfFinished() {
         for(Enemy enemy : enemiesAlive) {
             if (enemy.isFinished()) {
+                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
+            }
+        }
+    }
+
+    public void removeEnemyIfDead() {
+        for (Enemy enemy : enemiesAlive) {
+            if (enemy.getHealth()<= 0) {
                 enemiesAlive.remove(enemiesAlive.indexOf(enemy));
             }
         }
