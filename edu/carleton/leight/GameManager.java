@@ -31,30 +31,30 @@ public class GameManager extends Application {
     private List<Tower> towers;
     private Group root;
     private Profile profile;
-    private Label stats;
+    private GameScreen gameScreen;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
     //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
     //    Parent root = (Parent) loader.load();
         this.profile = new Profile(10, 20);
-        this.enemiesAlive = new ArrayList();
-        this.towers = new ArrayList();
+        this.enemiesAlive = new ArrayList<Enemy>();
+        this.towers = new ArrayList<Tower>();
         this.primaryStage = primaryStage;
         this.root = new Group();
-        this.stats = new Label(this.profile.getStats());
 
-        //note:this should be added before everything else
-        this.root.getChildren().add(stats);
+        this.gameScreen = new GameScreen( getDefaultGameGrid(),
+                getStats(), this.profile, this.root);
+        this.gameScreen.drawPath();
 
         Scene scene = new Scene(root, 700, 500);
-        primaryStage.setTitle("Circle Defend'r");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.primaryStage.setTitle("Circle Defend'r");
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
         setUpAnimationTimer();
 
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
                 Platform.exit();
@@ -77,12 +77,12 @@ public class GameManager extends Application {
                     int row = (int) mouseEvent.getY() / 50;
                     //######################
                     //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
-                    //so tower's can't be marked on gameBoard when built and
+                    //so towers can't be marked on gameBoard when built and
                     //we can't set placeable to false
-                    GameScreen gameScreen = createDefaultGameScreen();
+                    int[][] gameGrid = getDefaultGameGrid();
 
                     //only build if not on path
-                    if (gameScreen.getGrid()[row][column] == 0) {
+                    if (gameGrid[row][column] == 0) {
                         buildTower(mouseEvent.getX(), mouseEvent.getY());
                     }
                 }
@@ -100,25 +100,25 @@ public class GameManager extends Application {
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
         ImageView towerView = new ImageView(towerImage);
-        towerView.setX(x - 25);
-        towerView.setY(y - 25);
+        towerView.setX(x);
+        towerView.setY(y);
         this.root.getChildren().add(towerView);
 
         //model
         Tower tower = new Tower(x,y);
         this.towers.add(tower);
-        this.profile.setGold(this.profile.getGold()-tower.getCost());
-        // ##################### mark location on gamescreen
+        this.profile.setGold(this.profile.getGold() - tower.getCost());
+        // ##################### mark location on gameGrid
     }
 
 
     private void createEnemy() {
         //view
-        Circle circle = new Circle(300,550,15,Color.RED);
+        Circle circle = new Circle(325,550,15,Color.RED);
         this.root.getChildren().add(circle);
 
         //model
-        Enemy enemy = new Enemy(300,550,circle);
+        Enemy enemy = new Enemy(325,550,circle);
         this.enemiesAlive.add(enemy);
     }
 
@@ -185,16 +185,16 @@ public class GameManager extends Application {
 
             //Sets the path for the enemies to move along. Updates coordinates
             //after the enemy moves.
-            if (circle.getCenterY() >= 250) {
+            if (circle.getCenterY() >= 275) {
                 circle.setCenterY(circle.getCenterY() - 2);
-            } else if (circle.getCenterY() <= 250 && circle.getCenterX() >= 150) {
+            } else if (circle.getCenterY() <= 275 && circle.getCenterX() >= 175) {
                 circle.setCenterX(circle.getCenterX() - 2);
-            } else if (circle.getCenterY() <= 250 && circle.getCenterX() <= 150) {
+            } else if (circle.getCenterY() <= 275 && circle.getCenterX() <= 175) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
-            updateStats();
+            gameScreen.updateLabel();
 
         }
 
@@ -210,24 +210,24 @@ public class GameManager extends Application {
         }
     }
 
+
     public void updateCoordinates(Enemy enemy, double x, double y) {
         enemy.setX(x);
         enemy.setY(y);
     }
 
-    public void updateStats() {
-        this.root.getChildren().remove(this.stats);
+    public String getStats() {
         String newStats = "Lives: " + this.profile.getLives() +"\n";
         newStats += "High Score: " + this.profile.getLives() +"\n";
         newStats += "Gold: " + this.profile.getLives();
-        this.stats = new Label(newStats);
-        this.root.getChildren().add(this.stats);
+        return newStats;
     }
 
 
-    public GameScreen createDefaultGameScreen() {
-        //1 means the square is used already
-        int[][] grid = new int[][]{
+    public int[][] getDefaultGameGrid() {
+        //0 means tower placeable
+        //1 means enemy path
+        return new int[][]{
                 {0,0,0,1,0,0,0,0,0,0},
                 {0,0,0,1,0,0,0,0,0,0},
                 {0,0,0,1,0,0,0,0,0,0},
@@ -239,10 +239,8 @@ public class GameManager extends Application {
                 {0,0,0,0,0,0,1,0,0,0},
                 {0,0,0,0,0,0,1,0,0,0}
         };
-
-        int[] path = new int[]{1,1,1,1,1,1,1};
-        return new GameScreen(grid,path,"hi");
     }
+
     //Given a tower, finds the list of enemies in range and attacks the closest
     //enemy. If the enemy's health falls below 0, enemy is removed.
     public void attackEnemy(Tower tower, Enemy enemy) {
