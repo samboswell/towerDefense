@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -33,8 +35,10 @@ public class GameManager extends Application {
     private Timer timer;
     private Stage primaryStage;
     private List<Enemy> enemies;
+    private List<Tower> towers;
     private Group root;
     private Profile profile;
+    private GameScreen gameScreen;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -42,6 +46,8 @@ public class GameManager extends Application {
 //        Parent root = (Parent) loader.load();
         this.profile = new Profile(10, 20);
         this.enemies = new ArrayList();
+        this.towers = new ArrayList();
+        this.gameScreen = createDefaultGameScreen();
         this.primaryStage = primaryStage;
         this.root = new Group();
 
@@ -49,7 +55,6 @@ public class GameManager extends Application {
         primaryStage.setTitle("Circle Defend'r");
         primaryStage.setScene(scene);
         primaryStage.show();
-        buildTower();
         setUpAnimationTimer();
 
 
@@ -61,12 +66,23 @@ public class GameManager extends Application {
             }
         });
 
-        Rectangle r = new Rectangle(100.0,100.0);
-        root.getChildren().add(r);
-        r.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        Rectangle rect = new Rectangle(600.0,500.0);
+        rect.setOpacity(0.0); //hide clickable box
+        root.getChildren().add(rect);
+        rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println(mouseEvent.getX()+" "+mouseEvent.getY());
+                int column = (int) mouseEvent.getX()/50;
+                int row = (int) mouseEvent.getY()/50;
+                //######################
+                //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
+                //so tower's can't be marked when built
+                GameScreen gameScreen = createDefaultGameScreen();
+
+                //only build if not on path
+                if (gameScreen.getGrid()[row][column] != 1) {
+                    buildTower(mouseEvent.getX(), mouseEvent.getY());
+                }
             }
         });
 
@@ -80,9 +96,22 @@ public class GameManager extends Application {
     }
 
 
-    private void buildTower() {
-        Rectangle rectangle = new Rectangle(250, 200, 15, 15);
-        this.root.getChildren().add(rectangle);
+    private void buildTower(double xCoordinate, double yCoordinate) {
+        double x = xCoordinate - xCoordinate % 50;
+        double y = yCoordinate - yCoordinate % 50;
+
+        //view
+        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+                50,50,false,false);
+        ImageView towerView = new ImageView(towerImage);
+        towerView.setX(x-25);
+        towerView.setY(y-25);
+        this.root.getChildren().add(towerView);
+
+        //model
+        Tower tower = new Tower(x,y);
+        this.towers.add(tower);
+        // ##################### mark location on gamescreen
     }
 
 //    private void animateEnemies(Group group) {
@@ -125,8 +154,11 @@ public class GameManager extends Application {
 //    }
 
     private void createEnemy() {
+        //view
         Circle circle = new Circle(300,550,15,Color.RED);
         this.root.getChildren().add(circle);
+
+        //model
         Enemy enemy = new Enemy(false,100,5,10,300,550,circle);
         this.enemies.add(enemy);
     }
@@ -172,15 +204,18 @@ public class GameManager extends Application {
 
         for (Enemy enemy : enemies) {
             Circle circle = enemy.getCircle();
-            if (circle.getCenterY() > 240 ) {
+
+            //set path
+            if (circle.getCenterY() >= 250 ) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
-            else if (circle.getCenterY() <= 240 && circle.getCenterX() > 220) {
+            else if (circle.getCenterY() <= 250 && circle.getCenterX() >= 150) {
                 circle.setCenterX(circle.getCenterX() - 2);
             }
-            else if (circle.getCenterY() <= 240 && circle.getCenterX() <= 220 ) {
+            else if (circle.getCenterY() <= 250 && circle.getCenterX() <= 150) {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
+
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
         }
     }
@@ -191,21 +226,25 @@ public class GameManager extends Application {
     }
 
 
-//    public GameScreen createDefaultGameScreen() {
-//        int[][] grid = new int[][]{
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//                {0,0,0,1,0,0,0},
-//        };
-//
-//        int[] path = new int[]{1,1,1,1,1,1,1};
-//        GameScreen gameScreen = new GameScreen(grid,path,"hi");
-//        return gameScreen;
-//    }
+    public GameScreen createDefaultGameScreen() {
+        //1 means the square is used already
+        int[][] grid = new int[][]{
+                {0,0,0,1,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0},
+                {0,0,0,1,1,1,1,0,0,0},
+                {0,0,0,0,0,0,1,0,0,0},
+                {0,0,0,0,0,0,1,0,0,0},
+                {0,0,0,0,0,0,1,0,0,0},
+                {0,0,0,0,0,0,1,0,0,0}
+        };
+
+        int[] path = new int[]{1,1,1,1,1,1,1};
+        GameScreen gameScreen = new GameScreen(grid,path,"hi");
+        return gameScreen;
+    }
 
     public void upgrade(Tower tower) {}
     public void attackEnemy(Tower tower, Enemy enemy) {
