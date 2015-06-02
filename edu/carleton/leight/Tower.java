@@ -11,16 +11,16 @@ public class Tower extends Sprite {
     private double range;
     private int damage;
     private int cost;
-    private int speed;
+    private double speed;
     private double xCoordinate;
     private double yCoordinate;
     private Circle circle;
     
     public Tower(double xCoordinate, double yCoordinate) {
-        this.range = 3.0; // [minX, maxX, minY, maxY]
+        this.range = 10.0; // [minX, maxX, minY, maxY]
         this.damage = 20;
-        this.cost = 12;
-        this.speed = 10;
+        this.cost = 50;
+        this.speed = 1.0;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
     }
@@ -33,7 +33,7 @@ public class Tower extends Sprite {
     public int getCost() {
         return this.cost;
     }
-    public int getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
     public double getX() {return this.xCoordinate;}
@@ -47,6 +47,12 @@ public class Tower extends Sprite {
 //        return stats;
 //    }
 
+    public void upgrade() {
+        damage = damage + 1;
+        speed = speed + 0.1;
+        range = range + 3.0;
+        cost += 30;
+    }
      public List<Enemy> getEnemiesInRange(List<Enemy> enemiesAlive) {
         //get tower coordinates
         //compare enemy coordinates
@@ -66,21 +72,12 @@ public class Tower extends Sprite {
          return enemiesInRange;
      }
 
-    public void attackEnemy(Enemy enemy) {
+    public void attackEnemies(List<Enemy> enemiesAlive) {
+        List<Enemy> enemiesInRange = getEnemiesInRange(enemiesAlive);
 
         //enemy.setHealth(this.getDamage());
     }
 
-//    public void attackEnemies() {
-//        List<Tower> userTowers = this.profile.getUserTowers();
-//        for (Tower tower : userTowers) {
-//            List<Enemy> enemiesInRange = getEnemiesInRange();
-//            for (Enemy enemy : enemiesInRange) {
-//                attackEnemy(tower, enemy);
-//            }
-//        }
-//    }
-    
     
     // just for testing ###############################################
     public static void main(String[] args) {
