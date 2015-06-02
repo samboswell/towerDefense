@@ -15,6 +15,7 @@ public class Tower extends Sprite {
     private double xCoordinate;
     private double yCoordinate;
     private Circle circle;
+    private List<Projectile> projectiles;
     
     public Tower(double xCoordinate, double yCoordinate) {
         this.range = 10.0; // [minX, maxX, minY, maxY]
@@ -23,6 +24,7 @@ public class Tower extends Sprite {
         this.speed = 1.0;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
+        projectiles = new ArrayList<>();
     }
     public double getRange() {
         return this.range;
@@ -38,14 +40,11 @@ public class Tower extends Sprite {
     }
     public double getX() {return this.xCoordinate;}
     public double getY() {return this.yCoordinate;}
-//    public String getStats() {
-//        //this is probably incomplete ######################################
-//        int coveredRange = range[1]*range[3] - range[0]*range[2];
-//        String stats = "Covered range: "+coveredRange;
-//        stats += "Damage: " + this.damage;
-//        stats += "Attack Speed: " + this.speed;
-//        return stats;
-//    }
+    public String getStats() {
+        String stats = "Covered range: " + this.range + "Damage: "
+                        + this.damage + "Attack Speed: " + this.speed;
+        return stats;
+    }
 
     public void upgrade() {
         damage = damage + 1;
@@ -53,6 +52,7 @@ public class Tower extends Sprite {
         range = range + 3.0;
         cost += 30;
     }
+
      public List<Enemy> getEnemiesInRange(List<Enemy> enemiesAlive) {
         //get tower coordinates
         //compare enemy coordinates
@@ -74,11 +74,16 @@ public class Tower extends Sprite {
 
     public void attackEnemies(List<Enemy> enemiesAlive) {
         List<Enemy> enemiesInRange = getEnemiesInRange(enemiesAlive);
-
+        if(enemiesInRange.size()>0) {
+            makeProjectile(enemiesInRange.get(0));
+        }
         //enemy.setHealth(this.getDamage());
     }
 
-    
+    public void makeProjectile(Enemy enemy) {
+        Projectile projectile = new Projectile(enemy, xCoordinate, yCoordinate);
+        projectiles.add(projectile);
+    }
     // just for testing ###############################################
     public static void main(String[] args) {
         GameManager gameManager = new GameManager();
