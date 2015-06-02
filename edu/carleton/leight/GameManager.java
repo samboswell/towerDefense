@@ -167,11 +167,11 @@ public class GameManager extends Application {
         return this.enemiesAlive;
     }
 
-    public void addEnemy(Enemy enemy) {
-        enemiesAlive.add(enemy);
-    }
-
     public void removeEnemy(Enemy enemy) {
+        //view
+        root.getChildren().remove(enemy.getCircle());
+
+        //model
         enemiesAlive.remove(enemy);
     }
 
@@ -212,10 +212,10 @@ public class GameManager extends Application {
                 }
             }
         }
-        // remove later
-        if (enemiesAlive.size() == 5) {
-            removeEnemy(enemiesAlive.get(4));
-        }
+
+//        if (enemiesAlive.size() == 5) {
+//            removeEnemy(enemiesAlive.get(enemiesAlive.size()-1));
+//        }
 
         for (Enemy enemy : enemiesAlive) {
             Circle circle = enemy.getCircle();
