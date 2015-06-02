@@ -82,6 +82,8 @@ public class Tower extends Sprite {
         Projectile projectile = new Projectile(enemy, xCoordinate, yCoordinate);
         projectiles.add(projectile);
     }
+
+
     // just for testing ###############################################
     public static void main(String[] args) {
         GameManager gameManager = new GameManager();

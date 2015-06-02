@@ -3,7 +3,10 @@ package edu.carleton.leight;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,23 +33,21 @@ public class GameManager extends Application {
     private List<Tower> towers;
     private Group root;
     private Profile profile;
-    private GameScreen gameScreen;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-    //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-    //    Parent root = (Parent) loader.load();
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle("Circle Defend'r");
+        primaryStage.setScene(loadHomeScene());
+        primaryStage.show();
+
+
+
         this.profile = new Profile(10, 20);
         this.enemiesAlive = new ArrayList();
         this.towers = new ArrayList();
-        this.gameScreen = createDefaultGameScreen();
-        this.primaryStage = primaryStage;
         this.root = new Group();
 
-        Scene scene = new Scene(root, 700, 500);
-        primaryStage.setTitle("Circle Defend'r");
-        primaryStage.setScene(scene);
-        primaryStage.show();
         setUpAnimationTimer();
 
 
@@ -60,7 +61,7 @@ public class GameManager extends Application {
 
         Rectangle rect = new Rectangle(600.0,500.0);
         rect.setOpacity(0.0); //hide clickable box
-        root.getChildren().add(rect);
+        this.root.getChildren().add(rect);
         rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -79,6 +80,39 @@ public class GameManager extends Application {
         });
 
     }
+    public Scene loadHomeScene() {
+        Scene homeScene;
+        Parent root = null;
+
+        try {
+            FXMLLoader tmp = new FXMLLoader(getClass().getResource("fxml/home.fxml"));
+            root = tmp.load();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        homeScene = new Scene(root, 700, 500);
+        return homeScene;
+    }
+
+    public void onPlayButton(ActionEvent event) {
+        loadGameScene();
+    }
+
+    public Scene loadGameScene() {
+        Scene gameScene;
+        Parent root = null;
+
+        try {
+            FXMLLoader tmp = new FXMLLoader(getClass().getResource("fxml/GameScreen.fxml"));
+            root = tmp.load();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        gameScene = new Scene(root, 700, 500);
+        return gameScene;
+    }
 
 
     private void buildTower(double xCoordinate, double yCoordinate) {
@@ -86,7 +120,7 @@ public class GameManager extends Application {
         double y = yCoordinate - yCoordinate % 50;
 
         //view
-        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+        Image towerImage = new Image("edu/carleton/leight/images/TowerImage.png",
                 50,50,false,false);
         ImageView towerView = new ImageView(towerImage);
         towerView.setX(x - 25);
@@ -159,10 +193,6 @@ public class GameManager extends Application {
             }
         }
 
-//        if (enemiesAlive.size() == 5) {
-//            removeEnemy(enemiesAlive.get(enemiesAlive.size()-1));
-//        }
-
         for (Enemy enemy : enemiesAlive) {
             //checks to see if the enemy is finished with the path,
             //then removes the enemy from the list.
@@ -190,8 +220,7 @@ public class GameManager extends Application {
         for (Tower tower : towers) {
             List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
             if (enemiesInRange.size()>0) {
-            Enemy enemy = enemiesInRange.get(0);
-            attackEnemy(tower, enemy);
+            attackEnemy(tower);
             System.out.println(enemiesInRange);
             }
         }
@@ -224,13 +253,13 @@ public class GameManager extends Application {
     }
     //Given a tower, finds the list of enemies in range and attacks the closest
     //enemy. If the enemy's health falls below 0, enemy is removed.
-    public void attackEnemy(Tower tower, Enemy enemy) {
+    public void attackEnemy(Tower tower) {
         List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
         Enemy attackedEnemy = enemiesInRange.get(0);
         attackedEnemy.setHealth(attackedEnemy.getHealth(),tower.getDamage());
-            if(attackedEnemy.getHealth()<=0) {
-                howDidEnemyDie(attackedEnemy);
-            }
+        if(attackedEnemy.getHealth()<=0) {
+            howDidEnemyDie(attackedEnemy);
+        }
 
     }
     // Given an enemy, decides whether the enemy has finished the path
@@ -248,29 +277,10 @@ public class GameManager extends Application {
         }
         removeEnemyFromGame(enemy);
     }
-    public void sellTower() {}
 
-
-    //Iterates through enemies to find an enemy from the list of enemies
-    // that is finished, then removes it from the list.
-    public void removeEnemyIfFinished() {
-        for(Enemy enemy : enemiesAlive) {
-            if (enemy.isFinished()) {
-                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-            }
-        }
-    }
-
-    public void removeEnemyIfDead() {
-        for (Enemy enemy : enemiesAlive) {
-            if (enemy.getHealth()<= 0) {
-                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-            }
-        }
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+//
+//
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 }

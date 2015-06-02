@@ -33,11 +33,15 @@ public class Profile {
 
     public void buyTower(){
         Tower tower = new Tower(0,0);
-
         int towerCost = tower.getCost();
         this.userTowers.add(tower);
         this.gold -= towerCost;
+    }
 
+    public void sellTower(Tower tower) {
+        int soldTowerCost = tower.getCost()/2;
+        this.userTowers.remove(tower);
+        this.gold += soldTowerCost;
     }
 
 
