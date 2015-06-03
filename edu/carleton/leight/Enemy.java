@@ -20,6 +20,7 @@ public class Enemy {
         this.speed = 2;
         this.value = 20;
         this.gold = 100;
+
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.circle = circle;

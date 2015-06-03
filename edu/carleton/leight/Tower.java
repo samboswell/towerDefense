@@ -22,8 +22,10 @@ public class Tower extends Sprite {
         this.damage = 20;
         this.cost = 50;
         this.speed = 1.0;
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+
+        //set coordinates to middle of the box
+        this.xCoordinate = xCoordinate - xCoordinate%50 + 25;
+        this.yCoordinate = yCoordinate - yCoordinate%50 + 25;
         projectiles = new ArrayList<>();
     }
     public double getRange() {
