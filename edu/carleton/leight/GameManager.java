@@ -1,21 +1,31 @@
 package edu.carleton.leight;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.Cursor;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+import com.sun.javafx.tk.Toolkit.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +45,7 @@ public class GameManager extends Application {
     private Profile profile;
     private GameScreen gameScreen;
     private int[][] gameGrid;
+    private Scene scene;
 
 
     @Override
@@ -51,49 +62,12 @@ public class GameManager extends Application {
 
         this.gameScreen.drawPath(getGameGrid());
 
-
-        //note: this rect should be created after everything
-        Rectangle rect = new Rectangle(500.0, 500.0);
-        rect.setOpacity(0.0); //hide clickable box
-        this.root.getChildren().add(rect);
+        createButton();
 
 
-        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
-                50,50,false,false);
-        ImageView towerView = new ImageView(towerImage);
-        towerView.setX(625);
-        towerView.setY(150);
-        this.root.getChildren().add(towerView);
-        Button btn = new Button();
-        btn.setText("Build Tower");
-        btn.setLayoutX(600.0);
-        btn.setLayoutY(200.0);
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        int column = (int) mouseEvent.getX() / 50;
-                        int row = (int) mouseEvent.getY() / 50;
-                        //######################
-                        //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
-                        //so towers can't be marked on gameBoard when built and
-                        //we can't set placeable to false
-                        int[][] gameGrid = getGameGrid();
 
-                        //only build if not on path
-                        if (gameGrid[row][column] == 0) {
-                            buildTower(mouseEvent.getX(), mouseEvent.getY());
-                        }
-                    }
-                });
-            }
-        });
+        this.scene = new Scene(root, 700, 500);
 
-        this.root.getChildren().add(btn);
-
-        Scene scene = new Scene(root, 700, 500);
         this.primaryStage.setTitle("Circle Defend'r");
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
@@ -110,8 +84,67 @@ public class GameManager extends Application {
 
     }
 
+    public void createButton() {
+        Rectangle rect = new Rectangle(500.0, 500.0);
+        rect.setOpacity(0.0); //hide clickable box
+        this.root.getChildren().add(rect);
 
-    private void buildTower(double rawX, double rawY) {
+        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+                50,50,false,false);
+        ImageView towerView = new ImageView(towerImage);
+        towerView.setX(625);
+        towerView.setY(150);
+        this.root.getChildren().add(towerView);
+        Button btn = new Button();
+        btn.setText("Build Tower");
+        btn.setLayoutX(600.0);
+        btn.setLayoutY(200.0);
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+//                TODO: get this button to work--https://blog.idrsolutions.com/2014/05/tutorial-change-default-cursor-javafx/
+//                Task task = new Task() {
+//                    @Override
+//                    protected Integer call() throws Exception {
+//                        int iterations;
+//                        scene.setCursor(Cursor.WAIT); //Change cursor to wait style
+//                        for (iterations = 0; iterations &lt; 100000; iterations++) {
+//                            System.out.println("Iteration " + iterations);
+//                        }
+//                        scene.setCursor(Cursor.DEFAULT); //Change cursor to default style
+//                        return iterations;
+//                    }
+//                };
+//                Thread th = new Thread(task);
+//                th.setDaemon(true);
+//                th.start();
+                rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        int column = (int) mouseEvent.getX() / 50;
+                        int row = (int) mouseEvent.getY() / 50;
+                        //######################
+                        //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
+                        //so towers can't be marked on gameBoard when built and
+                        //we can't set placeable to false
+                        int[][] gameGrid = getGameGrid();
+
+                        //only build if not on path
+                        if (gameGrid[row][column] == 0) {
+                            buildTower(mouseEvent.getX(), mouseEvent.getY());
+                        }
+                    }
+                });
+                Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+                        50,50,false,false);
+                scene.setCursor(new ImageCursor(towerImage));
+            }
+        });
+        this.root.getChildren().add(btn);
+    }
+
+    public void buildTower(double rawX, double rawY) {
         //snaps tower to 50 by 50 blocks
         double x =  rawX - rawX % 50;
         double y = rawY - rawY % 50;
@@ -135,7 +168,7 @@ public class GameManager extends Application {
     }
 
 
-    private void createEnemy() {
+    public void createEnemy() {
         //view
         Circle circle = new Circle(325,550,15,Color.RED);
         this.root.getChildren().add(circle);
@@ -157,7 +190,7 @@ public class GameManager extends Application {
         enemiesAlive.remove(enemy);
     }
 
-    private void setUpAnimationTimer() {
+    public void setUpAnimationTimer() {
 
         this.startTime = System.nanoTime();
 
@@ -178,7 +211,7 @@ public class GameManager extends Application {
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 
-    private void updateAnimation() {
+    public void updateAnimation() {
         final int enemyDelay = 75;
         final int towerDelay = 100;
 
