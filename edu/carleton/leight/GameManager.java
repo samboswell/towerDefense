@@ -132,7 +132,6 @@ public class GameManager extends Application {
         int blockX = (int) x/50;
         int blockY = (int) y/50;
         this.gameGrid[blockX][blockY] = 2;
-        // TODO: mark location on gameGrid ###################
     }
 
 
