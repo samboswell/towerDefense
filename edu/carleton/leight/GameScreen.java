@@ -6,26 +6,18 @@ import javafx.scene.shape.Rectangle;
 
 public class GameScreen {
 
-    private int[][] grid;
-    private String stats;
     private Profile profile;
     private Group root;
     private Label label;
 
 
-    public GameScreen(int[][] grid, String stats, Profile profile, Group root) {
-        this.grid = grid;
-        this.stats = stats;
+    public GameScreen(Profile profile, Group root) {
         this.profile = profile;
         this.root = root;
         label = new Label();
     }
 
-
-    public int[][] getGrid() {return this.grid;}
-    public String getStats(Tower tower) {return this.stats;}
-    public void drawPath() {
-        int[][] gameGrid = this.grid;
+    public void drawPath(int[][] gameGrid) {
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
                 int currentSquare = gameGrid[y][x];

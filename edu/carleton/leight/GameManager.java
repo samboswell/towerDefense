@@ -26,7 +26,7 @@ import java.util.TimerTask;
 public class GameManager extends Application {
     final private double FRAMES_PER_SECOND = 40.0;
 
-    long startTime;
+    private long startTime;
     private Timer timer;
     private Stage primaryStage;
     private List<Enemy> enemiesAlive;
@@ -34,6 +34,7 @@ public class GameManager extends Application {
     private Group root;
     private Profile profile;
     private GameScreen gameScreen;
+    private int[][] gameGrid;
 
 
     @Override
@@ -45,13 +46,14 @@ public class GameManager extends Application {
         this.towers = new ArrayList<Tower>();
         this.primaryStage = primaryStage;
         this.root = new Group();
+        this.gameScreen = new GameScreen(this.profile, this.root);
+        this.gameGrid = getDefaultGameGrid();
 
-        this.gameScreen = new GameScreen( getDefaultGameGrid(),
-                getStats(), this.profile, this.root);
-        this.gameScreen.drawPath();
+        this.gameScreen.drawPath(getGameGrid());
+
 
         //note: this rect should be created after everything
-        Rectangle rect = new Rectangle(600.0, 500.0);
+        Rectangle rect = new Rectangle(500.0, 500.0);
         rect.setOpacity(0.0); //hide clickable box
         this.root.getChildren().add(rect);
 
@@ -78,7 +80,7 @@ public class GameManager extends Application {
                         //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
                         //so towers can't be marked on gameBoard when built and
                         //we can't set placeable to false
-                        int[][] gameGrid = getDefaultGameGrid();
+                        int[][] gameGrid = getGameGrid();
 
                         //only build if not on path
                         if (gameGrid[row][column] == 0) {
@@ -111,7 +113,7 @@ public class GameManager extends Application {
 
     private void buildTower(double rawX, double rawY) {
         //snaps tower to 50 by 50 blocks
-        double x = rawX - rawX % 50;
+        double x =  rawX - rawX % 50;
         double y = rawY - rawY % 50;
 
         //view
@@ -126,7 +128,11 @@ public class GameManager extends Application {
         Tower tower = new Tower(x,y);
         this.towers.add(tower);
         this.profile.setGold(this.profile.getGold() - tower.getCost());
-        // ##################### mark location on gameGrid
+
+        int blockX = (int) x/50;
+        int blockY = (int) y/50;
+        this.gameGrid[blockX][blockY] = 2;
+        // TODO: mark location on gameGrid ###################
     }
 
 
@@ -181,7 +187,7 @@ public class GameManager extends Application {
         long delay = (System.nanoTime() - this.startTime)/10000000;
         for (int i = 0; i < 20; i++) {
             //delay enemy creation
-            if (delay > i*enemyDelay && delay < i*enemyDelay + 15) {
+            if (delay > i*enemyDelay) {
                 //we only want to create 1 enemy at a time
                 if (enemiesAlive.size() == i) {
                     createEnemy();
@@ -257,6 +263,10 @@ public class GameManager extends Application {
                 {0,0,0,0,0,0,1,0,0,0},
                 {0,0,0,0,0,0,1,0,0,0}
         };
+    }
+
+    public int[][] getGameGrid() {
+        return this.gameGrid;
     }
 
     //Given a tower, finds the list of enemies in range and attacks the closest
