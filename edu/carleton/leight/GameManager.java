@@ -222,18 +222,9 @@ public class GameManager extends Application {
         attemptEnemyGeneration();
         updateEnemyAnimation();
         updateAttacks();
-        updateFinishedEnemies();
+
         gameScreen.drawUpdatedLabel();
         System.out.println(getAliveEnemies().size());
-    }
-
-    public void updateFinishedEnemies() {
-        for (Enemy enemy : enemiesAlive) {
-            if (enemy.isFinished()) {
-                this.profile.setLives(profile.getLives()-1);
-                removeEnemyFromGame(enemy);
-            }
-        }
     }
 
     public void attemptEnemyGeneration() {
@@ -252,7 +243,8 @@ public class GameManager extends Application {
             //checks to see if the enemy is finished with the path,
             //then removes the enemy from the list.
             if (enemy.isFinished()) {
-                howDidEnemyDie(enemy);
+                this.enemiesAlive.remove(enemy);
+                this.profile.setLives(this.profile.getLives()-1);
             }
             Circle circle = enemy.getCircle();
 
@@ -272,14 +264,19 @@ public class GameManager extends Application {
     }
 
     public void updateAttacks() {
-        // Iterates through the list of towers to find the enemies in range
-        // for each tower. Each tower attacks the first enemy in its list.
-        for (Tower tower : towers) {
-            List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
-            if (enemiesInRange.size()>0) {
-                Enemy enemy = enemiesInRange.get(0);
-                attackEnemy(tower, enemy);
-                System.out.println(enemiesInRange);
+        final long attackDelay = 50;
+        long delay = (System.nanoTime() - this.startTime)/10000000;
+
+        if (delay%attackDelay>=0 && delay%attackDelay<=5) {
+            // Iterates through the list of towers to find the enemies in range
+            // for each tower. Each tower attacks the first enemy in its list.
+            for (Tower tower : towers) {
+                List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+                if (enemiesInRange.size() > 0) {
+                    Enemy enemy = enemiesInRange.get(0);
+                    attackEnemy(tower, enemy);
+                    System.out.println(enemiesInRange);
+                }
             }
         }
     }
@@ -328,7 +325,7 @@ public class GameManager extends Application {
     public void howDidEnemyDie(Enemy enemy) {
         // Enemy finished the path before getting killed
         if (enemy.isFinished()) {
-            profile.setLives((profile.getLives() - 1));
+            enemiesFinished.add(enemy);
         }
         // Enemy is killed, gold and points rewarded
         else {

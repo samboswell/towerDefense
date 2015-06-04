@@ -32,12 +32,7 @@ public class Enemy {
 //        }
 //        this.isFinished = false;
 //        return false;
-        if (this.getX() > 500) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return this.getY() < 0;
     }
     public int getHealth() {
         return this.health;
@@ -62,8 +57,6 @@ public class Enemy {
         return this.circle;
     }
     public void setX(double xCoordinate) {
-        if (xCoordinate < 0.0 || xCoordinate > 400) {
-        }
         this.xCoordinate = xCoordinate;
     }
     public void setY(double yCoordinate) {
