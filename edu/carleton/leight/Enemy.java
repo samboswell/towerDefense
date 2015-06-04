@@ -26,12 +26,18 @@ public class Enemy {
         this.circle = circle;
     }
     public boolean isFinished() {
-        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
-            this.isFinished = true;
+//        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
+//            this.isFinished = true;
+//            return true;
+//        }
+//        this.isFinished = false;
+//        return false;
+        if (this.getX() > 500) {
             return true;
         }
-        this.isFinished = false;
-        return false;
+        else {
+            return false;
+        }
     }
     public int getHealth() {
         return this.health;

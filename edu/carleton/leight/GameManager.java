@@ -222,7 +222,18 @@ public class GameManager extends Application {
         attemptEnemyGeneration();
         updateEnemyAnimation();
         updateAttacks();
+        updateFinishedEnemies();
         gameScreen.drawUpdatedLabel();
+        System.out.println(getAliveEnemies().size());
+    }
+
+    public void updateFinishedEnemies() {
+        for (Enemy enemy : enemiesAlive) {
+            if (enemy.isFinished()) {
+                this.profile.setLives(profile.getLives()-1);
+                removeEnemyFromGame(enemy);
+            }
+        }
     }
 
     public void attemptEnemyGeneration() {
@@ -230,16 +241,10 @@ public class GameManager extends Application {
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-//        for (int i = 0; i < 20; i++) {
-//            //delay enemy creation
-//            if (delay > i*enemyDelay) {
-//                //we only want to create 1 enemy at a time
         if (enemiesAlive.size()+enemiesFinished.size() <= 20
                 && delay%enemyDelay>=0 && delay%enemyDelay<=2) {
             createEnemy(325,550);
         }
-//            }
-//        }
     }
 
     public void updateEnemyAnimation() {
@@ -311,9 +316,9 @@ public class GameManager extends Application {
         List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
         Enemy attackedEnemy = enemiesInRange.get(0);
         attackedEnemy.setHealth(attackedEnemy.getHealth(),tower.getDamage());
-            if(attackedEnemy.getHealth()<=0) {
-                howDidEnemyDie(attackedEnemy);
-            }
+        if(attackedEnemy.getHealth()<=0) {
+            howDidEnemyDie(attackedEnemy);
+        }
 
     }
 
