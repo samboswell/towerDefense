@@ -124,10 +124,8 @@ public class GameManager extends Application {
                     public void handle(MouseEvent mouseEvent) {
                         int column = (int) mouseEvent.getX() / 50;
                         int row = (int) mouseEvent.getY() / 50;
-                        //######################
-                        //NOTE: WE CAN'T ACCESS INSTANCE VARIABLES HERE
-                        //so towers can't be marked on gameBoard when built and
-                        //we can't set placeable to false
+
+                        //non-final instance variables are not accessible here
                         int[][] gameGrid = getGameGrid();
 
                         //only build if not on path
@@ -137,7 +135,7 @@ public class GameManager extends Application {
                     }
                 });
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
-                        50,50,false,false);
+                        50, 50, false, false);
                 scene.setCursor(new ImageCursor(towerImage));
             }
         });
@@ -217,18 +215,15 @@ public class GameManager extends Application {
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-        for (int i = 0; i < 20; i++) {
-            //delay enemy creation
-            if (delay > i*enemyDelay) {
-                //we only want to create 1 enemy at a time
-                if (enemiesAlive.size() == i) {
+//        for (int i = 0; i < 20; i++) {
+//            //delay enemy creation
+//            if (delay > i*enemyDelay) {
+//                //we only want to create 1 enemy at a time
+                if (enemiesAlive.size() <= 20 && delay%enemyDelay>=0 &&
+                        delay%enemyDelay<=2) {
                     createEnemy();
                 }
-            }
-        }
-
-//        if (enemiesAlive.size() == 5) {
-//            removeEnemy(enemiesAlive.get(enemiesAlive.size()-1));
+//            }
 //        }
 
         for (Enemy enemy : enemiesAlive) {
