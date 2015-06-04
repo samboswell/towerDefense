@@ -26,6 +26,9 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import com.sun.javafx.tk.Toolkit.Task;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,43 +41,61 @@ public class GameManager extends Application {
 
     private long startTime;
     private Timer timer;
-    private Stage primaryStage;
+    private Stage stage;
     private List<Enemy> enemiesAlive;
     private List<Tower> towers;
     private Group root;
     private Profile profile;
     private GameScreen gameScreen;
     private int[][] gameGrid;
-    private Scene scene;
+    private Scene gameScene;
+    private Scene homeScene;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-    //    FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-    //    Parent root = (Parent) loader.load();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+//        Parent parent = (Parent) loader.load();
+
+        //homeScene
+        Group homeRoot = new Group();
+        this.homeScene = new Scene(homeRoot,700,500);
+        Button btn1 = new Button();
+        btn1.setText("PLAY!");
+        btn1.setLayoutX(200);
+        btn1.setLayoutY(200);
+        btn1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = getStage();
+                stage.setScene(gameScene);
+            }
+        });
+        homeRoot.getChildren().add(btn1);
+
+
+
+
         this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<Enemy>();
         this.towers = new ArrayList<Tower>();
-        this.primaryStage = primaryStage;
+        this.stage = primaryStage;
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
 
-        this.gameScreen.drawPath(getGameGrid());
 
+        //gameScene created
         createButton();
-
-
-
-        this.scene = new Scene(root, 700, 500);
-
-        this.primaryStage.setTitle("Circle Defend'r");
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+        this.gameScreen.drawPath(getGameGrid());
+        this.gameScene = new Scene(root, 700, 500);
+        this.stage.setTitle("Circle Defend'r");
+        this.stage.setScene(homeScene);
+        this.stage.show();
         setUpAnimationTimer();
 
 
-        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
                 Platform.exit();
@@ -84,10 +105,15 @@ public class GameManager extends Application {
 
     }
 
+    public Stage getStage() {
+        return this.stage;
+    }
+
     public void createButton() {
-        Rectangle rect = new Rectangle(500.0, 500.0);
-        rect.setOpacity(0.0); //hide clickable box
-        this.root.getChildren().add(rect);
+        //this rectangle is the clickable zone for towers.
+        Rectangle clickableRect = new Rectangle(500.0, 500.0);
+        clickableRect.setOpacity(0.0); //hide clickable zone
+        this.root.getChildren().add(clickableRect);
 
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
@@ -118,7 +144,7 @@ public class GameManager extends Application {
 //                Thread th = new Thread(task);
 //                th.setDaemon(true);
 //                th.start();
-                rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
                     @Override
                     public void handle(MouseEvent mouseEvent) {
@@ -136,7 +162,7 @@ public class GameManager extends Application {
                 });
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                         50, 50, false, false);
-                scene.setCursor(new ImageCursor(towerImage));
+                gameScene.setCursor(new ImageCursor(towerImage));
             }
         });
         this.root.getChildren().add(btn);
