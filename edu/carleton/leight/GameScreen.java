@@ -2,6 +2,8 @@ package edu.carleton.leight;
 
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class GameScreen {
@@ -32,7 +34,7 @@ public class GameScreen {
             }
         }
     }
-    public void updateLabel() {
+    public void drawUpdatedLabel() {
         this.root.getChildren().remove(this.label);
         String newStats = this.profile.getStats();
         Label newLabel = new Label(newStats);
@@ -40,7 +42,12 @@ public class GameScreen {
         this.label = newLabel;
     }
 
-    private void setProfile(Profile profile) {
+    public void drawEnemy() {
+        Circle circle = new Circle(325,550,15, Color.RED);
+        this.root.getChildren().add(circle);
+    }
+
+    public void setProfile(Profile profile) {
         this.profile = profile;
     }
 }

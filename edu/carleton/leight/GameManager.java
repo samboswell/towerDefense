@@ -1,31 +1,21 @@
 package edu.carleton.leight;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.Cursor;
-import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
-import com.sun.javafx.tk.Toolkit.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -57,38 +47,28 @@ public class GameManager extends Application {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 //        Parent parent = (Parent) loader.load();
 
-        //homeScene
-        Group homeRoot = new Group();
-        this.homeScene = new Scene(homeRoot,700,500);
-        Button btn1 = new Button();
-        btn1.setText("PLAY!");
-        btn1.setLayoutX(200);
-        btn1.setLayoutY(200);
-        btn1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Stage stage = getStage();
-                stage.setScene(gameScene);
-            }
-        });
-        homeRoot.getChildren().add(btn1);
-
-
-
 
         this.profile = new Profile(10, 100);
-        this.enemiesAlive = new ArrayList<Enemy>();
-        this.towers = new ArrayList<Tower>();
+        this.enemiesAlive = new ArrayList<>();
+        this.towers = new ArrayList<>();
         this.stage = primaryStage;
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
 
-
         //gameScene created
         createButton();
         this.gameScreen.drawPath(getGameGrid());
         this.gameScene = new Scene(root, 700, 500);
+
+        //homeScreen created (this must be after gameScene is created)
+        Group homeRoot = new Group();
+        this.homeScene = new Scene(homeRoot, 700, 500);
+        HomeScreen homeScreen = new HomeScreen(stage);
+        homeScreen.createPlayButton(homeRoot, gameScene);
+        homeScreen.createAboutButton(homeRoot);
+
+        //stage set
         this.stage.setTitle("Circle Defend'r");
         this.stage.setScene(homeScene);
         this.stage.show();
@@ -192,13 +172,13 @@ public class GameManager extends Application {
     }
 
 
-    public void createEnemy() {
+    public void createEnemy(int x, int y) {
         //view
-        Circle circle = new Circle(325,550,15,Color.RED);
+        Circle circle = new Circle(x,y,15,Color.RED);
         this.root.getChildren().add(circle);
 
         //model
-        Enemy enemy = new Enemy(325,550,circle);
+        Enemy enemy = new Enemy(x,y,circle);
         this.enemiesAlive.add(enemy);
     }
 
@@ -236,8 +216,14 @@ public class GameManager extends Application {
     }
 
     public void updateAnimation() {
+        attemptEnemyGeneration();
+        updateEnemyAnimation();
+        updateAttacks();
+        gameScreen.drawUpdatedLabel();
+    }
+
+    public void attemptEnemyGeneration() {
         final int enemyDelay = 75;
-        final int towerDelay = 100;
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
@@ -245,13 +231,15 @@ public class GameManager extends Application {
 //            //delay enemy creation
 //            if (delay > i*enemyDelay) {
 //                //we only want to create 1 enemy at a time
-                if (enemiesAlive.size() <= 20 && delay%enemyDelay>=0 &&
-                        delay%enemyDelay<=2) {
-                    createEnemy();
-                }
+        if (enemiesAlive.size() <= 20 && delay%enemyDelay>=0 &&
+                delay%enemyDelay<=2) {
+            createEnemy(325,550);
+        }
 //            }
 //        }
+    }
 
+    public void updateEnemyAnimation() {
         for (Enemy enemy : enemiesAlive) {
             //checks to see if the enemy is finished with the path,
             //then removes the enemy from the list.
@@ -271,35 +259,27 @@ public class GameManager extends Application {
             }
 
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
-            gameScreen.updateLabel();
 
         }
+    }
 
+    public void updateAttacks() {
         // Iterates through the list of towers to find the enemies in range
         // for each tower. Each tower attacks the first enemy in its list.
         for (Tower tower : towers) {
             List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
             if (enemiesInRange.size()>0) {
-            Enemy enemy = enemiesInRange.get(0);
-            attackEnemy(tower, enemy);
-            System.out.println(enemiesInRange);
+                Enemy enemy = enemiesInRange.get(0);
+                attackEnemy(tower, enemy);
+                System.out.println(enemiesInRange);
             }
         }
     }
-
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
         enemy.setX(x);
         enemy.setY(y);
     }
-
-    public String getStats() {
-        String newStats = "Lives: " + this.profile.getLives() +"\n";
-        newStats += "High Score: " + this.profile.getLives() +"\n";
-        newStats += "Gold: " + this.profile.getLives();
-        return newStats;
-    }
-
 
     public int[][] getDefaultGameGrid() {
         //0 means tower placeable
@@ -333,6 +313,7 @@ public class GameManager extends Application {
             }
 
     }
+
     // Given an enemy, decides whether the enemy has finished the path
     // or if the user has killed the enemy. Punishes and rewards respectively.
     // Then removes the enemy from the game.
@@ -348,6 +329,7 @@ public class GameManager extends Application {
         }
         removeEnemyFromGame(enemy);
     }
+
     public void sellTower() {}
 
 
