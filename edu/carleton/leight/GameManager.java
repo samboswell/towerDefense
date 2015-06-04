@@ -33,6 +33,7 @@ public class GameManager extends Application {
     private Timer timer;
     private Stage stage;
     private List<Enemy> enemiesAlive;
+    private List<Enemy> enemiesFinished;
     private List<Tower> towers;
     private Group root;
     private Profile profile;
@@ -50,6 +51,7 @@ public class GameManager extends Application {
 
         this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<>();
+        this.enemiesFinished = new ArrayList<>();
         this.towers = new ArrayList<>();
         this.stage = primaryStage;
         this.root = new Group();
@@ -192,6 +194,7 @@ public class GameManager extends Application {
 
         //model
         enemiesAlive.remove(enemy);
+        enemiesFinished.add(enemy);
     }
 
     public void setUpAnimationTimer() {
@@ -231,8 +234,8 @@ public class GameManager extends Application {
 //            //delay enemy creation
 //            if (delay > i*enemyDelay) {
 //                //we only want to create 1 enemy at a time
-        if (enemiesAlive.size() <= 20 && delay%enemyDelay>=0 &&
-                delay%enemyDelay<=2) {
+        if (enemiesAlive.size()+enemiesFinished.size() <= 20
+                && delay%enemyDelay>=0 && delay%enemyDelay<=2) {
             createEnemy(325,550);
         }
 //            }
@@ -339,6 +342,7 @@ public class GameManager extends Application {
         for(Enemy enemy : enemiesAlive) {
             if (enemy.isFinished()) {
                 enemiesAlive.remove(enemiesAlive.indexOf(enemy));
+                enemiesFinished.add(enemy);
             }
         }
     }
