@@ -86,11 +86,11 @@ public class Tower extends Sprite {
     }
     // just for testing ###############################################
     public static void main(String[] args) {
-        GameManager gameManager = new GameManager();
-        List<Enemy> enemies = gameManager.getAliveEnemies();
-        Tower tower = new Tower(300,550);
-        List<Enemy> enemiesRange = tower.getEnemiesInRange(enemies);
-        System.out.println(enemies.size());
-        System.out.println(enemiesRange.size());
+//        GameManager gameManager = new GameManager();
+//        List<Enemy> enemies = gameManager.getAliveEnemies();
+//        Tower tower = new Tower(300,550);
+//        List<Enemy> enemiesRange = tower.getEnemiesInRange(enemies);
+//        System.out.println(enemies.size());
+//        System.out.println(enemiesRange.size());
     }
 }

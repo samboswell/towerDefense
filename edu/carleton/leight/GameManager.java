@@ -1,6 +1,5 @@
 package edu.carleton.leight;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -13,12 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +21,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class GameManager extends Application {
+public class GameManager {
     final private double FRAMES_PER_SECOND = 40.0;
-
+    private Stage stage;
     private long startTime;
     private Timer timer;
-    private Stage stage;
     private List<Enemy> enemiesAlive;
     private List<Enemy> enemiesFinished;
     private List<Tower> towers;
@@ -43,17 +37,11 @@ public class GameManager extends Application {
     private Scene homeScene;
 
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-//        Parent parent = (Parent) loader.load();
-
-
+    public GameManager() {
         this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<>();
         this.enemiesFinished = new ArrayList<>();
         this.towers = new ArrayList<>();
-        this.stage = primaryStage;
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
@@ -62,37 +50,15 @@ public class GameManager extends Application {
         createButton();
         this.gameScreen.drawPath(getGameGrid());
         this.gameScene = new Scene(root, 700, 500);
+    }
 
-        //homeScreen created (this must be after gameScene is created)
-        Group homeRoot = new Group();
-        this.homeScene = new Scene(homeRoot, 700, 500);
-        HomeScreen homeScreen = new HomeScreen(stage);
-        homeScreen.createPlayButton(homeRoot, gameScene);
-        homeScreen.createAboutButton(homeRoot);
-
-        //stage set
-        this.stage.setTitle("Circle Defend'r");
-        this.stage.setScene(homeScene);
-        this.stage.show();
-
-        //start the game animation
+    public void initialize() {
         setUpAnimationTimer();
-
-
-        this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-
     }
 
-    public Stage getStage() {
-        return this.stage;
+    public Scene getGameScene() {
+        return this.gameScene;
     }
-
     public void createButton() {
         //this rectangle is the clickable zone for towers.
         Rectangle clickableRect = new Rectangle(500.0, 500.0);
@@ -154,6 +120,7 @@ public class GameManager extends Application {
         });
         this.root.getChildren().add(btn);
     }
+
 
     public int getCurrentGold() {
         return this.profile.getGold();
@@ -245,7 +212,7 @@ public class GameManager extends Application {
         long delay = (System.nanoTime() - this.startTime)/10000000;
         if (enemiesAlive.size()+enemiesFinished.size() <= 20
                 && delay%enemyDelay>=0 && delay%enemyDelay<=2) {
-            createEnemy(325,550);
+            createEnemy(325, 550);
         }
     }
 
@@ -324,7 +291,7 @@ public class GameManager extends Application {
     public void attackEnemy(Tower tower, Enemy enemy) {
         List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
         Enemy attackedEnemy = enemiesInRange.get(0);
-        attackedEnemy.setHealth(attackedEnemy.getHealth(),tower.getDamage());
+        attackedEnemy.setHealth(attackedEnemy.getHealth(), tower.getDamage());
         if(attackedEnemy.getHealth()<=0) {
             howDidEnemyDie(attackedEnemy);
         }
@@ -370,7 +337,4 @@ public class GameManager extends Application {
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

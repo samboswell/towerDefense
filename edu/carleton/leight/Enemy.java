@@ -3,11 +3,14 @@ package edu.carleton.leight;
 import javafx.scene.shape.Circle;
 
 public class Enemy {
-    
+
+    private String name;
     private boolean isFinished;
+    private int startHealth;
     private int health;
+    private int startSpeed;
     private int speed;
-    private int value;
+    private int scoreValue;
     private int gold;
     private double xCoordinate;
     private double yCoordinate;
@@ -18,7 +21,7 @@ public class Enemy {
         this.isFinished = false;
         this.health = 100;
         this.speed = 2;
-        this.value = 20;
+        this.scoreValue = 20;
         this.gold = 100;
 
         this.xCoordinate = xCoordinate;
@@ -41,7 +44,7 @@ public class Enemy {
         return this.speed;
     }
     public int getValue() {
-        return this.value;
+        return this.scoreValue;
     }
     public int getGold() {
         return this.gold;
