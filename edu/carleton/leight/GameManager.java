@@ -170,9 +170,9 @@ public class GameManager extends Application {
         this.towers.add(tower);
         this.profile.setGold(this.profile.getGold() - tower.getCost());
 
-        int blockX = (int) x/50;
-        int blockY = (int) y/50;
-        this.gameGrid[blockX][blockY] = 2;
+//        int blockX = (int) x/50;
+//        int blockY = (int) y/50;
+//        this.gameGrid[blockX][blockY] = 2;
     }
 
 
@@ -248,6 +248,7 @@ public class GameManager extends Application {
             //then removes the enemy from the list.
             if (enemy.isFinished()) {
                 this.enemiesAlive.remove(enemy);
+                this.enemiesFinished.add(enemy);
                 this.profile.setLives(this.profile.getLives()-1);
             }
             Circle circle = enemy.getCircle();
