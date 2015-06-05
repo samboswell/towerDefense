@@ -74,6 +74,8 @@ public class GameManager extends Application {
         this.stage.setTitle("Circle Defend'r");
         this.stage.setScene(homeScene);
         this.stage.show();
+
+        //start the game animation
         setUpAnimationTimer();
 
 
@@ -224,7 +226,9 @@ public class GameManager extends Application {
         updateAttacks();
 
         gameScreen.drawUpdatedLabel();
-        System.out.println(getAliveEnemies().size());
+        if (this.profile.getLives() <= 0) {
+            this.stage.setScene(homeScene);
+        }
     }
 
     public void attemptEnemyGeneration() {

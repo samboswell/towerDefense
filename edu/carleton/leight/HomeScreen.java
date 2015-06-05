@@ -1,5 +1,6 @@
 package edu.carleton.leight;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -7,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.util.TimerTask;
 
 /**
  * Created by tuchowj on 6/4/15.
