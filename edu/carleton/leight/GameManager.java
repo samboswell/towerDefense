@@ -138,9 +138,12 @@ public class GameManager extends Application {
                         //non-final instance variables are not accessible here
                         int[][] gameGrid = getGameGrid();
 
-                        //only build if not on path
-                        if (gameGrid[row][column] == 0) {
-                            buildTower(mouseEvent.getX(), mouseEvent.getY());
+                        //only build if you have the gold
+                        if (getCurrentGold() >= 50) {
+                            //only build if not on path
+                            if (gameGrid[row][column] == 0) {
+                                buildTower(mouseEvent.getX(), mouseEvent.getY());
+                            }
                         }
                     }
                 });
@@ -150,6 +153,10 @@ public class GameManager extends Application {
             }
         });
         this.root.getChildren().add(btn);
+    }
+
+    public int getCurrentGold() {
+        return this.profile.getGold();
     }
 
     public void buildTower(double rawX, double rawY) {
