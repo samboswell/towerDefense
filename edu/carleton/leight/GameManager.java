@@ -195,7 +195,8 @@ public class GameManager {
     }
 
     public void updateAnimation() {
-        attemptEnemyGeneration();
+        sendWave(0, 10, 0);
+        sendWave(10, 30, 1000);
         updateEnemyAnimation();
         updateAttacks();
 
@@ -205,14 +206,18 @@ public class GameManager {
         }
     }
 
-    public void attemptEnemyGeneration() {
+    public void sendWave(int numCreatedEnemies, int numEnemiesToCreate,
+                         float waveStartTime) {
         final int enemyDelay = 75;
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-        if (enemiesAlive.size()+enemiesFinished.size() <= 20
-                && delay%enemyDelay>=0 && delay%enemyDelay<=2) {
-            createEnemy(325, 550);
+        if (delay > waveStartTime) {
+            if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
+                    enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
+                    && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy(325, 550);
+            }
         }
     }
 
@@ -254,7 +259,6 @@ public class GameManager {
                 if (enemiesInRange.size() > 0) {
                     Enemy enemy = enemiesInRange.get(0);
                     attackEnemy(tower, enemy);
-                    System.out.println(enemiesInRange);
                 }
             }
         }

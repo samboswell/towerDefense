@@ -12,8 +12,8 @@ import javafx.stage.WindowEvent;
 
 
 public class Main extends Application {
-    public final static int stageXSize = 1000;
-    public final static int stageYSize = 1000;
+    public final static int stageXSize = 700;
+    public final static int stageYSize = 500;
     private Stage stage;
 
     @Override
