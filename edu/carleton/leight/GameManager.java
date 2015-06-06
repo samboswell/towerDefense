@@ -35,6 +35,7 @@ public class GameManager {
     private int[][] gameGrid;
     private Scene gameScene;
     private Scene homeScene;
+    private boolean isPlaying;
 
 
     public GameManager() {
@@ -45,6 +46,7 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
+        this.isPlaying = false;
 
         //gameScene created
         createButton();
@@ -116,6 +118,7 @@ public class GameManager {
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                         50, 50, false, false);
                 gameScene.setCursor(new ImageCursor(towerImage));
+
             }
         });
         this.root.getChildren().add(btn);
@@ -214,8 +217,8 @@ public class GameManager {
     }
 
     public void updateAnimation() {
-        sendWave(0, 10, 0);
-        sendWave(10, 30, 1000);
+        sendWave(0);
+        sendWave(10);
         updateEnemyAnimation();
         updateAttacks();
 
@@ -227,12 +230,16 @@ public class GameManager {
 
     public void sendWave(float waveStartTime) {
         final int enemyDelay = 75;
+        long delay = 0;
         WaveManager waveManager = new WaveManager();
         int waveNum = waveManager.getCurrentWave();
 
         //get a time delay from start of animation
-        long delay = (System.nanoTime() - this.startTime)/10000000;
+        if (isPlaying) {
+            delay = (System.nanoTime() - this.startTime) / 10000000;
+        }
         if (delay > waveStartTime) {
+            waveManager.createWaves();
             if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
                     enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
                     && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {

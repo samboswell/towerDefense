@@ -52,6 +52,11 @@ public class Main extends Application {
         }
     }
 
+    public void aboutGame() {
+        Parent root;
+        FXMLLoader loader3 = new FXMLLoader(getClass().getResource("About.fxml"));
+    }
+
 
     public static void main(String[] args) {
         launch(args);

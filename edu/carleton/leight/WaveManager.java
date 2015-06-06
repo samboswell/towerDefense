@@ -1,7 +1,7 @@
 package edu.carleton.leight;
 
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class WaveManager {
     private static WaveManager waveManager;
@@ -64,10 +64,10 @@ public class WaveManager {
 
         }
     }
-
-    private void createWaves() {
-        List<Enemy> enemies = null;
-        List<Integer> times = null;
+    //Tells the rest of the game what enemies are in the waves.
+    private ArrayList<Enemy> createWaves() {
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        ArrayList<Integer> times = new ArrayList<Integer>();
 
         for(int i=0; i < 5; i++){
             enemies.add(new RedEnemy(325, 550));
@@ -77,6 +77,23 @@ public class WaveManager {
         }
 
         waves[0] = new Wave(enemies, times);
+        if (currentWave == 0) {
+            return enemies;
+        }
 
+        enemies = new ArrayList<Enemy>();
+        times = new ArrayList<Integer>();
+
+        for(int i=0; i < 5; i++){
+            enemies.add(new RedEnemy(325, 550));
+        }
+        for (int i=0; i < 10; i++) {
+            enemies.add(new BlueEnemy(325, 550));
+        }
+        for(int i=0; i < 15; i++) {
+            times.add(new Integer(i*50));
+        }
+
+        waves[1] = new Wave(enemies, times);
     }
 }
