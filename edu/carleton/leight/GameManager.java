@@ -150,14 +150,33 @@ public class GameManager {
     }
 
 
-    public void createEnemy(String name, int health, int scoreValue, int gold, int x, int y) {
-        //view
-        Circle circle = new Circle(x,y,15,Color.RED);
-        this.root.getChildren().add(circle);
+    public void createEnemy(Enemy enemy, double x, double y) {
+        Color color = null;
+        String name = enemy.getName();
+        if(name.equals("YellowEnemy")){
+            color = Color.YELLOW;
+            enemy = new YellowEnemy(x,y);
+            this.enemiesAlive.add(enemy);
 
-        //model
-        Enemy enemy = new Enemy(name, health, scoreValue, gold, x,y,circle);
-        this.enemiesAlive.add(enemy);
+        }
+        if (name.equals("BlueEnemy")) {
+            color = Color.BLUE;
+            enemy = new BlueEnemy(x,y);
+            this.enemiesAlive.add(enemy);
+        }
+        if (name.equals("BossEnemy")) {
+            color = Color.PAPAYAWHIP; //Let's see what color this is.
+            enemy = new BossEnemy(x,y);
+            this.enemiesAlive.add(enemy);
+        }
+        else {
+            color = Color.RED;
+            enemy = new RedEnemy(x,y);
+            this.enemiesAlive.add(enemy);
+        }
+        //view
+        Circle circle = new Circle(x,y,15,color);
+        this.root.getChildren().add(circle);
     }
 
     public List<Enemy> getAliveEnemies() {
@@ -206,9 +225,10 @@ public class GameManager {
         }
     }
 
-    public void sendWave(int numCreatedEnemies, int numEnemiesToCreate,
-                         float waveStartTime) {
+    public void sendWave(float waveStartTime) {
         final int enemyDelay = 75;
+        WaveManager waveManager = new WaveManager();
+        int waveNum = waveManager.getCurrentWave();
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
@@ -216,7 +236,7 @@ public class GameManager {
             if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
                     enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
                     && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Red Enemy", 100, 50, 20, 325, 550);
+                createEnemy(enemiesAlive.get(0), 325, 550);
             }
         }
     }

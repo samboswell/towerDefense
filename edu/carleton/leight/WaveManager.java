@@ -11,7 +11,7 @@ public class WaveManager {
     private boolean isPlaying;
     private boolean gameOver;
 
-    private WaveManager() {
+    public WaveManager() {
         tick = 0;
         currentWave = 0;
         isPlaying = false;
@@ -66,10 +66,17 @@ public class WaveManager {
     }
 
     private void createWaves() {
-        List<Enemy> enemies;
-        List<Integer> times;
+        List<Enemy> enemies = null;
+        List<Integer> times = null;
 
-        
+        for(int i=0; i < 5; i++){
+            enemies.add(new RedEnemy(325, 550));
+        }
+        for(int i=0; i < 5; i++) {
+            times.add(new Integer(i*50));
+        }
+
+        waves[0] = new Wave(enemies, times);
 
     }
 }

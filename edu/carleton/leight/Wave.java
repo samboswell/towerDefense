@@ -1,7 +1,6 @@
 package edu.carleton.leight;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Wave {
@@ -11,7 +10,7 @@ public class Wave {
      * @param enemies: the list of enemies
      * @param times: the list of times
      */
-    public Wave(ArrayList<Enemy> enemies, ArrayList<Integer> times)
+    public Wave(List<Enemy> enemies, List<Integer> times)
     {
         this.enemies = enemies;
         this.times = times;
@@ -38,7 +37,7 @@ public class Wave {
         }
         //removes both the enemy and the corresponding time from the lists
         GameManager gameManager = new GameManager();
-        gameManager.removeEnemyFromGame(enemies.remove(0));
+        gameManager.createEnemy(enemies.remove(0),325,550);
         times.remove(0);
         return true;
     }

@@ -37,6 +37,7 @@ public class Enemy {
 //        return false;
         return this.getY() < 0;
     }
+    public String getName() {return this.name;}
     public int getHealth() {
         return this.health;
     }
