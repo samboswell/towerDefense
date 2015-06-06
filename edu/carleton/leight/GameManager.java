@@ -35,8 +35,6 @@ public class GameManager {
     private int[][] gameGrid;
     private Scene gameScene;
     private Scene homeScene;
-    private boolean isPlaying;
-    private int i;
 
 
     public GameManager() {
@@ -47,7 +45,6 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
-        this.isPlaying = false;
 
         //gameScene created
         createButton();
@@ -119,7 +116,6 @@ public class GameManager {
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                         50, 50, false, false);
                 gameScene.setCursor(new ImageCursor(towerImage));
-
             }
         });
         this.root.getChildren().add(btn);
@@ -154,33 +150,14 @@ public class GameManager {
     }
 
 
-    public void createEnemy(Enemy enemy, double x, double y) {
-        Color color = null;
-        String name = enemy.getName();
-        if(name.equals("YellowEnemy")){
-            color = Color.YELLOW;
-            enemy = new YellowEnemy(x,y);
-            this.enemiesAlive.add(enemy);
-
-        }
-        if (name.equals("BlueEnemy")) {
-            color = Color.BLUE;
-            enemy = new BlueEnemy(x,y);
-            this.enemiesAlive.add(enemy);
-        }
-        if (name.equals("BossEnemy")) {
-            color = Color.PAPAYAWHIP; //Let's see what color this is.
-            enemy = new BossEnemy(x,y);
-            this.enemiesAlive.add(enemy);
-        }
-        else {
-            color = Color.RED;
-            enemy = new RedEnemy(x,y);
-            this.enemiesAlive.add(enemy);
-        }
+    public void createEnemy(String name, int health, int scoreValue, int gold, int x, int y) {
         //view
-        Circle circle = new Circle(x,y,15,color);
+        Circle circle = new Circle(x,y,15,Color.RED);
         this.root.getChildren().add(circle);
+
+        //model
+        Enemy enemy = new Enemy(name, health, scoreValue, gold, x,y,circle);
+        this.enemiesAlive.add(enemy);
     }
 
     public List<Enemy> getAliveEnemies() {
@@ -218,8 +195,19 @@ public class GameManager {
     }
 
     public void updateAnimation() {
-        sendWave(0);
-        sendWave(10);
+
+        //get a time delay from start of animation
+        long delay = (System.nanoTime() - this.startTime)/10000000;
+        System.out.println(delay);
+        if (delay>5) {
+            sendWave1(delay);
+        }
+        if (delay>1500) {
+            sendWave2(delay);
+        }
+        if (delay > 3200) {
+            sendWave3(delay);
+        }
         updateEnemyAnimation();
         updateAttacks();
 
@@ -229,23 +217,35 @@ public class GameManager {
         }
     }
 
-    public void sendWave(float waveStartTime) {
-        final int enemyDelay = 75;
-        long delay = 0;
-        WaveManager waveManager = new WaveManager();
-        int waveNum = waveManager.getCurrentWave();
 
-        //get a time delay from start of animation
-        if (isPlaying) {
-            delay = (System.nanoTime() - this.startTime) / 10000000;
+    public void sendWave1(long delay) {
+        final int enemyDelay = 75;
+
+        if (enemiesAlive.size() + enemiesFinished.size() >= 0 &&
+                enemiesAlive.size() + enemiesFinished.size() <= 10
+                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+            createEnemy("Red Enemy", 100, 50, 20, 325, 550);
         }
-        if (delay > waveStartTime) {
-            ArrayList<Enemy> enemies = waveManager.createFirstWave();
-            if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
-                    enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
-                    && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy(enemiesAlive.get(0), 325, 550);
-            }
+    }
+
+    public void sendWave2(long delay) {
+
+        final int enemyDelay = 70;
+
+        if (enemiesAlive.size() + enemiesFinished.size() >= 10 &&
+                enemiesAlive.size() + enemiesFinished.size() <= 29
+                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+            createEnemy("Red Enemy", 150, 50, 20, 325, 550);
+        }
+    }
+
+    public void sendWave3(long delay) {
+        final int enemyDelay = 65;
+
+        if (enemiesAlive.size() + enemiesFinished.size() >= 30 &&
+                enemiesAlive.size() + enemiesFinished.size() <= 49
+                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+            createEnemy("Red Enemy", 200, 50, 20, 325, 550);
         }
     }
 
