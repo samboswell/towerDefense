@@ -36,6 +36,7 @@ public class GameManager {
     private Scene gameScene;
     private Scene homeScene;
     private boolean isPlaying;
+    private int i;
 
 
     public GameManager() {
