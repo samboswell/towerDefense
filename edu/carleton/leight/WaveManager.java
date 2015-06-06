@@ -24,6 +24,10 @@ public class WaveManager {
         return currentWave + 1;
     }
 
+    public Wave getWave() {
+        return waves[currentWave];
+    }
+
     public static WaveManager getWaveManager() {
         if(waveManager == null) {
             waveManager = new WaveManager();
@@ -65,7 +69,7 @@ public class WaveManager {
         }
     }
     //Tells the rest of the game what enemies are in the waves.
-    private ArrayList<Enemy> createWaves() {
+    public void createWaves() {
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         ArrayList<Integer> times = new ArrayList<Integer>();
 
@@ -77,9 +81,6 @@ public class WaveManager {
         }
 
         waves[0] = new Wave(enemies, times);
-        if (currentWave == 0) {
-            return enemies;
-        }
 
         enemies = new ArrayList<Enemy>();
         times = new ArrayList<Integer>();
@@ -96,4 +97,7 @@ public class WaveManager {
 
         waves[1] = new Wave(enemies, times);
     }
+
+
+
 }

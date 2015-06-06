@@ -239,7 +239,7 @@ public class GameManager {
             delay = (System.nanoTime() - this.startTime) / 10000000;
         }
         if (delay > waveStartTime) {
-            waveManager.createWaves();
+            ArrayList<Enemy> enemies = waveManager.createFirstWave();
             if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
                     enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
                     && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
