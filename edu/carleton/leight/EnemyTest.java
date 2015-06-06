@@ -14,11 +14,11 @@ public class EnemyTest {
     @org.junit.Before
     public void beginning() throws Exception {
         Circle circle = new Circle(30,30,10);
-        Enemy enemy = new Enemy(30.0, 30.0, circle);
+        Enemy enemy = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, circle);
     }
 
     Circle circle = new Circle(30,30,10);
-    Enemy enemy = new Enemy(30.0, 30.0, circle);
+    Enemy enemy = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, circle);
     @org.junit.Test
     public void testIsFinished() throws Exception {
         assertFalse("enemy HAS finished the path",enemy.isFinished());

@@ -17,13 +17,13 @@ public class Enemy {
 
     private Circle circle;
     
-    public Enemy (double xCoordinate, double yCoordinate, Circle circle) {
+    public Enemy (String name, int health, int scoreValue, int gold, double xCoordinate, double yCoordinate, Circle circle) {
+        this.name = name;
         this.isFinished = false;
-        this.health = 100;
+        this.health = health;
         this.speed = 2;
-        this.scoreValue = 20;
-        this.gold = 100;
-
+        this.scoreValue = scoreValue;
+        this.gold = gold;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.circle = circle;

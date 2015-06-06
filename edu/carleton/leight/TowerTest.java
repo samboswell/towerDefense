@@ -64,15 +64,15 @@ public class TowerTest {
         List<Enemy> enemiesAlive = new ArrayList<>();
         List<Enemy> enemiesInRange = new ArrayList<>();
         //distance of 10(root2)
-        Enemy enemy1 = new Enemy(0.0, 0.0, circle);
+        Enemy enemy1 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 0.0, circle);
         //distance of 15
-        Enemy enemy2 = new Enemy(0.0, 5.0, circle);
+        Enemy enemy2 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 5.0, circle);
         //distance of 9
-        Enemy enemy3 = new Enemy(1.0, 10.0, circle);
+        Enemy enemy3 = new Enemy("Red Enemy", 100, 50, 20, 1.0, 10.0, circle);
         //distance of 5
-        Enemy enemy4 = new Enemy(5.0, 10.0, circle);
+        Enemy enemy4 = new Enemy("Red Enemy", 100, 50, 20, 5.0, 10.0, circle);
         //distance of 20
-        Enemy enemy5 = new Enemy(30.0, 30.0, circle);
+        Enemy enemy5 = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, circle);
         enemiesAlive.add(enemy1);
         enemiesAlive.add(enemy2);
         enemiesAlive.add(enemy3);

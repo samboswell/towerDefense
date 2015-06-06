@@ -150,13 +150,13 @@ public class GameManager {
     }
 
 
-    public void createEnemy(int x, int y) {
+    public void createEnemy(String name, int health, int scoreValue, int gold, int x, int y) {
         //view
         Circle circle = new Circle(x,y,15,Color.RED);
         this.root.getChildren().add(circle);
 
         //model
-        Enemy enemy = new Enemy(x,y,circle);
+        Enemy enemy = new Enemy(name, health, scoreValue, gold, x,y,circle);
         this.enemiesAlive.add(enemy);
     }
 
@@ -216,7 +216,7 @@ public class GameManager {
             if (enemiesAlive.size() + enemiesFinished.size() >= numCreatedEnemies &&
                     enemiesAlive.size() + enemiesFinished.size() <= numEnemiesToCreate
                     && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy(325, 550);
+                createEnemy("Red Enemy", 100, 50, 20, 325, 550);
             }
         }
     }
@@ -321,24 +321,24 @@ public class GameManager {
     public void sellTower() {}
 
 
-    //Iterates through enemies to find an enemy from the list of enemies
-    // that is finished, then removes it from the list.
-    public void removeEnemyIfFinished() {
-        for(Enemy enemy : enemiesAlive) {
-            if (enemy.isFinished()) {
-                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-                enemiesFinished.add(enemy);
-            }
-        }
-    }
-
-    public void removeEnemyIfDead() {
-        for (Enemy enemy : enemiesAlive) {
-            if (enemy.getHealth()<= 0) {
-                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-            }
-        }
-    }
+//    //Iterates through enemies to find an enemy from the list of enemies
+//    // that is finished, then removes it from the list.
+//    public void removeEnemyIfFinished() {
+//        for(Enemy enemy : enemiesAlive) {
+//            if (enemy.isFinished()) {
+//                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
+//                enemiesFinished.add(enemy);
+//            }
+//        }
+//    }
+//
+//    public void removeEnemyIfDead() {
+//        for (Enemy enemy : enemiesAlive) {
+//            if (enemy.getHealth()<= 0) {
+//                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
+//            }
+//        }
+//    }
 
 
 }
