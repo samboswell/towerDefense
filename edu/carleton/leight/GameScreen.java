@@ -31,15 +31,15 @@ public class GameScreen {
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
         ImageView towerView = new ImageView(towerImage);
-        towerView.setX(625);
+        towerView.setX(GameManager.GRID_SIZE+50);
         towerView.setY(150);
         this.root.getChildren().add(towerView);
 
     }
 
     public void drawPath(int[][] gameGrid) {
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
+        for (int y = 0; y < 15; y++) {
+            for (int x = 0; x < 15; x++) {
                 int currentSquare = gameGrid[y][x];
                 int xCorner = x*50;
                 int yCorner = y*50;
@@ -57,7 +57,7 @@ public class GameScreen {
         this.root.getChildren().remove(this.profileLabel);
         String newStats = this.profile.getStats();
         Label profileLabel = new Label(newStats);
-        profileLabel.setLayoutX(600);
+        profileLabel.setLayoutX(GameManager.GRID_SIZE+50);
         this.root.getChildren().add(profileLabel);
         this.profileLabel = profileLabel;
     }
@@ -65,7 +65,7 @@ public class GameScreen {
     public void drawUpdatedStatsLabel(String statsString) {
         this.root.getChildren().remove(this.statsLabel);
         Label statsLabel = new Label(statsString);
-        statsLabel.setLayoutX(550);
+        statsLabel.setLayoutX(GameManager.GRID_SIZE+50);
         statsLabel.setLayoutY(350);
         this.root.getChildren().add(statsLabel);
         this.statsLabel = statsLabel;

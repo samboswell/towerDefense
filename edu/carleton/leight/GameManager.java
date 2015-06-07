@@ -30,9 +30,9 @@ import java.util.TimerTask;
 
 
 public class GameManager {
-    final private double FRAMES_PER_SECOND = 40.0;
-    final private int BLOCK_SIZE = 50;
-    final private int GRID_SIZE = 10*BLOCK_SIZE;
+    final public static double FRAMES_PER_SECOND = 30.0;
+    final public static int BLOCK_SIZE = 50;
+    final public static int GRID_SIZE = 15*BLOCK_SIZE;
 
     private long startTime;
     private Timer timer;
@@ -70,7 +70,7 @@ public class GameManager {
         createTowerButton();
         createWaveButton();
 
-        this.gameScene = new Scene(root, 700, 500);
+        this.gameScene = new Scene(root, GRID_SIZE+150, GRID_SIZE);
 
         //game music is initialized and it is INTENSE
         String uriString = new
@@ -149,7 +149,7 @@ public class GameManager {
 
         //view
         btn.setText("Build Tower");
-        btn.setLayoutX(600.0);
+        btn.setLayoutX(GRID_SIZE+50);
         btn.setLayoutY(200.0);
         this.root.getChildren().add(btn);
     }
@@ -164,7 +164,7 @@ public class GameManager {
         });
 
         //view
-        waveBtn.setLayoutX(600);
+        waveBtn.setLayoutX(GRID_SIZE+50);
         waveBtn.setLayoutY(470);
         this.root.getChildren().add(waveBtn);
     }
@@ -294,7 +294,7 @@ public class GameManager {
         final int enemyDelay = 75;
         if (enemiesAlive.size() + enemiesFinished.size() < 10 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 325, 550);
+            createEnemy("Red Enemy", 175, GRID_SIZE+50);
         }
     }
 
@@ -302,7 +302,7 @@ public class GameManager {
         final int enemyDelay = 70;
         if (enemiesAlive.size() + enemiesFinished.size() < 30 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Blue Enemy", 325, 550);
+            createEnemy("Blue Enemy", 175, GRID_SIZE+50);
         }
     }
 
@@ -310,7 +310,7 @@ public class GameManager {
         final int enemyDelay = 65;
         if (enemiesAlive.size() + enemiesFinished.size() < 60 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Yellow Enemy", 325, 550);
+            createEnemy("Yellow Enemy", 175, GRID_SIZE+50);
         }
     }
 
@@ -318,7 +318,7 @@ public class GameManager {
         final int enemyDelay = 60;
         if (enemiesAlive.size() + enemiesFinished.size() < 61 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Boss Enemy", 325, 550);
+            createEnemy("Boss Enemy", 175, GRID_SIZE+50);
         }
     }
 
@@ -335,14 +335,29 @@ public class GameManager {
             }
             Circle circle = enemy.getCircle();
 
+            double y = circle.getCenterY();
+            double x = circle.getCenterX();
+
             //Sets the path for the enemies to move along. Updates coordinates
             //after the enemy moves.
-            if (circle.getCenterY() >= 275) {
-                circle.setCenterY(circle.getCenterY() - 2);
-            } else if (circle.getCenterY() <= 275 && circle.getCenterX() >= 175) {
-                circle.setCenterX(circle.getCenterX() - 2);
-            } else if (circle.getCenterY() <= 275 && circle.getCenterX() <= 175) {
-                circle.setCenterY(circle.getCenterY() - 2);
+            if ( y >= 475 && x <= 180 ) {
+                circle.setCenterY(y - 2);
+            } else if (y >= 470 && x <= 425) {
+                circle.setCenterX(x + 2);
+            } else if (y <= 625 && y >= 470 && x <= 430) {
+                circle.setCenterY(y + 2);
+            } else if (y <= 630 && y >= 470 && x <= 625) {
+                circle.setCenterX(x + 2);
+            } else if (y >= 125 && x <= 630 && x >= 500) {
+                circle.setCenterY(y - 2);
+            } else if (y >= 120 && x >= 425) {
+                circle.setCenterX(x - 2);
+            } else if (y <= 275 && x >= 420) {
+                circle.setCenterY(y + 2);
+            } else if (y <= 280 && x >= 175) {
+                circle.setCenterX(x - 2);
+            } else {
+                circle.setCenterY(y - 2);
             }
 
             this.root.getChildren().remove(circle);
@@ -407,7 +422,7 @@ public class GameManager {
     public void createSellTowerButton(Tower tower) {
         this.root.getChildren().remove(this.sellBtn);
         this.sellBtn = new Button("Sell");
-        this.sellBtn.setLayoutX(550);
+        this.sellBtn.setLayoutX(GRID_SIZE+40);
         this.sellBtn.setLayoutY(400);
         this.root.getChildren().add(sellBtn);
         this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -422,7 +437,7 @@ public class GameManager {
     public void createUpgradeTowerButton(Tower tower) {
         this.root.getChildren().remove(this.upgradeBtn);
         this.upgradeBtn = new Button("Upgrade");
-        this.upgradeBtn.setLayoutX(600);
+        this.upgradeBtn.setLayoutX(GRID_SIZE+80);
         this.upgradeBtn.setLayoutY(400);
         this.root.getChildren().add(upgradeBtn);
         this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -459,16 +474,21 @@ public class GameManager {
         //0 means tower placeable
         //1 means enemy path
         return new int[][]{
-                {0,0,0,1,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0},
-                {0,0,0,1,1,1,1,0,0,0},
-                {0,0,0,0,0,0,1,0,0,0},
-                {0,0,0,0,0,0,1,0,0,0},
-                {0,0,0,0,0,0,1,0,0,0},
-                {0,0,0,0,0,0,1,0,0,0}
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
         };
     }
 

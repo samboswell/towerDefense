@@ -30,16 +30,10 @@ public class Enemy {
         this.gold = gold;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.circle = new Circle(325,550,this.getSize(), color);
+        this.circle = new Circle(xCoordinate,yCoordinate,this.getSize(), color);
         this.isDead = false;
     }
     public boolean isFinished() {
-//        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
-//            this.isFinished = true;
-//            return true;
-//        }
-//        this.isFinished = false;
-//        return false;
         return this.getY() < 0;
     }
     public String getName() {return this.name;}
