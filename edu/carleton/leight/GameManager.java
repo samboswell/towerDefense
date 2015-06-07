@@ -264,11 +264,14 @@ public class GameManager {
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
-        switch (waveCount) {
-            case 1: sendWave1(delay);
-            case 2: sendWave2(delay);
-            case 3: sendWave3(delay);
-            case 4: sendWave4(delay);
+        if (this.waveCount == 1) {
+            sendWave1(delay);
+        } else if (this.waveCount == 2) {
+            sendWave2(delay);
+        } else if (this.waveCount == 3) {
+            sendWave3(delay);
+        } else if (this.waveCount == 4) {
+            sendWave4(delay);
         }
 
         updateEnemyAnimation();
