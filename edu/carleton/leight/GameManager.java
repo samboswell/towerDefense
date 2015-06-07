@@ -150,14 +150,44 @@ public class GameManager {
     }
 
 
-    public void createEnemy(String name, int health, int scoreValue, int gold, int x, int y) {
-        //view
-        Circle circle = new Circle(x,y,15,Color.RED);
-        this.root.getChildren().add(circle);
+    public void createEnemy(String name, int x, int y) {
+        if(name == "Red Enemy") {
+            //view
+            Circle circle = new Circle(x, y, 15, Color.RED);
+            this.root.getChildren().add(circle);
 
-        //model
-        Enemy enemy = new Enemy(name, health, scoreValue, gold, x,y,circle);
-        this.enemiesAlive.add(enemy);
+            //model
+            Enemy enemy = new RedEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+        }
+        if(name == "Blue Enemy") {
+            //view
+            Circle circle = new Circle(x, y, 15, Color.BLUE);
+            this.root.getChildren().add(circle);
+
+            //model
+            Enemy enemy = new BlueEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+        }
+        if(name == "Yellow Enemy") {
+            //view
+            Circle circle = new Circle(x, y, 15, Color.YELLOW);
+            this.root.getChildren().add(circle);
+
+            //model
+            Enemy enemy = new YellowEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+        }
+        if(name == "Boss Enemy") {
+            //view
+            Circle circle = new Circle(x, y, 15, Color.DARKGOLDENROD);
+            this.root.getChildren().add(circle);
+
+            //model
+            Enemy enemy = new BossEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+        }
+
     }
 
     public List<Enemy> getAliveEnemies() {
@@ -198,7 +228,7 @@ public class GameManager {
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
-        System.out.println(delay);
+
         if (delay>5) {
             sendWave1(delay);
         }
@@ -207,6 +237,9 @@ public class GameManager {
         }
         if (delay > 3200) {
             sendWave3(delay);
+        }
+        if (delay > 5000) {
+            sendWave4(delay);
         }
         updateEnemyAnimation();
         updateAttacks();
@@ -224,7 +257,7 @@ public class GameManager {
         if (enemiesAlive.size() + enemiesFinished.size() >= 0 &&
                 enemiesAlive.size() + enemiesFinished.size() <= 10
                 && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 100, 50, 20, 325, 550);
+            createEnemy("Red Enemy", 325, 550);
         }
     }
 
@@ -235,7 +268,7 @@ public class GameManager {
         if (enemiesAlive.size() + enemiesFinished.size() >= 10 &&
                 enemiesAlive.size() + enemiesFinished.size() <= 29
                 && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 150, 50, 20, 325, 550);
+            createEnemy("Yellow Enemy", 325, 550);
         }
     }
 
@@ -245,7 +278,16 @@ public class GameManager {
         if (enemiesAlive.size() + enemiesFinished.size() >= 30 &&
                 enemiesAlive.size() + enemiesFinished.size() <= 49
                 && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 200, 50, 20, 325, 550);
+            createEnemy("Blue Enemy", 325, 550);
+        }
+    }
+
+    public void sendWave4(long delay) {
+        final int enemyDelay = 60;
+        if (enemiesAlive.size() + enemiesFinished.size() >= 49 &&
+                enemiesAlive.size() + enemiesFinished.size() <= 50
+                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+            createEnemy("Boss Enemy", 325, 550);
         }
     }
 
@@ -259,6 +301,7 @@ public class GameManager {
                 this.profile.setLives(this.profile.getLives()-1);
             }
             Circle circle = enemy.getCircle();
+            System.out.println(circle.getCenterX());
 
             //Sets the path for the enemies to move along. Updates coordinates
             //after the enemy moves.
@@ -270,8 +313,9 @@ public class GameManager {
                 circle.setCenterY(circle.getCenterY() - 2);
             }
 
+            this.root.getChildren().remove(circle);
             updateCoordinates(enemy, circle.getCenterX(), circle.getCenterY());
-
+            this.root.getChildren().add(circle);
         }
     }
 
@@ -295,6 +339,8 @@ public class GameManager {
     public void updateCoordinates(Enemy enemy, double x, double y) {
         enemy.setX(x);
         enemy.setY(y);
+        enemy.setCircleX(x);
+        enemy.setCircleY(y);
     }
 
     public int[][] getDefaultGameGrid() {

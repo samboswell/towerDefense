@@ -1,5 +1,6 @@
 package edu.carleton.leight;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Enemy {
@@ -17,7 +18,7 @@ public class Enemy {
 
     private Circle circle;
     
-    public Enemy (String name, int health, int scoreValue, int gold, double xCoordinate, double yCoordinate, Circle circle) {
+    public Enemy (String name, int health, int scoreValue, int gold, double xCoordinate, double yCoordinate, Color color) {
         this.name = name;
         this.isFinished = false;
         this.health = health;
@@ -26,7 +27,7 @@ public class Enemy {
         this.gold = gold;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.circle = circle;
+        this.circle = new Circle(325,550,15, color);
     }
     public boolean isFinished() {
 //        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
@@ -65,6 +66,12 @@ public class Enemy {
     }
     public void setY(double yCoordinate) {
         this.yCoordinate = yCoordinate;
+    }
+    public void setCircleX(double xCoordinate) {
+        this.circle.setCenterX(xCoordinate);
+    }
+    public void setCircleY(double yCoordinate) {
+        this.circle.setCenterY(yCoordinate);
     }
 
     public void setHealth(int health, int damage) {
