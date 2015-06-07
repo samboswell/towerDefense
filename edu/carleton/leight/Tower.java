@@ -1,6 +1,7 @@
 package edu.carleton.leight;
 
 
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -16,8 +17,10 @@ public class Tower extends Sprite {
     private double yCoordinate;
     private Circle circle;
     private List<Projectile> projectiles;
+    private ImageView towerImage;
     
-    public Tower(double xCoordinate, double yCoordinate) {
+    public Tower(double xCoordinate, double yCoordinate, ImageView towerImage) {
+        this.towerImage = towerImage;
         this.range = 100.0; // [minX, maxX, minY, maxY]
         this.damage = 20;
         this.cost = 50;
@@ -27,6 +30,10 @@ public class Tower extends Sprite {
         this.xCoordinate = xCoordinate - xCoordinate%50 + 25;
         this.yCoordinate = yCoordinate - yCoordinate%50 + 25;
         projectiles = new ArrayList<>();
+    }
+
+    public ImageView getImage() {
+        return this.towerImage;
     }
     public double getRange() {
         return this.range;

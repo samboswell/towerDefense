@@ -17,14 +17,16 @@ public class GameScreen {
 
     private Profile profile;
     private Group root;
-    private Label label;
+    private Label profileLabel;
+    private Label statsLabel;
 
     public GameScreen(Profile profile, Group root) {
         this.profile = profile;
         this.root = root;
-        label = new Label();
+        this.profileLabel = new Label();
+        this.statsLabel = new Label();
     }
-    public void createButton() {
+    public void createTowerButtonImage() {
 
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
@@ -50,12 +52,20 @@ public class GameScreen {
             }
         }
     }
-    public void drawUpdatedLabel() {
-        this.root.getChildren().remove(this.label);
+    public void drawUpdatedProfileLabel() {
+        this.root.getChildren().remove(this.profileLabel);
         String newStats = this.profile.getStats();
-        Label newLabel = new Label(newStats);
-        this.root.getChildren().add(newLabel);
-        this.label = newLabel;
+        Label profileLabel = new Label(newStats);
+        profileLabel.setLayoutX(600);
+        this.root.getChildren().add(profileLabel);
+        this.profileLabel = profileLabel;
+    }
+
+    public void drawUpdatedStatsLabel() {
+        Label statsLabel = new Label("*insert stats here*");
+        statsLabel.setLayoutX(500);
+        statsLabel.setLayoutY(400);
+        this.root.getChildren().add(statsLabel);
     }
 
     public void drawEnemy() {
