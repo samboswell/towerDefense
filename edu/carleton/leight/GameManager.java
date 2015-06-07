@@ -150,7 +150,7 @@ public class GameManager {
 
 
     public void createEnemy(String name, int x, int y) {
-        if(name == "Red Enemy") {
+        if(name.equals("Red Enemy")) {
             //view
             Circle circle = new Circle(x, y, 15, Color.RED);
 
@@ -158,7 +158,7 @@ public class GameManager {
             Enemy enemy = new RedEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
-        if(name == "Blue Enemy") {
+        if(name.equals("Blue Enemy")) {
             //view
             Circle circle = new Circle(x, y, 15, Color.BLUE);
 
@@ -166,7 +166,7 @@ public class GameManager {
             Enemy enemy = new BlueEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
-        if(name == "Yellow Enemy") {
+        if(name.equals("Yellow Enemy")) {
             //view
             Circle circle = new Circle(x, y, 15, Color.YELLOW);
 
@@ -174,7 +174,7 @@ public class GameManager {
             Enemy enemy = new YellowEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
-        if(name == "Boss Enemy") {
+        if(name.equals("Boss Enemy")) {
             //view
             Circle circle = new Circle(x, y, 15, Color.DARKGOLDENROD);
 
