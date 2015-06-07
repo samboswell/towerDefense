@@ -41,7 +41,7 @@ public class Main extends Application {
         Parent root;
         FXMLLoader loader2 = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
         try {
-            GameManager gameManager2 = new GameManager();
+            GameManager gameManager2 = new GameManager(this);
             loader2.setController(gameManager2);
             loader2.load();
             stage.setScene(gameManager2.getGameScene());
@@ -76,10 +76,10 @@ public class Main extends Application {
 
     public void endGame() {
         Parent root;
-        FXMLLoader loader4 = new FXMLLoader(getClass().getResource("EndGame.fxml"));
+        FXMLLoader loader4 = new FXMLLoader(getClass().getResource("home.fxml"));
         try {
-            EndGameController endGame = new EndGameController(this);
-            loader4.setController(endGame);
+            HomeScreenController homeScreenController = new HomeScreenController(this);
+            loader4.setController(homeScreenController);
             root = (Parent) loader4.load();
             this.stage.setScene(new Scene(root, stageXSize, stageYSize));
             this.stage.show();

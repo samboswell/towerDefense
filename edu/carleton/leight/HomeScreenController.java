@@ -20,4 +20,6 @@ public class HomeScreenController {
 
     @FXML public void onAboutPress(ActionEvent event) {main.aboutGame(); }
 
+    @FXML public void onGameOver(ActionEvent event) {main.endGame();}
+
 }

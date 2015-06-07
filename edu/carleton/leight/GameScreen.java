@@ -46,7 +46,7 @@ public class GameScreen {
                 if (currentSquare == 1) {
                     Rectangle pathBlock = new Rectangle(xCorner, yCorner,
                             50.0, 50.0);
-                    pathBlock.setOpacity(0.8);
+                    pathBlock.setOpacity(.8);
                     this.root.getChildren().add(pathBlock);
                 }
             }
@@ -68,6 +68,10 @@ public class GameScreen {
         statsLabel.setLayoutY(350);
         this.root.getChildren().add(statsLabel);
         this.statsLabel = statsLabel;
+    }
+
+    public void removeStatsLabel() {
+        this.root.getChildren().remove(this.statsLabel);
     }
 
     public void drawEnemy() {

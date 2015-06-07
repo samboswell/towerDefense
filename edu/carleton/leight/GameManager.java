@@ -1,12 +1,14 @@
 package edu.carleton.leight;
 
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -46,9 +48,10 @@ public class GameManager {
     private int waveCount;
     private Button sellBtn;
     private Button upgradeBtn;
+    private Main main;
 
 
-    public GameManager() {
+    public GameManager(Main main) {
         this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<>();
         this.enemiesFinished = new ArrayList<>();
@@ -57,6 +60,7 @@ public class GameManager {
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
         this.waveCount = 0;
+        this.main = main;
 
         //draw background of gameScreen
         this.gameScreen.drawPath(getGameGrid());
@@ -92,7 +96,7 @@ public class GameManager {
         Rectangle clickableRect = new Rectangle(GRID_SIZE, GRID_SIZE);
         clickableRect.setOpacity(0.0); //hide clickable zone
         this.root.getChildren().add(clickableRect);
-        Button btn = new Button();
+        ToggleButton btn = new ToggleButton();
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -105,30 +109,41 @@ public class GameManager {
                         new Image("edu/carleton/leight/TowerImage.png",
                                 BLOCK_SIZE, BLOCK_SIZE, false, false);
                 getGameScene().setCursor(new ImageCursor(towerImage));
+                if (btn.isSelected()) {
+                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            if (getIsPlacingTower()) {
+                                //this conditional will only be the case if a tower has
+                                //not yet been built after clicking the build button
+                                int column = (int) mouseEvent.getX() / BLOCK_SIZE;
+                                int row = (int) mouseEvent.getY() / BLOCK_SIZE;
+                                int[][] gameGrid = getGameGrid();
 
-                clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        //this conditional will only be the case if a tower has
-                        //not yet been built after clicking the build button
-                        if (getIsPlacingTower()) {
-                            int column = (int) mouseEvent.getX() / BLOCK_SIZE;
-                            int row = (int) mouseEvent.getY() / BLOCK_SIZE;
-                            int[][] gameGrid = getGameGrid();
-
-                            //only build if you have the gold
-                            if (getCurrentGold() >= 50) {
-                                //only build if not on path
-                                if (gameGrid[row][column] == 0) {
-                                    buildTower(mouseEvent.getX(),
-                                            mouseEvent.getY());
+                                //only build if you have the gold
+                                if (getCurrentGold() >= 50) {
+                                    //only build if not on path
+                                    if (gameGrid[row][column] == 0) {
+                                        buildTower(mouseEvent.getX(),
+                                                mouseEvent.getY());
+                                    }
                                 }
+                                getGameScene().setCursor(Cursor.DEFAULT);
+                                btn.setSelected(false);
+                                setIsPlacingTower(false);
                             }
-                            getGameScene().setCursor(Cursor.DEFAULT);
-                            setIsPlacingTower(false);
                         }
-                    }
-                });
+                    });
+                }
+                else {
+                    getGameScene().setCursor(Cursor.DEFAULT);
+                    setIsPlacingTower(false);
+                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                        }
+                    });
+                }
             }
         });
 
@@ -172,9 +187,6 @@ public class GameManager {
     public void setWaveCount(int waveCount) {
         this.waveCount = waveCount;
     }
-
-
-
 
     public void buildTower(double rawX, double rawY) {
         //snaps tower to 50 by 50 blocks
@@ -285,8 +297,7 @@ public class GameManager {
         gameScreen.drawUpdatedProfileLabel();
 
         if (this.profile.getLives() <= 0) {
-            System.out.println("YOU LOSE!!!!!!!!!!!!!!!!!!!!!!!!");
-//            this.stage.setScene(homeScene);
+            main.endGame();
         }
     }
 
@@ -331,9 +342,8 @@ public class GameManager {
                 this.enemiesAlive.remove(enemy);
                 this.enemiesFinished.add(enemy);
                 this.profile.setLives(this.profile.getLives() - 1);
-                System.out.println(this.root.getChildren().size());
                 this.root.getChildren().remove(enemy.getCircle());
-                System.out.println("2: " +this.root.getChildren().size());
+                break;
             }
             Circle circle = enemy.getCircle();
 
@@ -365,9 +375,28 @@ public class GameManager {
                 if (enemiesInRange.size() > 0) {
                     Enemy enemy = enemiesInRange.get(0);
                     attackEnemy(tower, enemy);
+                    createProjectileAnimation(tower, enemy);
                 }
             }
         }
+    }
+
+    public void createProjectileAnimation(Tower tower, Enemy enemy) {
+        final Path path = new Path();
+        path.getElements().add(new MoveTo(tower.getX(), tower.getY()));
+        path.getElements().add(new LineTo(enemy.getX(), enemy.getY()));
+        path.setOpacity(0.0);
+        this.root.getChildren().add(path);
+
+        Circle projectile = new Circle(5);
+        this.root.getChildren().add(projectile);
+        final PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.seconds(0.1));
+        pathTransition.setPath(path);
+        pathTransition.setNode(projectile);
+        pathTransition.setCycleCount(1);
+        pathTransition.play();
+//        projectile.setCenterX(10000);
     }
 
     public void updateTowerClick() {
@@ -397,6 +426,7 @@ public class GameManager {
             @Override
             public void handle(ActionEvent event) {
                 sellTower(tower);
+                getGameScreen().removeStatsLabel();
             }
         });
     }
@@ -410,11 +440,18 @@ public class GameManager {
         this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                tower.upgrade();
-                getProfile().setGold((int) (getProfile().getGold() - tower.getCost()* 1.25));
-                tower.setCost((int) (tower.getCost() *1.25));
+                if (getProfile().getGold() > tower.getCost() * 1.25){
+                    tower.upgrade();
+                    getProfile().setGold((int) (getProfile().getGold() - tower.getCost() * 1.25));
+                    tower.setCost((int) (tower.getCost() * 1.25));
+                    getGameScreen().removeStatsLabel();
+                }
             }
         });
+    }
+
+    public GameScreen getGameScreen() {
+        return this.gameScreen;
     }
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
@@ -474,9 +511,14 @@ public class GameManager {
     }
 
     public void sellTower(Tower tower) {
+        //model
         profile.setGold(profile.getGold() + (int) (tower.getCost()*0.95));
         towers.remove(tower);
+
+        //view
         this.root.getChildren().remove(tower.getImage());
+        this.root.getChildren().remove(this.sellBtn);
+        this.root.getChildren().remove(this.upgradeBtn);
     }
 
 

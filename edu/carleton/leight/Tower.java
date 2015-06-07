@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tower extends Sprite {
+public class Tower {
 
     private double range;
     private int damage;
@@ -15,13 +15,11 @@ public class Tower extends Sprite {
     private double speed;
     private double xCoordinate;
     private double yCoordinate;
-    private Circle circle;
-    private List<Projectile> projectiles;
     private ImageView towerImage;
     
     public Tower(double xCoordinate, double yCoordinate, ImageView towerImage) {
         this.towerImage = towerImage;
-        this.range = 100.0; // [minX, maxX, minY, maxY]
+        this.range = 102.0;
         this.damage = 20;
         this.cost = 50;
         this.speed = 1.0;
@@ -29,7 +27,6 @@ public class Tower extends Sprite {
         //set coordinates to middle of the box
         this.xCoordinate = xCoordinate - xCoordinate%50 + 25;
         this.yCoordinate = yCoordinate - yCoordinate%50 + 25;
-        projectiles = new ArrayList<>();
     }
 
     public ImageView getImage() {
@@ -78,20 +75,6 @@ public class Tower extends Sprite {
          return enemiesInRange;
      }
 
-    public void attackEnemies(List<Enemy> enemiesAlive) {
-        List<Enemy> enemiesInRange = getEnemiesInRange(enemiesAlive);
-        if(enemiesInRange.size()>0) {
-            makeProjectile(enemiesInRange.get(0));
-        }
-        //enemy.setHealth(this.getDamage());
-    }
-
-    public void makeProjectile(Enemy enemy) {
-        Projectile projectile = new Projectile(enemy, xCoordinate, yCoordinate);
-        projectiles.add(projectile);
-    }
-
-    public List<Projectile> getProjectiles() {return this.projectiles;}
     // just for testing ###############################################
     public static void main(String[] args) {
 //        GameManager gameManager = new GameManager();
