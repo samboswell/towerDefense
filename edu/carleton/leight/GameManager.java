@@ -17,6 +17,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
 
+import java.io.File;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -54,6 +58,11 @@ public class GameManager {
         createTowerButton();
         this.gameScreen.drawPath(getGameGrid());
         this.gameScene = new Scene(root, 700, 500);
+
+        //game music is initialized and it is INTENSE
+        String uriString = new File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
+        MediaPlayer player = new MediaPlayer( new Media(uriString));
+        player.play();
     }
 
     public void initialize() {
