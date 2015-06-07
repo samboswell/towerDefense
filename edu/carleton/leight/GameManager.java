@@ -48,7 +48,6 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
-        this.isPlacingTower = false;
 
         //gameScene created
         gameScreen.createButton();
@@ -77,10 +76,11 @@ public class GameManager {
             @Override
             public void handle(ActionEvent event) {
                 setIsPlacingTower(true);
-                if (getIsPlacingTower()) {
-                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
+
+                clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (getIsPlacingTower()) {
                             int column = (int) mouseEvent.getX() / 50;
                             int row = (int) mouseEvent.getY() / 50;
 
@@ -97,16 +97,10 @@ public class GameManager {
                             getGameScene().setCursor(Cursor.DEFAULT);
                             setIsPlacingTower(false);
                         }
-                    });
-                }
-                else {
-                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            System.out.println("yay");
-                        }
-                    });
-                }
+                    }
+                });
+
+                //set cursor to towerImage when placeable
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                         50, 50, false, false);
                 getGameScene().setCursor(new ImageCursor(towerImage));
