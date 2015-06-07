@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="222.0" layoutY="410.0" mnemonicParsing="false" onAction="#onBackPress" text="Back" />
+      <TextArea prefHeight="400.0" prefWidth="700.0" text="&#10;&#10;&#10;&#10;In Circle Defend'r you play as squares who are under siege by enemy circles. Your&#10;goal is to survive the onslaught by building square towers to defeat the circles&#10;before they reach the end of the path. You click on the tower button to build your&#10;towers, and they automatically defeat your foe.&#10;&#10;Go forth and defeat the Circle enemy!&#10;&#10;&#10;Circle Defend'r is created by Tristan Leigh, Jonah Tuchow,and Sam Boswell.&#10;This project is a part of Jadrian Miles' Software Design in Spring 2015.&#10;Many thanks to Jadrian Miles and the Carleton College Computer Science department.">
+         <font>
+            <Font name="Ayuthaya" size="13.0" />
+         </font>
+      </TextArea>
+   </children>
+</AnchorPane>

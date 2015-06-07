@@ -55,8 +55,38 @@ public class Main extends Application {
     public void aboutGame() {
         Parent root;
         FXMLLoader loader3 = new FXMLLoader(getClass().getResource("About.fxml"));
+        try {
+            AboutScreenController aboutController = new AboutScreenController(this);
+            loader3.setController(aboutController);
+            root = (Parent) loader3.load();
+            this.stage.setScene(new Scene(root, stageXSize, stageYSize));
+            this.stage.show();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
+    public void backToMain() {
+        try {
+            start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void endGame() {
+        Parent root;
+        FXMLLoader loader4 = new FXMLLoader(getClass().getResource("EndGame.fxml"));
+        try {
+            EndGameController endGame = new EndGameController(this);
+            loader4.setController(endGame);
+            root = (Parent) loader4.load();
+            this.stage.setScene(new Scene(root, stageXSize, stageYSize));
+            this.stage.show();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);

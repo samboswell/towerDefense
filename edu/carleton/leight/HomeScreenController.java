@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-import java.util.TimerTask;
-
 public class HomeScreenController {
     private Main main;
     @FXML private Button play;
@@ -20,8 +18,6 @@ public class HomeScreenController {
         main.playGame();
     }
 
-//    @FXML public void onAboutPress(ActionEvent event) {
-//        displayAbout();
-//    }
+    @FXML public void onAboutPress(ActionEvent event) {main.aboutGame(); }
 
 }

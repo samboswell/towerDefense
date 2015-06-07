@@ -15,7 +15,7 @@
             <Font name="Ayuthaya" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="102.0" layoutY="261.0" mnemonicParsing="false" text="About">
+      <Button layoutX="102.0" layoutY="261.0" mnemonicParsing="false" onAction="#onAboutPress" text="About">
          <font>
             <Font name="Ayuthaya" size="13.0" />
          </font>
