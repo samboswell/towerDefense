@@ -32,7 +32,6 @@ public class GameManager {
     final private int BLOCK_SIZE = 50;
     final private int GRID_SIZE = 10*BLOCK_SIZE;
 
-//    private Stage stage;
     private long startTime;
     private Timer timer;
     private List<Enemy> enemiesAlive;
@@ -43,8 +42,10 @@ public class GameManager {
     private GameScreen gameScreen;
     private int[][] gameGrid;
     private Scene gameScene;
-//    private Scene homeScene;
     private boolean isPlacingTower;
+    private int waveCount;
+    private Button sellBtn;
+    private Button upgradeBtn;
 
 
     public GameManager() {
@@ -55,6 +56,7 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
+        this.waveCount = 0;
 
         //draw background of gameScreen
         this.gameScreen.drawPath(getGameGrid());
@@ -62,6 +64,7 @@ public class GameManager {
         //the build tower button must be in GameManager, because its action
         //depends on the current state of the game
         createTowerButton();
+        createWaveButton();
 
         this.gameScene = new Scene(root, 700, 500);
 
@@ -132,18 +135,42 @@ public class GameManager {
         this.root.getChildren().add(btn);
     }
 
+    public void createWaveButton() {
+        Button waveBtn = new Button("NEXT WAVE!!!");
+        waveBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setWaveCount(getWaveCount() + 1);
+            }
+        });
+
+        //view
+        waveBtn.setLayoutX(600);
+        waveBtn.setLayoutY(470);
+        this.root.getChildren().add(waveBtn);
+    }
+
+    public int getWaveCount() {
+        return this.waveCount;
+    }
+
     public boolean getIsPlacingTower() {
         return this.isPlacingTower;
+    }
+
+    public int getCurrentGold() {
+        return this.profile.getGold();
     }
 
     public void setIsPlacingTower(boolean isPlacingTower) {
         this.isPlacingTower = isPlacingTower;
     }
-
-
-    public int getCurrentGold() {
-        return this.profile.getGold();
+    public void setWaveCount(int waveCount) {
+        this.waveCount = waveCount;
     }
+
+
+
 
     public void buildTower(double rawX, double rawY) {
         //snaps tower to 50 by 50 blocks
@@ -237,17 +264,11 @@ public class GameManager {
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
-        if (delay>5) {
-            sendWave1(delay);
-        }
-        if (delay>1500) {
-            sendWave2(delay);
-        }
-        if (delay > 3200) {
-            sendWave3(delay);
-        }
-        if (delay > 5000) {
-            sendWave4(delay);
+        switch (waveCount) {
+            case 1: sendWave1(delay);
+            case 2: sendWave2(delay);
+            case 3: sendWave3(delay);
+            case 4: sendWave4(delay);
         }
 
         updateEnemyAnimation();
@@ -265,40 +286,32 @@ public class GameManager {
 
     public void sendWave1(long delay) {
         final int enemyDelay = 75;
-
-        if (enemiesAlive.size() + enemiesFinished.size() >= 0 &&
-                enemiesAlive.size() + enemiesFinished.size() <= 10
-                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+        if (enemiesAlive.size() + enemiesFinished.size() < 10 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
             createEnemy("Red Enemy", 325, 550);
         }
     }
 
     public void sendWave2(long delay) {
-
         final int enemyDelay = 70;
-
-        if (enemiesAlive.size() + enemiesFinished.size() >= 10 &&
-                enemiesAlive.size() + enemiesFinished.size() <= 29
-                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+        if (enemiesAlive.size() + enemiesFinished.size() < 30 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
             createEnemy("Yellow Enemy", 325, 550);
         }
     }
 
     public void sendWave3(long delay) {
         final int enemyDelay = 65;
-
-        if (enemiesAlive.size() + enemiesFinished.size() >= 30 &&
-                enemiesAlive.size() + enemiesFinished.size() <= 49
-                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+        if (enemiesAlive.size() + enemiesFinished.size() < 60 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
             createEnemy("Blue Enemy", 325, 550);
         }
     }
 
     public void sendWave4(long delay) {
         final int enemyDelay = 60;
-        if (enemiesAlive.size() + enemiesFinished.size() >= 49 &&
-                enemiesAlive.size() + enemiesFinished.size() <= 50
-                && delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+        if (enemiesAlive.size() + enemiesFinished.size() < 61 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
             createEnemy("Boss Enemy", 325, 550);
         }
     }
@@ -355,15 +368,31 @@ public class GameManager {
             tower.getImage().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    updateStatScreen();
+                    String statsString = tower.getStats();
+                    gameScreen.drawUpdatedStatsLabel(statsString);
+
+                    //add buttons whose actions depend on game state
+                    createSellTowerButton();
+                    createUpgradeTowerButton();
                 }
             });
         }
     }
 
-    public void updateStatScreen() {
+    public void createSellTowerButton() {
+        this.root.getChildren().remove(this.sellBtn);
+        this.sellBtn = new Button("Sell");
+        this.sellBtn.setLayoutX(550);
+        this.sellBtn.setLayoutY(400);
+        this.root.getChildren().add(sellBtn);
+    }
 
-        gameScreen.drawUpdatedStatsLabel();
+    public void createUpgradeTowerButton() {
+        this.root.getChildren().remove(this.upgradeBtn);
+        this.upgradeBtn = new Button("Upgrade");
+        this.upgradeBtn.setLayoutX(600);
+        this.upgradeBtn.setLayoutY(400);
+        this.root.getChildren().add(upgradeBtn);
     }
 
     public void updateCoordinates(Enemy enemy, double x, double y) {

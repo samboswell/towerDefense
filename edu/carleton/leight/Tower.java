@@ -50,9 +50,8 @@ public class Tower extends Sprite {
     public double getX() {return this.xCoordinate;}
     public double getY() {return this.yCoordinate;}
     public String getStats() {
-        String stats = "Covered range: " + this.range + "Damage: "
-                        + this.damage + "Attack Speed: " + this.speed;
-        return stats;
+        return "Range: " + this.range + "\nDamage: " + this.damage +
+                "\nAttack Speed: " + this.speed;
     }
 
     public void upgrade() {

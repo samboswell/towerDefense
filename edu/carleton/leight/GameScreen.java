@@ -61,11 +61,13 @@ public class GameScreen {
         this.profileLabel = profileLabel;
     }
 
-    public void drawUpdatedStatsLabel() {
-        Label statsLabel = new Label("*insert stats here*");
-        statsLabel.setLayoutX(500);
-        statsLabel.setLayoutY(400);
+    public void drawUpdatedStatsLabel(String statsString) {
+        this.root.getChildren().remove(this.statsLabel);
+        Label statsLabel = new Label(statsString);
+        statsLabel.setLayoutX(550);
+        statsLabel.setLayoutY(350);
         this.root.getChildren().add(statsLabel);
+        this.statsLabel = statsLabel;
     }
 
     public void drawEnemy() {
