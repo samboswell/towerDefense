@@ -15,6 +15,7 @@ public class Enemy {
     private int gold;
     private double xCoordinate;
     private double yCoordinate;
+    private boolean isDead;
 
     private Circle circle;
     
@@ -28,6 +29,7 @@ public class Enemy {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.circle = new Circle(325,550,15, color);
+        this.isDead = false;
     }
     public boolean isFinished() {
 //        if((this.getX()==circle.getRadius()+50.0) || (this.getY()==circle.getRadius()+50.0)) {
@@ -76,5 +78,13 @@ public class Enemy {
 
     public void setHealth(int health, int damage) {
         this.health = health-damage;
+        if (health <= 0) {
+            isDead = true;
+            isFinished = false;
+        }
+    }
+
+    public boolean isDead() {
+        return this.isDead;
     }
 }

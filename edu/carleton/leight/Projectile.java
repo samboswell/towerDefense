@@ -1,5 +1,8 @@
 package edu.carleton.leight;
 
+
+import java.awt.*;
+
 /**
  * Created by leight on 5/31/15.
  */
@@ -16,5 +19,13 @@ public class Projectile {
     }
 
     public Enemy getEnemyTarget() {return enemyTarget;}
+
+    public double getEndXCoordinate() {return enemyTarget.getX();}
+
+    public double getEndYCoordinate() {return enemyTarget.getY();}
+
+    public double getStartXCoordinate() {return this.towerXCoordinate;}
+
+    public double getStartYCoordinate() {return this.towerYCoordinate;}
 
 }

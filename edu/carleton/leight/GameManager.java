@@ -1,7 +1,9 @@
 package edu.carleton.leight;
 
+import javafx.animation.PathTransition;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
@@ -9,11 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class GameManager {
     private int[][] gameGrid;
     private Scene gameScene;
     private Scene homeScene;
+    private boolean isPlacingTower;
 
 
     public GameManager() {
@@ -45,9 +48,11 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.gameGrid = getDefaultGameGrid();
+        this.isPlacingTower = false;
 
         //gameScene created
-        createButton();
+        gameScreen.createButton();
+        createTowerButton();
         this.gameScreen.drawPath(getGameGrid());
         this.gameScene = new Scene(root, 700, 500);
     }
@@ -59,18 +64,11 @@ public class GameManager {
     public Scene getGameScene() {
         return this.gameScene;
     }
-    public void createButton() {
+    public void createTowerButton() {
         //this rectangle is the clickable zone for towers.
         Rectangle clickableRect = new Rectangle(500.0, 500.0);
         clickableRect.setOpacity(0.0); //hide clickable zone
         this.root.getChildren().add(clickableRect);
-
-        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
-                50,50,false,false);
-        ImageView towerView = new ImageView(towerImage);
-        towerView.setX(625);
-        towerView.setY(150);
-        this.root.getChildren().add(towerView);
         Button btn = new Button();
         btn.setText("Build Tower");
         btn.setLayoutX(600.0);
@@ -78,47 +76,51 @@ public class GameManager {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                TODO: get this button to work--https://blog.idrsolutions.com/2014/05/tutorial-change-default-cursor-javafx/
-//                Task task = new Task() {
-//                    @Override
-//                    protected Integer call() throws Exception {
-//                        int iterations;
-//                        scene.setCursor(Cursor.WAIT); //Change cursor to wait style
-//                        for (iterations = 0; iterations &lt; 100000; iterations++) {
-//                            System.out.println("Iteration " + iterations);
-//                        }
-//                        scene.setCursor(Cursor.DEFAULT); //Change cursor to default style
-//                        return iterations;
-//                    }
-//                };
-//                Thread th = new Thread(task);
-//                th.setDaemon(true);
-//                th.start();
-                clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                setIsPlacingTower(true);
+                if (getIsPlacingTower()) {
+                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            int column = (int) mouseEvent.getX() / 50;
+                            int row = (int) mouseEvent.getY() / 50;
 
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        int column = (int) mouseEvent.getX() / 50;
-                        int row = (int) mouseEvent.getY() / 50;
+                            //non-final instance variables are not accessible here
+                            int[][] gameGrid = getGameGrid();
 
-                        //non-final instance variables are not accessible here
-                        int[][] gameGrid = getGameGrid();
-
-                        //only build if you have the gold
-                        if (getCurrentGold() >= 50) {
-                            //only build if not on path
-                            if (gameGrid[row][column] == 0) {
-                                buildTower(mouseEvent.getX(), mouseEvent.getY());
+                            //only build if you have the gold
+                            if (getCurrentGold() >= 50) {
+                                //only build if not on path
+                                if (gameGrid[row][column] == 0) {
+                                    buildTower(mouseEvent.getX(), mouseEvent.getY());
+                                }
                             }
+                            getGameScene().setCursor(Cursor.DEFAULT);
+                            setIsPlacingTower(false);
                         }
-                    }
-                });
+                    });
+                }
+                else {
+                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            System.out.println("yay");
+                        }
+                    });
+                }
                 Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                         50, 50, false, false);
-                gameScene.setCursor(new ImageCursor(towerImage));
+                getGameScene().setCursor(new ImageCursor(towerImage));
             }
         });
         this.root.getChildren().add(btn);
+    }
+
+    public boolean getIsPlacingTower() {
+        return this.isPlacingTower;
+    }
+
+    public void setIsPlacingTower(boolean isPlacingTower) {
+        this.isPlacingTower = isPlacingTower;
     }
 
 
@@ -144,9 +146,6 @@ public class GameManager {
         this.towers.add(tower);
         this.profile.setGold(this.profile.getGold() - tower.getCost());
 
-//        int blockX = (int) x/50;
-//        int blockY = (int) y/50;
-//        this.gameGrid[blockX][blockY] = 2;
     }
 
 
@@ -154,7 +153,6 @@ public class GameManager {
         if(name == "Red Enemy") {
             //view
             Circle circle = new Circle(x, y, 15, Color.RED);
-            this.root.getChildren().add(circle);
 
             //model
             Enemy enemy = new RedEnemy(x, y);
@@ -163,7 +161,6 @@ public class GameManager {
         if(name == "Blue Enemy") {
             //view
             Circle circle = new Circle(x, y, 15, Color.BLUE);
-            this.root.getChildren().add(circle);
 
             //model
             Enemy enemy = new BlueEnemy(x, y);
@@ -172,7 +169,6 @@ public class GameManager {
         if(name == "Yellow Enemy") {
             //view
             Circle circle = new Circle(x, y, 15, Color.YELLOW);
-            this.root.getChildren().add(circle);
 
             //model
             Enemy enemy = new YellowEnemy(x, y);
@@ -181,7 +177,6 @@ public class GameManager {
         if(name == "Boss Enemy") {
             //view
             Circle circle = new Circle(x, y, 15, Color.DARKGOLDENROD);
-            this.root.getChildren().add(circle);
 
             //model
             Enemy enemy = new BossEnemy(x, y);
@@ -190,9 +185,6 @@ public class GameManager {
 
     }
 
-    public List<Enemy> getAliveEnemies() {
-        return this.enemiesAlive;
-    }
 
     public void removeEnemyFromGame(Enemy enemy) {
         //view
@@ -298,10 +290,12 @@ public class GameManager {
             if (enemy.isFinished()) {
                 this.enemiesAlive.remove(enemy);
                 this.enemiesFinished.add(enemy);
-                this.profile.setLives(this.profile.getLives()-1);
+                this.profile.setLives(this.profile.getLives() - 1);
+                System.out.println(this.root.getChildren().size());
+                this.root.getChildren().remove(enemy.getCircle());
+                System.out.println("2: " +this.root.getChildren().size());
             }
             Circle circle = enemy.getCircle();
-            System.out.println(circle.getCenterX());
 
             //Sets the path for the enemies to move along. Updates coordinates
             //after the enemy moves.
@@ -335,6 +329,7 @@ public class GameManager {
             }
         }
     }
+
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
         enemy.setX(x);
