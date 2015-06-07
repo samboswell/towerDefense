@@ -68,12 +68,12 @@ public class GameManager {
 
         this.gameScene = new Scene(root, 700, 500);
 
-//        //game music is initialized and it is INTENSE
-//        String uriString = new
-//                File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
-//        MediaPlayer player = new MediaPlayer(new Media(uriString));
-//        player.setCycleCount(100);
-//        player.play();
+        //game music is initialized and it is INTENSE
+        String uriString = new
+                File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player.setCycleCount(100);
+        player.play();
     }
 
     public void initialize() {
