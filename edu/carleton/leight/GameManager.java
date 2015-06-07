@@ -68,12 +68,12 @@ public class GameManager {
 
         this.gameScene = new Scene(root, 700, 500);
 
-        //game music is initialized and it is INTENSE
-        String uriString = new
-                File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.setCycleCount(100);
-        player.play();
+//        //game music is initialized and it is INTENSE
+//        String uriString = new
+//                File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
+//        MediaPlayer player = new MediaPlayer(new Media(uriString));
+//        player.setCycleCount(100);
+//        player.play();
     }
 
     public void initialize() {
@@ -82,6 +82,10 @@ public class GameManager {
 
     public Scene getGameScene() {
         return this.gameScene;
+    }
+
+    public Profile getProfile() {
+        return this.profile;
     }
     public void createTowerButton() {
         //This rectangle is the clickable zone for towers. It is not view.
@@ -136,7 +140,7 @@ public class GameManager {
     }
 
     public void createWaveButton() {
-        Button waveBtn = new Button("NEXT WAVE!!!");
+        Button waveBtn = new Button("Start Wave");
         waveBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -375,27 +379,42 @@ public class GameManager {
                     gameScreen.drawUpdatedStatsLabel(statsString);
 
                     //add buttons whose actions depend on game state
-                    createSellTowerButton();
-                    createUpgradeTowerButton();
+                    createSellTowerButton(tower);
+                    createUpgradeTowerButton(tower);
                 }
             });
         }
     }
 
-    public void createSellTowerButton() {
+
+    public void createSellTowerButton(Tower tower) {
         this.root.getChildren().remove(this.sellBtn);
         this.sellBtn = new Button("Sell");
         this.sellBtn.setLayoutX(550);
         this.sellBtn.setLayoutY(400);
         this.root.getChildren().add(sellBtn);
+        this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                sellTower(tower);
+            }
+        });
     }
 
-    public void createUpgradeTowerButton() {
+    public void createUpgradeTowerButton(Tower tower) {
         this.root.getChildren().remove(this.upgradeBtn);
         this.upgradeBtn = new Button("Upgrade");
         this.upgradeBtn.setLayoutX(600);
         this.upgradeBtn.setLayoutY(400);
         this.root.getChildren().add(upgradeBtn);
+        this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                tower.upgrade();
+                getProfile().setGold((int) (getProfile().getGold() - tower.getCost()* 1.25));
+                tower.setCost((int) (tower.getCost() *1.25));
+            }
+        });
     }
 
     public void updateCoordinates(Enemy enemy, double x, double y) {
@@ -454,7 +473,11 @@ public class GameManager {
         removeEnemyFromGame(enemy);
     }
 
-    public void sellTower() {}
+    public void sellTower(Tower tower) {
+        profile.setGold(profile.getGold() + (int) (tower.getCost()*0.95));
+        towers.remove(tower);
+        this.root.getChildren().remove(tower.getImage());
+    }
 
 
 //    //Iterates through enemies to find an enemy from the list of enemies

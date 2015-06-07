@@ -44,6 +44,7 @@ public class Tower extends Sprite {
     public int getCost() {
         return this.cost;
     }
+    public void setCost(int cost) { this.cost = cost;}
     public double getSpeed() {
         return this.speed;
     }
@@ -55,10 +56,9 @@ public class Tower extends Sprite {
     }
 
     public void upgrade() {
-        damage = damage + 1;
+        damage = damage + 5;
         speed = speed + 0.1;
-        range = range + 3.0;
-        cost += 30;
+        range = range + 20.0;
     }
 
      public List<Enemy> getEnemiesInRange(List<Enemy> enemiesAlive) {

@@ -3,9 +3,6 @@ package edu.carleton.leight;
 
 import java.awt.*;
 
-/**
- * Created by leight on 5/31/15.
- */
 public class Projectile {
 
     private Enemy enemyTarget;
