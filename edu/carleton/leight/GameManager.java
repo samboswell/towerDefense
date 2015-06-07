@@ -92,7 +92,7 @@ public class GameManager {
         return this.profile;
     }
     public void createTowerButton() {
-        //This rectangle is the clickable zone for towers. It is not view.
+        //This rectangle is the clickable zone for towers.
         Rectangle clickableRect = new Rectangle(GRID_SIZE, GRID_SIZE);
         clickableRect.setOpacity(0.0); //hide clickable zone
         this.root.getChildren().add(clickableRect);
@@ -210,33 +210,21 @@ public class GameManager {
 
     public void createEnemy(String name, int x, int y) {
         if(name.equals("Red Enemy")) {
-            //view
-            Circle circle = new Circle(x, y, 15, Color.RED);
-
             //model
             Enemy enemy = new RedEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
         if(name.equals("Blue Enemy")) {
-            //view
-            Circle circle = new Circle(x, y, 15, Color.BLUE);
-
             //model
             Enemy enemy = new BlueEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
         if(name.equals("Yellow Enemy")) {
-            //view
-            Circle circle = new Circle(x, y, 15, Color.YELLOW);
-
             //model
             Enemy enemy = new YellowEnemy(x, y);
             this.enemiesAlive.add(enemy);
         }
         if(name.equals("Boss Enemy")) {
-            //view
-            Circle circle = new Circle(x, y, 15, Color.DARKGOLDENROD);
-
             //model
             Enemy enemy = new BossEnemy(x, y);
             this.enemiesAlive.add(enemy);
@@ -314,7 +302,7 @@ public class GameManager {
         final int enemyDelay = 70;
         if (enemiesAlive.size() + enemiesFinished.size() < 30 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Yellow Enemy", 325, 550);
+            createEnemy("Blue Enemy", 325, 550);
         }
     }
 
@@ -322,7 +310,7 @@ public class GameManager {
         final int enemyDelay = 65;
         if (enemiesAlive.size() + enemiesFinished.size() < 60 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Blue Enemy", 325, 550);
+            createEnemy("Yellow Enemy", 325, 550);
         }
     }
 
@@ -445,9 +433,15 @@ public class GameManager {
                     getProfile().setGold((int) (getProfile().getGold() - tower.getCost() * 1.25));
                     tower.setCost((int) (tower.getCost() * 1.25));
                     getGameScreen().removeStatsLabel();
+                    removeButtons();
                 }
             }
         });
+    }
+
+    public void removeButtons() {
+        this.root.getChildren().remove(this.sellBtn);
+        this.root.getChildren().remove(this.upgradeBtn);
     }
 
     public GameScreen getGameScreen() {

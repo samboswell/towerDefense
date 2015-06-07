@@ -52,6 +52,7 @@ public class GameScreen {
             }
         }
     }
+
     public void drawUpdatedProfileLabel() {
         this.root.getChildren().remove(this.profileLabel);
         String newStats = this.profile.getStats();
@@ -72,14 +73,5 @@ public class GameScreen {
 
     public void removeStatsLabel() {
         this.root.getChildren().remove(this.statsLabel);
-    }
-
-    public void drawEnemy() {
-        Circle circle = new Circle(325,550,15, Color.RED);
-        this.root.getChildren().add(circle);
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
     }
 }

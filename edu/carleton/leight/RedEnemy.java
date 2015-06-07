@@ -7,7 +7,7 @@ public class RedEnemy extends Enemy {
     public static String name = "Red Enemy";
 
     public RedEnemy(double xCoordinate, double yCoordinate) {
-        super(name, 100, 50, 20, xCoordinate, yCoordinate, Color.RED);
+        super(name, 100, 10, 50, 20, xCoordinate, yCoordinate, Color.RED);
     }
 
 

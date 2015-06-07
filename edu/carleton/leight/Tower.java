@@ -12,7 +12,6 @@ public class Tower {
     private double range;
     private int damage;
     private int cost;
-    private double speed;
     private double xCoordinate;
     private double yCoordinate;
     private ImageView towerImage;
@@ -22,7 +21,6 @@ public class Tower {
         this.range = 102.0;
         this.damage = 20;
         this.cost = 50;
-        this.speed = 1.0;
 
         //set coordinates to middle of the box
         this.xCoordinate = xCoordinate - xCoordinate%50 + 25;
@@ -42,19 +40,15 @@ public class Tower {
         return this.cost;
     }
     public void setCost(int cost) { this.cost = cost;}
-    public double getSpeed() {
-        return this.speed;
-    }
     public double getX() {return this.xCoordinate;}
     public double getY() {return this.yCoordinate;}
     public String getStats() {
-        return "Range: " + this.range + "\nDamage: " + this.damage +
-                "\nAttack Speed: " + this.speed;
+        return "Range: " + this.range + "\nDamage: " + this.damage + "\nCost: "
+                + this.cost;
     }
 
     public void upgrade() {
         damage = damage + 5;
-        speed = speed + 0.1;
         range = range + 20.0;
     }
 

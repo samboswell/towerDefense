@@ -16,19 +16,21 @@ public class Enemy {
     private double xCoordinate;
     private double yCoordinate;
     private boolean isDead;
+    private int size;
 
     private Circle circle;
     
-    public Enemy (String name, int health, int scoreValue, int gold, double xCoordinate, double yCoordinate, Color color) {
+    public Enemy (String name, int health, int size, int scoreValue, int gold, double xCoordinate, double yCoordinate, Color color) {
         this.name = name;
         this.isFinished = false;
         this.health = health;
+        this.size = size;
         this.speed = 2;
         this.scoreValue = scoreValue;
         this.gold = gold;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.circle = new Circle(325,550,15, color);
+        this.circle = new Circle(325,550,this.getSize(), color);
         this.isDead = false;
     }
     public boolean isFinished() {
@@ -44,6 +46,7 @@ public class Enemy {
     public int getHealth() {
         return this.health;
     }
+    public int getSize() {return this.size;}
     public int getSpeed() {
         return this.speed;
     }
