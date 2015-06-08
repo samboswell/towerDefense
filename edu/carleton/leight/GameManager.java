@@ -177,8 +177,7 @@ public class GameManager {
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     getGameScene().setCursor(Cursor.DEFAULT);
                     setIsPlacingTower(false);
                     clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -379,6 +378,9 @@ public class GameManager {
                 if (wave.getWaveCount() == 6 && enemyCount > 149) {
                     wave.setWaveCount(7);
                 }
+                if (wave.getWaveCount() == 7 && enemyCount > 150) {
+                    wave.setWaveCount(8);
+                }
             }
         });
 
@@ -511,15 +513,25 @@ public class GameManager {
         else if (wave.getWaveCount() == 7) {
             sendWave(delay, 7);
         }
+        else if (wave.getWaveCount() == 8) {
+            gameScreen.drawGameCompleted();
+        }
 
         updateEnemyAnimation();
         updateAttacks();
         updateTowerClick();
 
-        gameScreen.drawUpdatedProfileLabel();
 
         if (this.profile.getLives() <= 0) {
             gameScreen.drawGameOver();
+        } else {
+            gameScreen.drawUpdatedProfileLabel();
+        }
+        for (Enemy enemy : enemiesAlive) {
+            if (enemy.getName().equals("Boss Enemy") && enemy.isFinished()) {
+                gameScreen.drawGameOver();
+                this.profile.setLives(0);
+            }
         }
     }
 
