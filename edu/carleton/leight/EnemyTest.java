@@ -32,26 +32,26 @@ public class EnemyTest {
 
     @org.junit.Test
     public void testGetX() throws Exception {
-        assertEquals(enemy.getX(),30.0);
+        assertEquals(enemy.getX(),30.0, 0.0);
     }
 
     @org.junit.Test
     public void testGetY() throws Exception {
-        assertEquals(enemy.getY(),30.0);
+        assertEquals(enemy.getY(),30.0, 0.0);
     }
 
     @org.junit.Test
     public void testSetX() throws Exception {
-        assertEquals(enemy.getX(),30.0);
+        assertEquals(enemy.getX(),30.0, 0.0);
         enemy.setX(20.0);
-        assertEquals(enemy.getX(),20.0);
+        assertEquals(enemy.getX(),20.0, 0.0);
     }
 
     @org.junit.Test
     public void testSetY() throws Exception {
-        assertEquals(enemy.getY(),30.0);
+        assertEquals(enemy.getY(),30.0, 0.0);
         enemy.setY(20.0);
-        assertEquals(enemy.getY(),20.0);
+        assertEquals(enemy.getY(),20.0, 0.0);
     }
 
     @org.junit.Test

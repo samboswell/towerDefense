@@ -23,7 +23,7 @@
 //    Tower tower = new Tower(10.0, 10.0, towerView);
 //    @org.junit.Test
 //    public void testGetRange() throws Exception {
-//        assertEquals(tower.getRange(), 102.0);
+//        assertEquals(tower.getRange(), 102.0, 0.0);
 //    }
 //
 //    @org.junit.Test
