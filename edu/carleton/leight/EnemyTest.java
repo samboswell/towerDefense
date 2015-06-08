@@ -14,7 +14,7 @@ public class EnemyTest {
         Enemy enemy = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, Color.RED);
     }
 
-    Enemy enemy = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, Color.RED);
+    Enemy enemy = new Enemy("Red Enemy", 100, 50, 20, 100.0, 30.0, Color.RED);
     @org.junit.Test
     public void testIsFinished() throws Exception {
         assertFalse("enemy HAS finished the path",enemy.isFinished());

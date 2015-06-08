@@ -55,18 +55,18 @@ public class GameManagerTest {
         int enemyCount = 0;
         int wave = 0;
         wave = changeWaves(wave, enemyCount);
-        assertEquals(wave, 1);
+        assertEquals(1, wave);
 
         //if input wave == 1, and enemyCount > 9, wave == 2
         enemyCount = 10;
         wave = changeWaves(wave, enemyCount);
-        assertEquals(wave, 2);
+        assertEquals(2, wave);
 
         //if input wave == 2, but enemyCount < 29, wave == 2
 
         enemyCount = 20;
         wave = changeWaves(wave, enemyCount);
-        assertEquals(wave, 2);
+        assertEquals(2, wave);
     }
 
 
@@ -137,7 +137,7 @@ public class GameManagerTest {
                 assertEquals(enemy.getName(), "Yellow Enemy");
             }
             //Are there any enemies in the list that we didn't add? (Boss Enemy)
-            assertFalse("Boss enemy got into the list", enemiesAlive.contains(BossEnemy.name));
+            assertNotEquals(enemy.getName(), "Boss Enemy");
 
         }
     }
@@ -145,9 +145,19 @@ public class GameManagerTest {
 //    @Test
 //    public void testRemoveEnemyFromGame() throws Exception {
 //        ArrayList<Enemy> enemiesAlive = createEnemyList();
-//        //Are there Red Enemies in enemiesAlive?
 //
-//        enemiesAlive.remove(enemy);
+//        //remove all redEnemies from enemiesAlive
+//        for(Enemy enemy : enemiesAlive) {
+//            if (enemy.getName().equals("Red Enemy")) {
+//                enemiesAlive.remove(enemy);
+//            }
+//        }
+//
+//        //are there any redEnemies in enemiesAlive?
+//        for(Enemy enemy : enemiesAlive) {
+//            System.out.println(enemy.getName());
+//        }
+//
 //    }
 
 
