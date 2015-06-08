@@ -33,7 +33,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-        HomeScreenController homeScreenController = new HomeScreenController(this);
+        HomeScreenController homeScreenController =
+                new HomeScreenController(this);
         loader.setController(homeScreenController);
         Parent root = (Parent) loader.load();
 
@@ -53,7 +54,8 @@ public class Main extends Application {
 
     public void playGame() {
         Parent root;
-        FXMLLoader loader2 = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+        FXMLLoader loader2 =
+                new FXMLLoader(getClass().getResource("GameScreen.fxml"));
         try {
             GameManager gameManager2 = new GameManager();
             loader2.setController(gameManager2);
@@ -68,9 +70,11 @@ public class Main extends Application {
 
     public void aboutGame() {
         Parent root;
-        FXMLLoader loader3 = new FXMLLoader(getClass().getResource("About.fxml"));
+        FXMLLoader loader3 =
+                new FXMLLoader(getClass().getResource("About.fxml"));
         try {
-            AboutScreenController aboutController = new AboutScreenController(this);
+            AboutScreenController aboutController =
+                    new AboutScreenController(this);
             loader3.setController(aboutController);
             root = (Parent) loader3.load();
             this.stage.setScene(new Scene(root, stageXSize, stageYSize));
@@ -90,9 +94,11 @@ public class Main extends Application {
 
     public void endGame() {
         Parent root;
-        FXMLLoader loader4 = new FXMLLoader(getClass().getResource("home.fxml"));
+        FXMLLoader loader4 =
+                new FXMLLoader(getClass().getResource("home.fxml"));
         try {
-            HomeScreenController homeScreenController = new HomeScreenController(this);
+            HomeScreenController homeScreenController =
+                    new HomeScreenController(this);
             loader4.setController(homeScreenController);
             root = (Parent) loader4.load();
             Scene scene = new Scene(root, stageXSize, stageYSize);

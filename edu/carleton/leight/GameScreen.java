@@ -43,6 +43,7 @@ public class GameScreen {
         this.gameGrid = getDefaultGameGrid();
 
     }
+
     public void drawTowerButtonImage() {
 
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
@@ -60,33 +61,6 @@ public class GameScreen {
         sidebar.setFill(Color.LIGHTGRAY);
         this.root.getChildren().add(sidebar);
     }
-
-    public int[][] getDefaultGameGrid() {
-        //0 means tower placeable
-        //1 means enemy path
-        return new int[][]{
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-        };
-    }
-
-    public int[][] getGameGrid() {
-        return this.gameGrid;
-    }
-
 
     public void drawPath(int[][] gameGrid) {
         for (int y = 0; y < 15; y++) {
@@ -170,8 +144,31 @@ public class GameScreen {
         this.root.getChildren().add(gameOver);
     }
 
-    public void removeProjectile(Circle projectile) {
-        this.root.getChildren().remove(projectile);
+    public int[][] getDefaultGameGrid() {
+        //0 means tower placeable
+        //1 means enemy path
+        return new int[][]{
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+        };
     }
+
+    public int[][] getGameGrid() {
+        return this.gameGrid;
+    }
+
 
 }

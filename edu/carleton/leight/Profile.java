@@ -8,13 +8,11 @@ public class Profile {
     private int lives;
     private int gold;
     private int highScore;
-    private List<Tower> userTowers;
 
     public Profile(int lives, int gold) {
         this.lives = lives;
         this.gold = gold;
         this.highScore = 0;
-        this.userTowers = new ArrayList<>();
     }
 
     public int getLives() {return this.lives;}
@@ -26,7 +24,7 @@ public class Profile {
     public String getStats() {
         String stats = "Lives: " + this.lives + "\n";
         stats += "High Score: " + this.highScore + "\n";
-        stats += "Gold: " + this.gold + "\n";
+        stats += "Gold: " + this.gold;
         return stats;
     }
 
@@ -36,8 +34,6 @@ public class Profile {
 
     public void setHighScore(int highScore) {this.highScore = highScore;}
 
-    public List<Tower> getUserTowers() {return this.userTowers;}
-
 
     // just for testing ###############################################
     public static void main(String[] args) {
@@ -46,7 +42,6 @@ public class Profile {
         System.out.println(p.getLives());
         System.out.println(p.getGold());
         System.out.println(p.getHighScore());
-        System.out.println(p.getUserTowers());
     }
 
 }
