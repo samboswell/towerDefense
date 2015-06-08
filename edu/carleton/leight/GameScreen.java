@@ -37,6 +37,13 @@ public class GameScreen {
 
     }
 
+    public void drawSideBar() {
+        Rectangle sidebar = new Rectangle(GameManager.GRID_SIZE+25,0,150,
+                GameManager.GRID_SIZE/2);
+        sidebar.setFill(Color.LIGHTGRAY);
+        this.root.getChildren().add(sidebar);
+    }
+
     public void drawPath(int[][] gameGrid) {
         for (int y = 0; y < 15; y++) {
             for (int x = 0; x < 15; x++) {
@@ -66,9 +73,15 @@ public class GameScreen {
         this.root.getChildren().remove(this.statsLabel);
         Label statsLabel = new Label(statsString);
         statsLabel.setLayoutX(GameManager.GRID_SIZE+50);
-        statsLabel.setLayoutY(350);
+        statsLabel.setLayoutY(200);
         this.root.getChildren().add(statsLabel);
         this.statsLabel = statsLabel;
+    }
+
+    public void drawTower(Tower tower, double x, double y) {
+        tower.getImage().setX(x);
+        tower.getImage().setY(y);
+        this.root.getChildren().add(tower.getImage());
     }
 
     public void removeStatsLabel() {

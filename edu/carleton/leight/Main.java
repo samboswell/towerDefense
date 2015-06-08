@@ -7,8 +7,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import java.io.File;
 
 
 public class Main extends Application {
@@ -23,6 +27,14 @@ public class Main extends Application {
         HomeScreenController homeScreenController = new HomeScreenController(this);
         loader.setController(homeScreenController);
         Parent root = (Parent) loader.load();
+
+        String uriString = new
+                File("edu/carleton/leight/Circle.mp3").toURI().toString();
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+        player.setCycleCount(100);
+        player.setAutoPlay(true);
+        player.play();
+
         //stage set
         this.stage.setTitle("Circle Defend'r");
         this.stage.setScene(new Scene(root, stageXSize, stageYSize));

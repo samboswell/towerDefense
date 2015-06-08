@@ -64,6 +64,7 @@ public class GameManager {
 
         //draw background of gameScreen
         this.gameScreen.drawPath(getGameGrid());
+        this.gameScreen.drawSideBar();
         this.gameScreen.createTowerButtonImage();
         //the build tower button must be in GameManager, because its action
         //depends on the current state of the game
@@ -72,16 +73,19 @@ public class GameManager {
 
         this.gameScene = new Scene(root, GRID_SIZE+150, GRID_SIZE);
 
-        //game music is initialized and it is INTENSE
-        String uriString = new
-                File("edu/carleton/leight/Metaphysik.mp3").toURI().toString();
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.setCycleCount(100);
-        player.play();
     }
 
     public void initialize() {
         setUpAnimationTimer();
+
+        //add music to background
+        String uriString = new
+                File("edu/carleton/leight/Circle.mp3").toURI().toString();
+        MediaPlayer player = new MediaPlayer(new Media(uriString));
+//        player.setCycleCount(100);
+        player.setAutoPlay(true);
+        System.out.println(player.totalDurationProperty());
+        player.play();
     }
 
     public Scene getGameScene() {
@@ -193,18 +197,17 @@ public class GameManager {
         double x =  rawX - rawX % BLOCK_SIZE;
         double y = rawY - rawY % BLOCK_SIZE;
 
-        //view
+
+        //model
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 BLOCK_SIZE,BLOCK_SIZE,false,false);
         ImageView towerView = new ImageView(towerImage);
-        towerView.setX(x);
-        towerView.setY(y);
-        this.root.getChildren().add(towerView);
-
-        //model
         Tower tower = new Tower(x,y,towerView);
         this.towers.add(tower);
         this.profile.setGold(this.profile.getGold() - tower.getCost());
+
+        //view
+        gameScreen.drawTower(tower, x,y);
     }
 
 
@@ -294,7 +297,7 @@ public class GameManager {
         final int enemyDelay = 75;
         if (enemiesAlive.size() + enemiesFinished.size() < 10 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 175, GRID_SIZE+50);
+            createEnemy("Red Enemy", 175, GRID_SIZE + 50);
         }
     }
 
@@ -385,6 +388,7 @@ public class GameManager {
     }
 
     public void createProjectileAnimation(Tower tower, Enemy enemy) {
+
         final Path path = new Path();
         path.getElements().add(new MoveTo(tower.getX(), tower.getY()));
         path.getElements().add(new LineTo(enemy.getX(), enemy.getY()));
@@ -397,9 +401,17 @@ public class GameManager {
         pathTransition.setDuration(Duration.seconds(0.1));
         pathTransition.setPath(path);
         pathTransition.setNode(projectile);
-        pathTransition.setCycleCount(1);
+//        pathTransition.setCycleCount(Timeline.INDEFINITE);
         pathTransition.play();
-//        projectile.setCenterX(10000);
+        EventHandler onFinished = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                removeProjectile(projectile);
+            }
+        };
+    }
+
+    public void removeProjectile(Circle projectile) {
+        this.root.getChildren().remove(projectile);
     }
 
     public void updateTowerClick() {
@@ -534,26 +546,6 @@ public class GameManager {
         this.root.getChildren().remove(this.sellBtn);
         this.root.getChildren().remove(this.upgradeBtn);
     }
-
-
-//    //Iterates through enemies to find an enemy from the list of enemies
-//    // that is finished, then removes it from the list.
-//    public void removeEnemyIfFinished() {
-//        for(Enemy enemy : enemiesAlive) {
-//            if (enemy.isFinished()) {
-//                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-//                enemiesFinished.add(enemy);
-//            }
-//        }
-//    }
-//
-//    public void removeEnemyIfDead() {
-//        for (Enemy enemy : enemiesAlive) {
-//            if (enemy.getHealth()<= 0) {
-//                enemiesAlive.remove(enemiesAlive.indexOf(enemy));
-//            }
-//        }
-//    }
 
 
 }
