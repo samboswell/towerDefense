@@ -6,7 +6,6 @@ package edu.carleton.leight;
  *
  * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
  */
-import javafx.animation.PathTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,8 +18,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.*;
-import javafx.util.Duration;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +154,27 @@ public class GameManager {
         waveBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                wave.setWaveCount(wave.getWaveCount() + 1);
+                if (wave.getWaveCount() == 0) {
+                    wave.setWaveCount(1);
+                }
+                if (wave.getWaveCount() == 1 && enemyCount > 9) {
+                    wave.setWaveCount(2);
+                }
+                if (wave.getWaveCount() == 2 && enemyCount > 29) {
+                    wave.setWaveCount(3);
+                }
+                if (wave.getWaveCount() == 3 && enemyCount > 59) {
+                    wave.setWaveCount(4);
+                }
+                if (wave.getWaveCount() == 4 && enemyCount > 99) {
+                    wave.setWaveCount(5);
+                }
+                if (wave.getWaveCount() == 5 && enemyCount > 124) {
+                    wave.setWaveCount(6);
+                }
+                if (wave.getWaveCount() == 6 && enemyCount > 149) {
+                    wave.setWaveCount(7);
+                }
             }
         });
 
@@ -300,52 +319,43 @@ public class GameManager {
         }
         if (waveNum == 2) {
             final int enemyDelay = 70;
-            for (int i = 0; i < 10; i++) {
                 if (enemyCount < 30 &&
-                        delay % enemyDelay >= 0 && delay % enemyDelay <=3) {
-                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                        delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
                     createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
                 }
             }
-        }
         if (waveNum == 3) {
             final int enemyDelay = 65;
             if (enemyCount < 60 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 4) {
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Red Enemy", 175, GRID_SIZE + 50);
-                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
         }
         if (waveNum == 4) {
             final int enemyDelay = 60;
             if (enemyCount < 100 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 5) {
-                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
         }
         if (waveNum == 5) {
             final int enemyDelay = 55;
             if (enemyCount < 125 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 6) {
-                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
-                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
         }
         if (waveNum == 6) {
             final int enemyDelay = 50;
             if (enemyCount < 150 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 7) {
-                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
-                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
         }
         if (waveNum == 7) {
             final int enemyDelay = 45;
             if (enemyCount < 175 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 8) {
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Boss Enemy", 175, GRID_SIZE + 50);
             }
         }
@@ -411,33 +421,6 @@ public class GameManager {
                 }
             }
         }
-    }
-
-    public void createProjectileAnimation(Tower tower, Enemy enemy) {
-
-        final Path path = new Path();
-        path.getElements().add(new MoveTo(tower.getX(), tower.getY()));
-        path.getElements().add(new LineTo(enemy.getX(), enemy.getY()));
-        path.setOpacity(0.0);
-        this.root.getChildren().add(path);
-
-        Circle projectile = new Circle(5);
-        this.root.getChildren().add(projectile);
-        final PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.seconds(0.1));
-        pathTransition.setPath(path);
-        pathTransition.setNode(projectile);
-//        pathTransition.setCycleCount(Timeline.INDEFINITE);
-        pathTransition.play();
-        EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                removeProjectile(projectile);
-            }
-        };
-    }
-
-    public void removeProjectile(Circle projectile) {
-        this.root.getChildren().remove(projectile);
     }
 
     public void updateTowerClick() {
