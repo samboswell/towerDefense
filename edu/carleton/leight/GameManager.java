@@ -157,41 +157,41 @@ public class GameManager {
                 if (btn.isSelected()) {
                     clickableRect.setOnMouseClicked(
                             new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            if (getIsPlacingTower()) {
-                                //this conditional will only be the case if a
-                                // tower has not yet been built after clicking
-                                // the build button
-                                int column =
-                                        (int) mouseEvent.getX() / BLOCK_SIZE;
-                                int row = (int) mouseEvent.getY() / BLOCK_SIZE;
-                                int[][] gameGrid =
-                                        gameScreen.getDefaultGameGrid();
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    if (getIsPlacingTower()) {
+                                        //this conditional will only be the case if a
+                                        // tower has not yet been built after clicking
+                                        // the build button
+                                        int column =
+                                                (int) mouseEvent.getX() / BLOCK_SIZE;
+                                        int row = (int) mouseEvent.getY() / BLOCK_SIZE;
+                                        int[][] gameGrid =
+                                                gameScreen.getDefaultGameGrid();
 
-                                //only build if you have the gold
-                                if (getCurrentGold() >= 50) {
-                                    //only build if not on path
-                                    if (gameGrid[row][column] == 0) {
-                                        buildTower(mouseEvent.getX(),
-                                                mouseEvent.getY());
+                                        //only build if you have the gold
+                                        if (getCurrentGold() >= 50) {
+                                            //only build if not on path
+                                            if (gameGrid[row][column] == 0) {
+                                                buildTower(mouseEvent.getX(),
+                                                        mouseEvent.getY());
+                                            }
+                                        }
+                                        getGameScene().setCursor(Cursor.DEFAULT);
+                                        btn.setSelected(false);
+                                        setIsPlacingTower(false);
                                     }
                                 }
-                                getGameScene().setCursor(Cursor.DEFAULT);
-                                btn.setSelected(false);
-                                setIsPlacingTower(false);
-                            }
-                        }
-                    });
+                            });
                 } else { //if button is unselected do nothing
                     getGameScene().setCursor(Cursor.DEFAULT);
                     setIsPlacingTower(false);
                     clickableRect.setOnMouseClicked(
                             new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                        }
-                    });
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                }
+                            });
                 }
             }
         });
@@ -361,7 +361,13 @@ public class GameManager {
             }
         } else if (waveNum == 7) {
             final int enemyDelay = 45;
-            if (enemyCount < 151 &&
+            if (enemyCount < 200 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
+        } else if (waveNum == 8) {
+            final int enemyDelay = 5;
+            if (enemyCount < 201 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Boss Enemy", 175, GRID_SIZE + 50);
             }
@@ -389,6 +395,8 @@ public class GameManager {
                     wave.setWaveCount(7);
                 } else if (wave.getWaveCount() == 7 && enemyCount > 150) {
                     wave.setWaveCount(8);
+                } else if (wave.getWaveCount() == 8 && enemyCount > 200) {
+                    wave.setWaveCount(9);
                 }
             }
         });
@@ -502,6 +510,9 @@ public class GameManager {
     }
 
     public void updateAnimation() {
+        /**
+         * main loop
+         */
 
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
@@ -522,6 +533,8 @@ public class GameManager {
         } else if (wave.getWaveCount() == 7) {
             sendWave(delay, 7);
         } else if (wave.getWaveCount() == 8) {
+            sendWave(delay, 8);
+        } else if (wave.getWaveCount() == 9) {
             gameScreen.drawGameCompleted();
         }
 

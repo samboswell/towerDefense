@@ -6,7 +6,7 @@ public class BossEnemy extends Enemy {
     public static String name = "Boss Enemy";
 
     public BossEnemy(double xCoordinate, double yCoordinate) {
-        super(name, 12500, 25, 1000, xCoordinate, yCoordinate,
+        super(name, 15000, 25, 1000, xCoordinate, yCoordinate,
               Color.DARKGOLDENROD);
     }
 
