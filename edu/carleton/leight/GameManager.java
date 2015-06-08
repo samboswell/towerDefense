@@ -42,8 +42,7 @@ public class GameManager {
     private boolean isPlacingTower;
     private Button sellBtn;
     private Button upgradeBtn;
-
-    public int enemyCount;
+    private int enemyCount;
 
 
     public GameManager() {
@@ -92,6 +91,8 @@ public class GameManager {
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 
+    //many of these methods are necessary for accessing non-final instance
+    //variables while handling user input
     public Scene getGameScene() {
         return this.gameScene;
     }
@@ -140,6 +141,7 @@ public class GameManager {
         clickableRect.setOpacity(0.0); //hide clickable zone
         this.root.getChildren().add(clickableRect);
         ToggleButton btn = new ToggleButton();
+
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -181,7 +183,7 @@ public class GameManager {
                             }
                         }
                     });
-                } else {
+                } else { //if button is unselected do nothing
                     getGameScene().setCursor(Cursor.DEFAULT);
                     setIsPlacingTower(false);
                     clickableRect.setOnMouseClicked(
@@ -213,11 +215,14 @@ public class GameManager {
     }
 
     public void createSellTowerButton(Tower tower) {
+        //view
         this.root.getChildren().remove(this.sellBtn);
         this.sellBtn = new Button("Sell");
         this.sellBtn.setLayoutX(GRID_SIZE + 35);
         this.sellBtn.setLayoutY(300);
         this.root.getChildren().add(sellBtn);
+        //end view
+
         this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -228,11 +233,14 @@ public class GameManager {
     }
 
     public void createUpgradeTowerButton(Tower tower) {
+        //view
         this.root.getChildren().remove(this.upgradeBtn);
         this.upgradeBtn = new Button("Upgrade");
         this.upgradeBtn.setLayoutX(GRID_SIZE + 75);
         this.upgradeBtn.setLayoutY(300);
         this.root.getChildren().add(upgradeBtn);
+        //end view
+
         this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -249,6 +257,9 @@ public class GameManager {
     }
 
     public void updateTowerClick() {
+        /**
+         * handle tower click event
+         */
         for (Tower tower : this.towers) {
             tower.getImage().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -265,30 +276,28 @@ public class GameManager {
     }
 
     public void createEnemy(String name, int x, int y) {
-
+        /**
+         * creates new enemy of given type with given coordinates
+         */
         if(name.equals("Red Enemy")) {
-            //model
             Enemy enemy = new RedEnemy(x, y);
             this.enemiesAlive.add(enemy);
-            enemyCount ++;
+            this.enemyCount ++;
         }
         if(name.equals("Blue Enemy")) {
-            //model
             Enemy enemy = new BlueEnemy(x, y);
             this.enemiesAlive.add(enemy);
-            enemyCount ++;
+            this.enemyCount ++;
         }
         if(name.equals("Yellow Enemy")) {
-            //model
             Enemy enemy = new YellowEnemy(x, y);
             this.enemiesAlive.add(enemy);
-            enemyCount ++;
+            this.enemyCount ++;
         }
         if(name.equals("Boss Enemy")) {
-            //model
             Enemy enemy = new BossEnemy(x, y);
             this.enemiesAlive.add(enemy);
-            enemyCount ++;
+            this.enemyCount ++;
         }
 
     }
@@ -303,14 +312,20 @@ public class GameManager {
     }
 
     public void sendWave(long delay, int waveNum) {
-        if (waveNum%7 == 1) {
+        /**
+         * coordinates wave generation
+         */
+        if (waveNum == 1) {
+            //enemy delay controls frequency in which enemies appear
             final int enemyDelay = 75;
             if (enemyCount < 10 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
+                //enemies will only be created within a small period of time
+                //Note: this will occasionally create variability in enemy
+                //creation time
                 createEnemy("Red Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 2) {
+        } else if (waveNum == 2) {
             final int enemyDelay = 70;
             if (enemyCount < 20 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
@@ -320,36 +335,31 @@ public class GameManager {
                     delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
                 createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 3) {
+        } else if (waveNum == 3) {
             final int enemyDelay = 65;
             if (enemyCount < 60 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Red Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 4) {
+        } else if (waveNum == 4) {
             final int enemyDelay = 60;
             if (enemyCount < 100 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 5) {
+        } else if (waveNum == 5) {
             final int enemyDelay = 55;
             if (enemyCount < 125 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 6) {
+        } else if (waveNum == 6) {
             final int enemyDelay = 50;
             if (enemyCount < 150 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
                 createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
             }
-        }
-        if (waveNum%7 == 0) {
+        } else if (waveNum == 7) {
             final int enemyDelay = 45;
             if (enemyCount < 151 &&
                     delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
@@ -365,26 +375,19 @@ public class GameManager {
             public void handle(ActionEvent event) {
                 if (wave.getWaveCount() == 0) {
                     wave.setWaveCount(1);
-                }
-                if (wave.getWaveCount() == 1 && enemyCount > 9) {
+                } else if (wave.getWaveCount() == 1 && enemyCount > 9) {
                     wave.setWaveCount(2);
-                }
-                if (wave.getWaveCount() == 2 && enemyCount > 29) {
+                } else if (wave.getWaveCount() == 2 && enemyCount > 29) {
                     wave.setWaveCount(3);
-                }
-                if (wave.getWaveCount() == 3 && enemyCount > 59) {
+                } else if (wave.getWaveCount() == 3 && enemyCount > 59) {
                     wave.setWaveCount(4);
-                }
-                if (wave.getWaveCount() == 4 && enemyCount > 99) {
+                } else if (wave.getWaveCount() == 4 && enemyCount > 99) {
                     wave.setWaveCount(5);
-                }
-                if (wave.getWaveCount() == 5 && enemyCount > 124) {
+                } else if (wave.getWaveCount() == 5 && enemyCount > 124) {
                     wave.setWaveCount(6);
-                }
-                if (wave.getWaveCount() == 6 && enemyCount > 149) {
+                } else if (wave.getWaveCount() == 6 && enemyCount > 149) {
                     wave.setWaveCount(7);
-                }
-                if (wave.getWaveCount() == 7 && enemyCount > 150) {
+                } else if (wave.getWaveCount() == 7 && enemyCount > 150) {
                     wave.setWaveCount(8);
                 }
             }
@@ -503,6 +506,7 @@ public class GameManager {
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
+        //conditionals prevent user from sending waves too soon
         if (wave.getWaveCount() == 1) {
             sendWave(delay, 1);
         } else if (wave.getWaveCount() == 2) {
@@ -513,14 +517,11 @@ public class GameManager {
             sendWave(delay, 4);
         } else if (wave.getWaveCount() == 5) {
             sendWave(delay, 5);
-        }
-        else if (wave.getWaveCount() == 6) {
+        } else if (wave.getWaveCount() == 6) {
             sendWave(delay, 6);
-        }
-        else if (wave.getWaveCount() == 7) {
+        } else if (wave.getWaveCount() == 7) {
             sendWave(delay, 7);
-        }
-        else if (wave.getWaveCount() == 8) {
+        } else if (wave.getWaveCount() == 8) {
             gameScreen.drawGameCompleted();
         }
 
@@ -532,6 +533,7 @@ public class GameManager {
         if (this.profile.getLives() <= 0) {
             gameScreen.drawGameOver();
         } else {
+            //this prevents label from appearing on lose screen
             gameScreen.drawUpdatedProfileLabel();
         }
         for (Enemy enemy : enemiesAlive) {
