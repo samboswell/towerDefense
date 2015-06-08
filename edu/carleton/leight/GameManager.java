@@ -144,7 +144,7 @@ public class GameManager {
 
         //view
         btn.setText("Build Tower");
-        btn.setLayoutX(GRID_SIZE+50);
+        btn.setLayoutX(GRID_SIZE+35);
         btn.setLayoutY(200.0);
         this.root.getChildren().add(btn);
     }
@@ -179,7 +179,7 @@ public class GameManager {
         });
 
         //view
-        waveBtn.setLayoutX(GRID_SIZE+50);
+        waveBtn.setLayoutX(GRID_SIZE+35);
         waveBtn.setLayoutY(340);
         this.root.getChildren().add(waveBtn);
     }
@@ -443,7 +443,7 @@ public class GameManager {
     public void createSellTowerButton(Tower tower) {
         this.root.getChildren().remove(this.sellBtn);
         this.sellBtn = new Button("Sell");
-        this.sellBtn.setLayoutX(GRID_SIZE+40);
+        this.sellBtn.setLayoutX(GRID_SIZE+35);
         this.sellBtn.setLayoutY(300);
         this.root.getChildren().add(sellBtn);
         this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -458,7 +458,7 @@ public class GameManager {
     public void createUpgradeTowerButton(Tower tower) {
         this.root.getChildren().remove(this.upgradeBtn);
         this.upgradeBtn = new Button("Upgrade");
-        this.upgradeBtn.setLayoutX(GRID_SIZE+80);
+        this.upgradeBtn.setLayoutX(GRID_SIZE+75);
         this.upgradeBtn.setLayoutY(300);
         this.root.getChildren().add(upgradeBtn);
         this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {

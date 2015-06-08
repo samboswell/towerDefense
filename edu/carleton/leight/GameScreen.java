@@ -47,7 +47,7 @@ public class GameScreen {
                 50,50,false,false);
         ImageView towerView = new ImageView(towerImage);
         towerView.setX(GameManager.GRID_SIZE+50);
-        towerView.setY(150);
+        towerView.setY(140);
         this.root.getChildren().add(towerView);
 
     }
@@ -106,7 +106,7 @@ public class GameScreen {
         this.root.getChildren().remove(this.profileLabel);
         String newStats = this.profile.getStats();
         Label profileLabel = new Label(newStats);
-        profileLabel.setLayoutX(GameManager.GRID_SIZE+50);
+        profileLabel.setLayoutX(GameManager.GRID_SIZE+35);
         this.root.getChildren().add(profileLabel);
         this.profileLabel = profileLabel;
     }
@@ -114,7 +114,7 @@ public class GameScreen {
     public void drawUpdatedStatsLabel(String statsString) {
         this.root.getChildren().remove(this.statsLabel);
         Label statsLabel = new Label(statsString);
-        statsLabel.setLayoutX(GameManager.GRID_SIZE+50);
+        statsLabel.setLayoutX(GameManager.GRID_SIZE+35);
         statsLabel.setLayoutY(250);
         this.root.getChildren().add(statsLabel);
         this.statsLabel = statsLabel;
