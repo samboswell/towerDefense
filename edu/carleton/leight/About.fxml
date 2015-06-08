@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -8,16 +10,20 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextArea editable="false" layoutY="14.0" prefHeight="500.0" prefWidth="700.0" text="&#10;&#10;&#10;&#10;In Circle Defend'r you play as squares who are under siege by enemy circles. Your&#10;goal is to survive the onslaught by building square towers to defeat the circles&#10;before they reach the end of the path. You click on the tower button to build your&#10;towers, and they automatically defeat your foe.&#10;&#10;The Towers,             which cost 50 gold each, fire blobs to destroy the circles.&#10;&#10;Place them neighboring the path for increased results! Circle Defend'r has 7 waves of&#10;circle enemies, ending with the Circle King trying to destroy your home.&#10;&#10;Go forth and defeat the Circle enemy!&#10;&#10;&#10;Circle Defend'r is created by Tristan Leigh, Jonah Tuchow,and Sam Boswell.&#10;This project is a part of Jadrian Miles' Software Design in Spring 2015.&#10;Many thanks to Jadrian Miles and the Carleton College Computer Science department.">
+      <TextArea layoutY="14.0" prefHeight="500.0" prefWidth="700.0" text="In Circle Defend'r you play as squares who are under siege by enemy circles. Your&#10;goal is to survive the onslaught by building square towers to defeat the circles&#10;before they reach the end of the path. You click on the tower button to build your&#10;towers, and they automatically defeat your foe.&#10;&#10;The Towers,             which cost 50 gold each, fire blobs to destroy the circles.&#10;&#10;Circle Defend'r has 7 waves of circle enemies, ending with the Circle King. Stronger&#10;enemies give more gold than weaker ones, so defeat them all!&#10;&#10;The Red Enemy is the weakest enemy:&#10;&#10;Then comes Blue:&#10;&#10;Then Yellow:&#10;&#10;Then the King:&#10;&#10;Go forth and defeat the Circle enemy!&#10;&#10;&#10;Circle Defend'r is created by Tristan Leigh, Jonah Tuchow,and Sam Boswell.&#10;This project is a part of Jadrian Miles' Software Design in Spring 2015.&#10;Many thanks to Jadrian Miles and the Carleton College Computer Science department.">
          <font>
             <Font name="Ayuthaya" size="13.0" />
          </font>
       </TextArea>
-      <Button layoutX="327.0" layoutY="412.0" mnemonicParsing="false" onAction="#onBackPress" text="Back" />
-      <ImageView fitHeight="58.0" fitWidth="58.0" layoutX="99.0" layoutY="163.0">
+      <Button layoutX="327.0" layoutY="460.0" mnemonicParsing="false" onAction="#onBackPress" text="Back" />
+      <ImageView fitHeight="58.0" fitWidth="58.0" layoutX="112.0" layoutY="87.0">
          <image>
             <Image url="@../../../../../Desktop/TowerImage.png" />
          </image>
       </ImageView>
+      <Circle fill="#ff2a1f" layoutX="296.0" layoutY="208.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="154.0" layoutY="243.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="#feff1f" layoutX="128.0" layoutY="277.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DARKGOLDENROD" layoutX="141.0" layoutY="320.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
    </children>
 </AnchorPane>

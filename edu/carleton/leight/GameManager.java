@@ -319,9 +319,13 @@ public class GameManager {
         }
         if (waveNum == 2) {
             final int enemyDelay = 70;
-                if (enemyCount < 30 &&
+                if (enemyCount < 20 &&
                         delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
-                    createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                }
+                else if (enemyCount >= 20 && enemyCount < 30 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
                 }
             }
         if (waveNum == 3) {

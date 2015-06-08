@@ -17,7 +17,6 @@ public class Enemy {
     private boolean isFinished;
     private int startHealth;
     private int health;
-    private int scoreValue;
     private int gold;
     private double xCoordinate;
     private double yCoordinate;

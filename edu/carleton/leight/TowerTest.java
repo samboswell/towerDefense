@@ -1,13 +1,12 @@
 //package edu.carleton.leight;
+//import javafx.scene.image.Image;
+//import javafx.scene.image.ImageView;
 //import javafx.scene.paint.Color;
-//import javafx.scene.shape.Circle;
 //
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertFalse;
-//import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.*;
 //
 ///**
 // * Created by boswells on 6/1/15.
@@ -16,13 +15,15 @@
 //
 //    @org.junit.Before
 //    public void beginning() throws Exception {
-//        Tower tower = new Tower(10.0, 10.0);
-//    }
 //
-//    Tower tower = new Tower(10.0, 10.0);
+//    }
+//    Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+//            50,50,false,false);
+//    ImageView towerView = new ImageView(towerImage);
+//    Tower tower = new Tower(10.0, 10.0, towerView);
 //    @org.junit.Test
 //    public void testGetRange() throws Exception {
-//        assertEquals(tower.getRange(), 10.0);
+//        assertEquals(tower.getRange(), 102.0);
 //    }
 //
 //    @org.junit.Test
@@ -33,11 +34,6 @@
 //    @org.junit.Test
 //    public void testGetCost() throws Exception {
 //        assertEquals(tower.getCost(),50);
-//    }
-//
-//    @org.junit.Test
-//    public void testGetSpeed() throws Exception {
-//        assertEquals(tower.getSpeed(), 1.0);
 //    }
 //
 //    @org.junit.Test
@@ -60,19 +56,18 @@
 //
 //    @org.junit.Test
 //    public void testEnemiesInRange() throws Exception {
-//        Circle circle = new Circle(300, 550, 15, Color.RED);
 //        List<Enemy> enemiesAlive = new ArrayList<>();
 //        List<Enemy> enemiesInRange = new ArrayList<>();
 //        //distance of 10(root2)
-//        Enemy enemy1 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 0.0, circle);
+//        Enemy enemy1 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 0.0, Color.RED);
 //        //distance of 15
-//        Enemy enemy2 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 5.0, circle);
+//        Enemy enemy2 = new Enemy("Red Enemy", 100, 50, 20, 0.0, 5.0, Color.RED);
 //        //distance of 9
-//        Enemy enemy3 = new Enemy("Red Enemy", 100, 50, 20, 1.0, 10.0, circle);
+//        Enemy enemy3 = new Enemy("Red Enemy", 100, 50, 20, 1.0, 10.0, Color.RED);
 //        //distance of 5
-//        Enemy enemy4 = new Enemy("Red Enemy", 100, 50, 20, 5.0, 10.0, circle);
+//        Enemy enemy4 = new Enemy("Red Enemy", 100, 50, 20, 5.0, 10.0, Color.RED);
 //        //distance of 20
-//        Enemy enemy5 = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, circle);
+//        Enemy enemy5 = new Enemy("Red Enemy", 100, 50, 20, 30.0, 30.0, Color.RED);
 //        enemiesAlive.add(enemy1);
 //        enemiesAlive.add(enemy2);
 //        enemiesAlive.add(enemy3);
