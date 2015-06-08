@@ -8,12 +8,16 @@ package edu.carleton.leight;
  */
 
 
+import javafx.animation.PathTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
+import javafx.util.Duration;
 
 public class GameScreen {
 
@@ -125,4 +129,32 @@ public class GameScreen {
     public void removeStatsLabel() {
         this.root.getChildren().remove(this.statsLabel);
     }
+
+    public void createProjectileAnimation(Tower tower, Enemy enemy) {
+
+        final Path path = new Path();
+        path.getElements().add(new MoveTo(tower.getX(), tower.getY()));
+        path.getElements().add(new LineTo(enemy.getX(), enemy.getY()));
+        path.setOpacity(0.0);
+        this.root.getChildren().add(path);
+
+        Circle projectile = new Circle(5);
+        this.root.getChildren().add(projectile);
+        final PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.seconds(0.1));
+        pathTransition.setPath(path);
+        pathTransition.setNode(projectile);
+//        pathTransition.setCycleCount(Timeline.INDEFINITE);
+        pathTransition.play();
+        EventHandler onFinished = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                removeProjectile(projectile);
+            }
+        };
+    }
+
+    public void removeProjectile(Circle projectile) {
+        this.root.getChildren().remove(projectile);
+    }
+
 }

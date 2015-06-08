@@ -293,17 +293,16 @@ public class GameManager {
     public void sendWave(long delay, int waveNum) {
         if (waveNum == 1) {
             final int enemyDelay = 75;
-            for (int i = 0; i < 10; i++) {
-                if (delay % enemyDelay >= 0 && delay % enemyDelay <=1) {
+                if (enemyCount < 10 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
                     createEnemy("Red Enemy", 175, GRID_SIZE + 50);
                 }
-
-            }
         }
         if (waveNum == 2) {
             final int enemyDelay = 70;
             for (int i = 0; i < 10; i++) {
-                if (delay % enemyDelay >= 0 && delay % enemyDelay <=1) {
+                if (enemyCount < 30 &&
+                        delay % enemyDelay >= 0 && delay % enemyDelay <=3) {
                     createEnemy("Red Enemy", 175, GRID_SIZE + 50);
                     createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
                 }
@@ -408,7 +407,7 @@ public class GameManager {
                 if (enemiesInRange.size() > 0) {
                     Enemy enemy = enemiesInRange.get(0);
                     attackEnemy(tower, enemy);
-                    createProjectileAnimation(tower, enemy);
+                    gameScreen.createProjectileAnimation(tower, enemy);
                 }
             }
         }

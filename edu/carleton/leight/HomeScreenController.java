@@ -1,5 +1,12 @@
 package edu.carleton.leight;
 
+/**
+ * Controller for the Home screen, Play starts the game, while about brings
+ * the user to the about page.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
