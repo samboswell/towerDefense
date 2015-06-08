@@ -1,6 +1,6 @@
 CS 257 Software Design Final Project: Circle Defend'r
 
-Group Members are:
+Group Members:
 Jonah Tuchow, Tristan Leigh, and Sam Boswell
 
 Running the Game:
