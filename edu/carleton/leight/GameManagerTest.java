@@ -1,47 +1,129 @@
-//package edu.carleton.leight;
-///**
-// * Created by boswells on 6/1/15.
-// */
-//public class GameManagerTest {
+package edu.carleton.leight;
+
+import javafx.scene.Scene;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.security.acl.Group;
+
+import static org.junit.Assert.*;
+
+public class GameManagerTest {
+//    @Before
+//    public void beginning() throws Exception {
 //
-//
-//    @org.junit.Test
-//    public void testAttackEnemy() throws Exception {
-//
+//        Main main;
+//        GameManager gameManager;
 //    }
-//
-//    @org.junit.Test
-//    public void testAttackEnemies() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testDeadEnemy() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testSellTower() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testGetCurrentEnemies() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testGetEnemiesInRange() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testRemoveEnemyIfFinished() throws Exception {
-//
-//    }
-//
-//    @org.junit.Test
-//    public void testAddEnemy() throws Exception {
-//
-//    }
-//}
+
+    @Test
+    public void testGetGameScene() throws Exception {
+    }
+
+    @Test
+    public void testGetProfile() throws Exception {
+        Main main = new Main();
+        GameManager gameManager = new GameManager(main);
+        assertEquals(gameManager.getProfile().getLives(),10);
+    }
+
+    @Test
+    public void testCreateWaveButton() throws Exception {
+
+    }
+
+    @Test
+    public void testGetCurrentGold() throws Exception {
+
+    }
+
+    @Test
+    public void testSetIsPlacingTower() throws Exception {
+
+    }
+
+    @Test
+    public void testBuildTower() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateEnemy() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveEnemyFromGame() throws Exception {
+
+    }
+
+    @Test
+    public void testSetUpAnimationTimer() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateAnimation() throws Exception {
+
+    }
+
+    @Test
+    public void testSendWave() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateEnemyAnimation() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateAttacks() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateTowerClick() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateSellTowerButton() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateUpgradeTowerButton() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveButtons() throws Exception {
+
+    }
+
+    @Test
+    public void testGetGameScreen() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateCoordinates() throws Exception {
+
+    }
+
+    @Test
+    public void testAttackEnemy() throws Exception {
+
+    }
+
+    @Test
+    public void testHowDidEnemyDie() throws Exception {
+
+    }
+
+    @Test
+    public void testSellTower() throws Exception {
+
+    }
+}

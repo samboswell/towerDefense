@@ -32,13 +32,6 @@ public class Main extends Application {
         loader.setController(homeScreenController);
         Parent root = (Parent) loader.load();
 
-        String uriString = new
-                File("edu/carleton/leight/Circle.mp3").toURI().toString();
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-        player.setCycleCount(100);
-        player.setAutoPlay(true);
-        player.play();
-
         //stage set
         this.stage.setTitle("Circle Defend'r");
         this.stage.setScene(new Scene(root, stageXSize, stageYSize));

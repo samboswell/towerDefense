@@ -17,7 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.scene.text.Font;
 
 public class GameScreen {
 
@@ -95,7 +97,7 @@ public class GameScreen {
                 if (currentSquare == 1) {
                     Rectangle pathBlock = new Rectangle(xCorner, yCorner,
                             50.0, 50.0);
-                    pathBlock.setOpacity(.8);
+                    pathBlock.setOpacity(1.0);
                     this.root.getChildren().add(pathBlock);
                 }
             }
@@ -151,6 +153,16 @@ public class GameScreen {
                 removeProjectile(projectile);
             }
         };
+    }
+
+    public void drawGameOver() {
+        this.root.getChildren().removeAll(this.root.getChildren());
+        Label gameOver = new Label("GAME OVER :(");
+        gameOver.setLayoutX(300);
+        gameOver.setLayoutY(300);
+        int fontSize = 50;
+        gameOver.setFont(new Font("Comic Sans", fontSize));
+        this.root.getChildren().add(gameOver);
     }
 
     public void removeProjectile(Circle projectile) {

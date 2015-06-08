@@ -9,10 +9,7 @@ package edu.carleton.leight;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.ImageCursor;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -304,7 +301,7 @@ public class GameManager {
         gameScreen.drawUpdatedProfileLabel();
 
         if (this.profile.getLives() <= 0) {
-            main.endGame();
+            gameScreen.drawGameOver();
         }
     }
 
