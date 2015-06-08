@@ -153,15 +153,19 @@ public class GameManager {
                                 BLOCK_SIZE, BLOCK_SIZE, false, false);
                 getGameScene().setCursor(new ImageCursor(towerImage));
                 if (btn.isSelected()) {
-                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    clickableRect.setOnMouseClicked(
+                            new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
                             if (getIsPlacingTower()) {
-                                //this conditional will only be the case if a tower has
-                                //not yet been built after clicking the build button
-                                int column = (int) mouseEvent.getX() / BLOCK_SIZE;
+                                //this conditional will only be the case if a
+                                // tower has not yet been built after clicking
+                                // the build button
+                                int column =
+                                        (int) mouseEvent.getX() / BLOCK_SIZE;
                                 int row = (int) mouseEvent.getY() / BLOCK_SIZE;
-                                int[][] gameGrid = gameScreen.getDefaultGameGrid();
+                                int[][] gameGrid =
+                                        gameScreen.getDefaultGameGrid();
 
                                 //only build if you have the gold
                                 if (getCurrentGold() >= 50) {
@@ -180,7 +184,8 @@ public class GameManager {
                 } else {
                     getGameScene().setCursor(Cursor.DEFAULT);
                     setIsPlacingTower(false);
-                    clickableRect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    clickableRect.setOnMouseClicked(
+                            new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
                         }
@@ -233,7 +238,8 @@ public class GameManager {
             public void handle(ActionEvent event) {
                 if (getProfile().getGold() > tower.getCost() * 1.25) {
                     tower.upgrade();
-                    getProfile().setGold((int) (getProfile().getGold() - tower.getCost() * 1.25));
+                    getProfile().setGold((int) (getProfile().getGold() -
+                                                tower.getCost() * 1.25));
                     tower.setCost((int) (tower.getCost() * 1.25));
                     getGameScreen().removeStatsLabel();
                     removeButtons();
@@ -430,7 +436,8 @@ public class GameManager {
             // Iterates through the list of towers to find the enemies in range
             // for each tower. Each tower attacks the first enemy in its list.
             for (Tower tower : towers) {
-                List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+                List<Enemy> enemiesInRange =
+                        tower.getEnemiesInRange(enemiesAlive);
                 if (enemiesInRange.size() > 0) {
                     Enemy enemy = enemiesInRange.get(0);
                     attackEnemy(tower, enemy);

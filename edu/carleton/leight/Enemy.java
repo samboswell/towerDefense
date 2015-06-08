@@ -25,7 +25,8 @@ public class Enemy {
 
     private Circle circle;
     
-    public Enemy (String name, int health, int size, int gold, double xCoordinate, double yCoordinate, Color color) {
+    public Enemy (String name, int health, int size, int gold,
+                  double xCoordinate, double yCoordinate, Color color) {
         this.name = name;
         this.isFinished = false;
         this.health = health;
