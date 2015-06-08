@@ -30,7 +30,7 @@ import java.util.TimerTask;
 
 
 public class GameManager {
-    final public static double FRAMES_PER_SECOND = 30.0;
+    final public static double FRAMES_PER_SECOND = 37.0;
     final public static int BLOCK_SIZE = 50;
     final public static int GRID_SIZE = 15*BLOCK_SIZE;
 
@@ -270,6 +270,8 @@ public class GameManager {
             sendWave3(delay);
         } else if (this.waveCount == 4) {
             sendWave4(delay);
+        } else if (this.waveCount == 5) {
+            sendWave5(delay);
         }
 
         updateEnemyAnimation();
@@ -308,9 +310,19 @@ public class GameManager {
         }
     }
 
-    public void sendWave4(long delay) {
+    private void sendWave4(long delay) {
+        final int enemyDelay = 30;
+
+        if (enemiesAlive.size() + enemiesFinished.size() < 100 &&
+                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+            createEnemy("Blue Enemy", 175, GRID_SIZE+50);
+            createEnemy("Yellow Enemy", 175, GRID_SIZE+50);
+        }
+    }
+
+    public void sendWave5(long delay) {
         final int enemyDelay = 60;
-        if (enemiesAlive.size() + enemiesFinished.size() < 61 &&
+        if (enemiesAlive.size() + enemiesFinished.size() < 101 &&
                 delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
             createEnemy("Boss Enemy", 175, GRID_SIZE+50);
         }

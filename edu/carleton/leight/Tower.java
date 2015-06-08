@@ -43,8 +43,8 @@ public class Tower {
     public double getX() {return this.xCoordinate;}
     public double getY() {return this.yCoordinate;}
     public String getStats() {
-        return "Range: " + this.range + "\nDamage: " + this.damage + "\nCost: "
-                + this.cost;
+        return "Range: " + this.range + "\nDamage: " + this.damage +
+                "\nUpgrade: " + this.cost*1.25;
     }
 
     public void upgrade() {
