@@ -1,16 +1,10 @@
 package edu.carleton.leight;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.ImageCursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class GameScreen {
@@ -20,11 +14,17 @@ public class GameScreen {
     private Label profileLabel;
     private Label statsLabel;
 
+    private int[][] gameGrid;
+
+
     public GameScreen(Profile profile, Group root) {
         this.profile = profile;
         this.root = root;
         this.profileLabel = new Label();
         this.statsLabel = new Label();
+
+        this.gameGrid = getDefaultGameGrid();
+
     }
     public void drawTowerButtonImage() {
 
@@ -43,6 +43,33 @@ public class GameScreen {
         sidebar.setFill(Color.LIGHTGRAY);
         this.root.getChildren().add(sidebar);
     }
+
+    public int[][] getDefaultGameGrid() {
+        //0 means tower placeable
+        //1 means enemy path
+        return new int[][]{
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
+                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+        };
+    }
+
+    public int[][] getGameGrid() {
+        return this.gameGrid;
+    }
+
 
     public void drawPath(int[][] gameGrid) {
         for (int y = 0; y < 15; y++) {

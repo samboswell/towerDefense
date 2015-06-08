@@ -1,27 +1,20 @@
 package edu.carleton.leight;
 
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.util.Duration;
-
-import java.io.File;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +34,10 @@ public class GameManager {
     private List<Tower> towers;
     private Group root;
     private Profile profile;
+    private Waves wave;
     private GameScreen gameScreen;
-    private int[][] gameGrid;
     private Scene gameScene;
     private boolean isPlacingTower;
-    private int waveCount;
     private Button sellBtn;
     private Button upgradeBtn;
     private Main main;
@@ -56,14 +48,13 @@ public class GameManager {
         this.enemiesAlive = new ArrayList<>();
         this.enemiesFinished = new ArrayList<>();
         this.towers = new ArrayList<>();
+        this.wave = new Waves();
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
-        this.gameGrid = getDefaultGameGrid();
-        this.waveCount = 0;
         this.main = main;
 
         //draw background of gameScreen
-        this.gameScreen.drawPath(getGameGrid());
+        this.gameScreen.drawPath(gameScreen.getGameGrid());
         this.gameScreen.drawSideBar();
         this.gameScreen.drawTowerButtonImage();
         //the build tower button must be in GameManager, because its action
@@ -113,7 +104,7 @@ public class GameManager {
                                 //not yet been built after clicking the build button
                                 int column = (int) mouseEvent.getX() / BLOCK_SIZE;
                                 int row = (int) mouseEvent.getY() / BLOCK_SIZE;
-                                int[][] gameGrid = getGameGrid();
+                                int[][] gameGrid = gameScreen.getDefaultGameGrid();
 
                                 //only build if you have the gold
                                 if (getCurrentGold() >= 50) {
@@ -154,7 +145,7 @@ public class GameManager {
         waveBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                setWaveCount(getWaveCount() + 1);
+                wave.setWaveCount(wave.getWaveCount() + 1);
             }
         });
 
@@ -162,10 +153,6 @@ public class GameManager {
         waveBtn.setLayoutX(GRID_SIZE+50);
         waveBtn.setLayoutY(340);
         this.root.getChildren().add(waveBtn);
-    }
-
-    public int getWaveCount() {
-        return this.waveCount;
     }
 
     public boolean getIsPlacingTower() {
@@ -179,10 +166,6 @@ public class GameManager {
     public void setIsPlacingTower(boolean isPlacingTower) {
         this.isPlacingTower = isPlacingTower;
     }
-    public void setWaveCount(int waveCount) {
-        this.waveCount = waveCount;
-    }
-
     public void buildTower(double rawX, double rawY) {
         //snaps tower to 50 by 50 blocks
         double x =  rawX - rawX % BLOCK_SIZE;
@@ -262,15 +245,15 @@ public class GameManager {
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
-        if (this.waveCount == 1) {
+        if (wave.getWaveCount() == 1) {
             sendWave1(delay);
-        } else if (this.waveCount == 2) {
+        } else if (wave.getWaveCount() == 2) {
             sendWave2(delay);
-        } else if (this.waveCount == 3) {
+        } else if (wave.getWaveCount() == 3) {
             sendWave3(delay);
-        } else if (this.waveCount == 4) {
+        } else if (wave.getWaveCount() == 4) {
             sendWave4(delay);
-        } else if (this.waveCount == 5) {
+        } else if (wave.getWaveCount() == 5) {
             sendWave5(delay);
         }
 
@@ -483,32 +466,6 @@ public class GameManager {
         enemy.setY(y);
         enemy.setCircleX(x);
         enemy.setCircleY(y);
-    }
-
-    public int[][] getDefaultGameGrid() {
-        //0 means tower placeable
-        //1 means enemy path
-        return new int[][]{
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-                {0,0,0,1,1,1,1,1,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,0,0,0,1,0,0},
-                {0,0,0,1,0,0,0,0,1,1,1,1,1,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-        };
-    }
-
-    public int[][] getGameGrid() {
-        return this.gameGrid;
     }
 
     //Given a tower, finds the list of enemies in range and attacks the closest
