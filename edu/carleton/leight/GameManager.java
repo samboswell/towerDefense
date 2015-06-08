@@ -42,12 +42,11 @@ public class GameManager {
     private boolean isPlacingTower;
     private Button sellBtn;
     private Button upgradeBtn;
-    private Main main;
 
     public int enemyCount;
 
 
-    public GameManager(Main main) {
+    public GameManager() {
         this.profile = new Profile(10, 100);
         this.enemiesAlive = new ArrayList<>();
         this.enemiesFinished = new ArrayList<>();
@@ -55,7 +54,6 @@ public class GameManager {
         this.wave = new Waves();
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
-        this.main = main;
 
         this.enemyCount = 0;
 
@@ -76,13 +74,66 @@ public class GameManager {
         setUpAnimationTimer();
     }
 
+    public void setUpAnimationTimer() {
+
+        this.startTime = System.nanoTime();
+
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        updateAnimation();
+                    }
+                });
+            }
+        };
+        long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
+        this.timer = new java.util.Timer();
+        this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
+    }
+
     public Scene getGameScene() {
         return this.gameScene;
+    }
+
+    public GameScreen getGameScreen() {
+        return this.gameScreen;
     }
 
     public Profile getProfile() {
         return this.profile;
     }
+
+    public int getCurrentGold() {
+        return this.profile.getGold();
+    }
+
+    public boolean getIsPlacingTower() {
+        return this.isPlacingTower;
+    }
+
+    public void setIsPlacingTower(boolean isPlacingTower) {
+        this.isPlacingTower = isPlacingTower;
+    }
+
+    public void buildTower(double rawX, double rawY) {
+        //snaps tower to 50 by 50 blocks
+        double x =  rawX - rawX % BLOCK_SIZE;
+        double y = rawY - rawY % BLOCK_SIZE;
+
+
+        //model
+        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
+                BLOCK_SIZE,BLOCK_SIZE,false,false);
+        ImageView towerView = new ImageView(towerImage);
+        Tower tower = new Tower(x,y,towerView);
+        this.towers.add(tower);
+        this.profile.setGold(this.profile.getGold() - tower.getCost());
+
+        //view
+        gameScreen.drawTower(tower, x, y);
+    }
+
     public void createTowerButton() {
         //This rectangle is the clickable zone for towers.
         Rectangle clickableRect = new Rectangle(GRID_SIZE, GRID_SIZE);
@@ -141,9 +192,165 @@ public class GameManager {
 
         //view
         btn.setText("Build Tower");
-        btn.setLayoutX(GRID_SIZE+35);
+        btn.setLayoutX(GRID_SIZE + 35);
         btn.setLayoutY(200.0);
         this.root.getChildren().add(btn);
+    }
+
+    public void sellTower(Tower tower) {
+        //model
+        profile.setGold(profile.getGold() + (int) (tower.getCost()*0.95));
+        towers.remove(tower);
+
+        //view
+        this.root.getChildren().remove(tower.getImage());
+        this.root.getChildren().remove(this.sellBtn);
+        this.root.getChildren().remove(this.upgradeBtn);
+    }
+
+    public void createSellTowerButton(Tower tower) {
+        this.root.getChildren().remove(this.sellBtn);
+        this.sellBtn = new Button("Sell");
+        this.sellBtn.setLayoutX(GRID_SIZE + 35);
+        this.sellBtn.setLayoutY(300);
+        this.root.getChildren().add(sellBtn);
+        this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                sellTower(tower);
+                getGameScreen().removeStatsLabel();
+            }
+        });
+    }
+
+    public void createUpgradeTowerButton(Tower tower) {
+        this.root.getChildren().remove(this.upgradeBtn);
+        this.upgradeBtn = new Button("Upgrade");
+        this.upgradeBtn.setLayoutX(GRID_SIZE+75);
+        this.upgradeBtn.setLayoutY(300);
+        this.root.getChildren().add(upgradeBtn);
+        this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (getProfile().getGold() > tower.getCost() * 1.25) {
+                    tower.upgrade();
+                    getProfile().setGold((int) (getProfile().getGold() - tower.getCost() * 1.25));
+                    tower.setCost((int) (tower.getCost() * 1.25));
+                    getGameScreen().removeStatsLabel();
+                    removeButtons();
+                }
+            }
+        });
+    }
+
+    public void updateTowerClick() {
+        for (Tower tower : this.towers) {
+            tower.getImage().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    String statsString = tower.getStats();
+                    gameScreen.drawUpdatedStatsLabel(statsString);
+
+                    //add buttons whose actions depend on game state
+                    createSellTowerButton(tower);
+                    createUpgradeTowerButton(tower);
+                }
+            });
+        }
+    }
+
+    public void createEnemy(String name, int x, int y) {
+
+        if(name.equals("Red Enemy")) {
+            //model
+            Enemy enemy = new RedEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+            enemyCount ++;
+        }
+        if(name.equals("Blue Enemy")) {
+            //model
+            Enemy enemy = new BlueEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+            enemyCount ++;
+        }
+        if(name.equals("Yellow Enemy")) {
+            //model
+            Enemy enemy = new YellowEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+            enemyCount ++;
+        }
+        if(name.equals("Boss Enemy")) {
+            //model
+            Enemy enemy = new BossEnemy(x, y);
+            this.enemiesAlive.add(enemy);
+            enemyCount ++;
+        }
+
+    }
+
+    public void removeEnemyFromGame(Enemy enemy) {
+        //view
+        root.getChildren().remove(enemy.getCircle());
+
+        //model
+        enemiesAlive.remove(enemy);
+        enemiesFinished.add(enemy);
+    }
+
+    public void sendWave(long delay, int waveNum) {
+        if (waveNum == 1) {
+            final int enemyDelay = 75;
+            if (enemyCount < 10 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
+                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 2) {
+            final int enemyDelay = 70;
+            if (enemyCount < 20 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
+                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+            }
+            else if (enemyCount >= 20 && enemyCount < 30 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 3) {
+            final int enemyDelay = 65;
+            if (enemyCount < 60 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 4) {
+            final int enemyDelay = 60;
+            if (enemyCount < 100 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 5) {
+            final int enemyDelay = 55;
+            if (enemyCount < 125 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 6) {
+            final int enemyDelay = 50;
+            if (enemyCount < 150 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 7) {
+            final int enemyDelay = 45;
+            if (enemyCount < 151 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
+                createEnemy("Boss Enemy", 175, GRID_SIZE + 50);
+            }
+        }
     }
 
     public void createWaveButton() {
@@ -181,185 +388,61 @@ public class GameManager {
         this.root.getChildren().add(waveBtn);
     }
 
-    public boolean getIsPlacingTower() {
-        return this.isPlacingTower;
+    public void removeButtons() {
+        this.root.getChildren().remove(this.sellBtn);
+        this.root.getChildren().remove(this.upgradeBtn);
     }
 
-    public int getCurrentGold() {
-        return this.profile.getGold();
-    }
-
-    public void setIsPlacingTower(boolean isPlacingTower) {
-        this.isPlacingTower = isPlacingTower;
-    }
-    public void buildTower(double rawX, double rawY) {
-        //snaps tower to 50 by 50 blocks
-        double x =  rawX - rawX % BLOCK_SIZE;
-        double y = rawY - rawY % BLOCK_SIZE;
-
-
-        //model
-        Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
-                BLOCK_SIZE,BLOCK_SIZE,false,false);
-        ImageView towerView = new ImageView(towerImage);
-        Tower tower = new Tower(x,y,towerView);
-        this.towers.add(tower);
-        this.profile.setGold(this.profile.getGold() - tower.getCost());
-
-        //view
-        gameScreen.drawTower(tower, x,y);
-    }
-
-
-    public void createEnemy(String name, int x, int y) {
-
-        if(name.equals("Red Enemy")) {
-            //model
-            Enemy enemy = new RedEnemy(x, y);
-            this.enemiesAlive.add(enemy);
-            enemyCount ++;
+    // Given an enemy, decides whether the enemy has finished the path
+    // or if the user has killed the enemy. Punishes and rewards respectively.
+    // Then removes the enemy from the game.
+    public void howDidEnemyDie(Enemy enemy) {
+        // Enemy finished the path before getting killed
+        if (enemy.isFinished()) {
+            enemiesFinished.add(enemy);
         }
-        if(name.equals("Blue Enemy")) {
-            //model
-            Enemy enemy = new BlueEnemy(x, y);
-            this.enemiesAlive.add(enemy);
-            enemyCount ++;
+        // Enemy is killed, gold and points rewarded
+        else {
+            profile.setGold(profile.getGold() + enemy.getGold());
+            profile.setHighScore(profile.getHighScore() + enemy.getGold());
         }
-        if(name.equals("Yellow Enemy")) {
-            //model
-            Enemy enemy = new YellowEnemy(x, y);
-            this.enemiesAlive.add(enemy);
-            enemyCount ++;
-        }
-        if(name.equals("Boss Enemy")) {
-            //model
-            Enemy enemy = new BossEnemy(x, y);
-            this.enemiesAlive.add(enemy);
-            enemyCount ++;
-        }
-
+        removeEnemyFromGame(enemy);
     }
 
-
-    public void removeEnemyFromGame(Enemy enemy) {
-        //view
-        root.getChildren().remove(enemy.getCircle());
-
-        //model
-        enemiesAlive.remove(enemy);
-        enemiesFinished.add(enemy);
+    //Given a tower, finds the list of enemies in range and attacks the closest
+    //enemy. If the enemy's health falls below 0, enemy is removed.
+    public void attackEnemy(Tower tower, Enemy enemy) {
+        List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+        Enemy attackedEnemy = enemiesInRange.get(0);
+        attackedEnemy.setHealth(attackedEnemy.getHealth(), tower.getDamage());
+        if(attackedEnemy.getHealth()<=0) {
+            howDidEnemyDie(attackedEnemy);
+        }
     }
 
-    public void setUpAnimationTimer() {
-
-        this.startTime = System.nanoTime();
-
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        updateAnimation();
-                    }
-                });
-            }
-        };
-
-        final long startTimeInMilliseconds = 0;
-        final long repetitionPeriodInMilliseconds = 100;
-        long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
-        this.timer = new java.util.Timer();
-        this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
-    }
-
-    public void updateAnimation() {
-
-        //get a time delay from start of animation
+    public void updateAttacks() {
+        final long attackDelay = 50;
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
-        if (wave.getWaveCount() == 1) {
-            sendWave(delay, 1);
-        } else if (wave.getWaveCount() == 2) {
-            sendWave(delay, 2);
-        } else if (wave.getWaveCount() == 3) {
-            sendWave(delay, 3);
-        } else if (wave.getWaveCount() == 4) {
-            sendWave(delay, 4);
-        } else if (wave.getWaveCount() == 5) {
-            sendWave(delay, 5);
-        }
-        else if (wave.getWaveCount() == 6) {
-            sendWave(delay, 6);
-        }
-        else if (wave.getWaveCount() == 7) {
-            sendWave(delay, 7);
-        }
-
-        updateEnemyAnimation();
-        updateAttacks();
-        updateTowerClick();
-
-        gameScreen.drawUpdatedProfileLabel();
-
-        if (this.profile.getLives() <= 0) {
-            gameScreen.drawGameOver();
+        if (delay%attackDelay>=0 && delay%attackDelay<=5) {
+            // Iterates through the list of towers to find the enemies in range
+            // for each tower. Each tower attacks the first enemy in its list.
+            for (Tower tower : towers) {
+                List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
+                if (enemiesInRange.size() > 0) {
+                    Enemy enemy = enemiesInRange.get(0);
+                    attackEnemy(tower, enemy);
+                    gameScreen.createProjectileAnimation(tower, enemy);
+                }
+            }
         }
     }
 
-
-    public void sendWave(long delay, int waveNum) {
-        if (waveNum == 1) {
-            final int enemyDelay = 75;
-                if (enemyCount < 10 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
-                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
-                }
-        }
-        if (waveNum == 2) {
-            final int enemyDelay = 70;
-                if (enemyCount < 20 &&
-                        delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
-                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
-                }
-                else if (enemyCount >= 20 && enemyCount < 30 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <=2) {
-                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
-                }
-            }
-        if (waveNum == 3) {
-            final int enemyDelay = 65;
-            if (enemyCount < 60 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
-            }
-        }
-        if (waveNum == 4) {
-            final int enemyDelay = 60;
-            if (enemyCount < 100 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
-            }
-        }
-        if (waveNum == 5) {
-            final int enemyDelay = 55;
-            if (enemyCount < 125 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
-            }
-        }
-        if (waveNum == 6) {
-            final int enemyDelay = 50;
-            if (enemyCount < 150 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
-            }
-        }
-        if (waveNum == 7) {
-            final int enemyDelay = 45;
-            if (enemyCount < 175 &&
-                    delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-                createEnemy("Boss Enemy", 175, GRID_SIZE + 50);
-            }
-        }
+    public void updateCoordinates(Enemy enemy, double x, double y) {
+        enemy.setX(x);
+        enemy.setY(y);
+        enemy.setCircleX(x);
+        enemy.setCircleY(y);
     }
 
     public void updateEnemyAnimation() {
@@ -406,129 +489,38 @@ public class GameManager {
         }
     }
 
-    public void updateAttacks() {
-        final long attackDelay = 50;
+    public void updateAnimation() {
+
+        //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
-        if (delay%attackDelay>=0 && delay%attackDelay<=5) {
-            // Iterates through the list of towers to find the enemies in range
-            // for each tower. Each tower attacks the first enemy in its list.
-            for (Tower tower : towers) {
-                List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
-                if (enemiesInRange.size() > 0) {
-                    Enemy enemy = enemiesInRange.get(0);
-                    attackEnemy(tower, enemy);
-                    gameScreen.createProjectileAnimation(tower, enemy);
-                }
-            }
+        if (wave.getWaveCount() == 1) {
+            sendWave(delay, 1);
+        } else if (wave.getWaveCount() == 2) {
+            sendWave(delay, 2);
+        } else if (wave.getWaveCount() == 3) {
+            sendWave(delay, 3);
+        } else if (wave.getWaveCount() == 4) {
+            sendWave(delay, 4);
+        } else if (wave.getWaveCount() == 5) {
+            sendWave(delay, 5);
         }
-    }
-
-    public void updateTowerClick() {
-        for (Tower tower : this.towers) {
-            tower.getImage().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    String statsString = tower.getStats();
-                    gameScreen.drawUpdatedStatsLabel(statsString);
-
-                    //add buttons whose actions depend on game state
-                    createSellTowerButton(tower);
-                    createUpgradeTowerButton(tower);
-                }
-            });
+        else if (wave.getWaveCount() == 6) {
+            sendWave(delay, 6);
         }
-    }
-
-
-    public void createSellTowerButton(Tower tower) {
-        this.root.getChildren().remove(this.sellBtn);
-        this.sellBtn = new Button("Sell");
-        this.sellBtn.setLayoutX(GRID_SIZE+35);
-        this.sellBtn.setLayoutY(300);
-        this.root.getChildren().add(sellBtn);
-        this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                sellTower(tower);
-                getGameScreen().removeStatsLabel();
-            }
-        });
-    }
-
-    public void createUpgradeTowerButton(Tower tower) {
-        this.root.getChildren().remove(this.upgradeBtn);
-        this.upgradeBtn = new Button("Upgrade");
-        this.upgradeBtn.setLayoutX(GRID_SIZE+75);
-        this.upgradeBtn.setLayoutY(300);
-        this.root.getChildren().add(upgradeBtn);
-        this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (getProfile().getGold() > tower.getCost() * 1.25){
-                    tower.upgrade();
-                    getProfile().setGold((int) (getProfile().getGold() - tower.getCost() * 1.25));
-                    tower.setCost((int) (tower.getCost() * 1.25));
-                    getGameScreen().removeStatsLabel();
-                    removeButtons();
-                }
-            }
-        });
-    }
-
-    public void removeButtons() {
-        this.root.getChildren().remove(this.sellBtn);
-        this.root.getChildren().remove(this.upgradeBtn);
-    }
-
-    public GameScreen getGameScreen() {
-        return this.gameScreen;
-    }
-
-    public void updateCoordinates(Enemy enemy, double x, double y) {
-        enemy.setX(x);
-        enemy.setY(y);
-        enemy.setCircleX(x);
-        enemy.setCircleY(y);
-    }
-
-    //Given a tower, finds the list of enemies in range and attacks the closest
-    //enemy. If the enemy's health falls below 0, enemy is removed.
-    public void attackEnemy(Tower tower, Enemy enemy) {
-        List<Enemy> enemiesInRange = tower.getEnemiesInRange(enemiesAlive);
-        Enemy attackedEnemy = enemiesInRange.get(0);
-        attackedEnemy.setHealth(attackedEnemy.getHealth(), tower.getDamage());
-        if(attackedEnemy.getHealth()<=0) {
-            howDidEnemyDie(attackedEnemy);
+        else if (wave.getWaveCount() == 7) {
+            sendWave(delay, 7);
         }
 
-    }
+        updateEnemyAnimation();
+        updateAttacks();
+        updateTowerClick();
 
-    // Given an enemy, decides whether the enemy has finished the path
-    // or if the user has killed the enemy. Punishes and rewards respectively.
-    // Then removes the enemy from the game.
-    public void howDidEnemyDie(Enemy enemy) {
-        // Enemy finished the path before getting killed
-        if (enemy.isFinished()) {
-            enemiesFinished.add(enemy);
+        gameScreen.drawUpdatedProfileLabel();
+
+        if (this.profile.getLives() <= 0) {
+            gameScreen.drawGameOver();
         }
-        // Enemy is killed, gold and points rewarded
-        else {
-            profile.setGold(profile.getGold() + enemy.getGold());
-            profile.setHighScore(profile.getHighScore() + enemy.getGold());
-        }
-        removeEnemyFromGame(enemy);
-    }
-
-    public void sellTower(Tower tower) {
-        //model
-        profile.setGold(profile.getGold() + (int) (tower.getCost()*0.95));
-        towers.remove(tower);
-
-        //view
-        this.root.getChildren().remove(tower.getImage());
-        this.root.getChildren().remove(this.sellBtn);
-        this.root.getChildren().remove(this.upgradeBtn);
     }
 
 

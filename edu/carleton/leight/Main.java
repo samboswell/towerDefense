@@ -7,16 +7,21 @@ package edu.carleton.leight;
  */
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 
 
 public class Main extends Application {
@@ -50,7 +55,7 @@ public class Main extends Application {
         Parent root;
         FXMLLoader loader2 = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
         try {
-            GameManager gameManager2 = new GameManager(this);
+            GameManager gameManager2 = new GameManager();
             loader2.setController(gameManager2);
             loader2.load();
             stage.setScene(gameManager2.getGameScene());
@@ -90,13 +95,15 @@ public class Main extends Application {
             HomeScreenController homeScreenController = new HomeScreenController(this);
             loader4.setController(homeScreenController);
             root = (Parent) loader4.load();
-            this.stage.setScene(new Scene(root, stageXSize, stageYSize));
+            Scene scene = new Scene(root, stageXSize, stageYSize);
+            scene.setRoot(root);
+            this.stage.setScene(scene);
             this.stage.show();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }

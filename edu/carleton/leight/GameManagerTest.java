@@ -22,8 +22,7 @@ public class GameManagerTest {
 
     @Test
     public void testGetProfile() throws Exception {
-        Main main = new Main();
-        GameManager gameManager = new GameManager(main);
+        GameManager gameManager = new GameManager();
         assertEquals(gameManager.getProfile().getLives(),10);
     }
 
