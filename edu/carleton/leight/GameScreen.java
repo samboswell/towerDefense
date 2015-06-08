@@ -146,13 +146,8 @@ public class GameScreen {
         pathTransition.setDuration(Duration.seconds(0.1));
         pathTransition.setPath(path);
         pathTransition.setNode(projectile);
-//        pathTransition.setCycleCount(Timeline.INDEFINITE);
         pathTransition.play();
-        EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                removeProjectile(projectile);
-            }
-        };
+        this.root.getChildren().remove(path);
     }
 
     public void drawGameOver() {
@@ -161,7 +156,17 @@ public class GameScreen {
         gameOver.setLayoutX(300);
         gameOver.setLayoutY(300);
         int fontSize = 50;
-        gameOver.setFont(new Font("Comic Sans", fontSize));
+        gameOver.setFont(new Font("Comic Sans MS", fontSize));
+        this.root.getChildren().add(gameOver);
+    }
+
+    public void drawGameCompleted() {
+        this.root.getChildren().removeAll(this.root.getChildren());
+        Label gameOver = new Label("YOU WIN!!! :)");
+        gameOver.setLayoutX(300);
+        gameOver.setLayoutY(300);
+        int fontSize = 50;
+        gameOver.setFont(new Font("Comic Sans MS", fontSize));
         this.root.getChildren().add(gameOver);
     }
 
