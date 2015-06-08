@@ -205,7 +205,7 @@ public class GameManager {
 
     public void sellTower(Tower tower) {
         //model
-        profile.setGold(profile.getGold() + (int) (tower.getCost()*0.95));
+        profile.setGold(profile.getGold() + (int) (tower.getCost() * 0.95));
         towers.remove(tower);
 
         //view
@@ -247,7 +247,7 @@ public class GameManager {
                 if (getProfile().getGold() > tower.getCost() * 1.25) {
                     tower.upgrade();
                     getProfile().setGold((int) (getProfile().getGold() -
-                                                tower.getCost() * 1.25));
+                            tower.getCost() * 1.25));
                     tower.setCost((int) (tower.getCost() * 1.25));
                     getGameScreen().removeStatsLabel();
                     removeButtons();
@@ -256,10 +256,10 @@ public class GameManager {
         });
     }
 
+    /**
+     * handle tower click event
+     */
     public void updateTowerClick() {
-        /**
-         * handle tower click event
-         */
         for (Tower tower : this.towers) {
             tower.getImage().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -275,10 +275,10 @@ public class GameManager {
         }
     }
 
+    /**
+     * creates new enemy of given type with given coordinates
+     */
     public void createEnemy(String name, int x, int y) {
-        /**
-         * creates new enemy of given type with given coordinates
-         */
         if(name.equals("Red Enemy")) {
             Enemy enemy = new RedEnemy(x, y);
             this.enemiesAlive.add(enemy);
@@ -311,10 +311,10 @@ public class GameManager {
         enemiesFinished.add(enemy);
     }
 
+    /**
+     * coordinates wave generation on a delay, depending on the wave.
+     */
     public void sendWave(long delay, int waveNum) {
-        /**
-         * coordinates wave generation
-         */
         if (waveNum == 1) {
             //enemy delay controls frequency in which enemies appear
             final int enemyDelay = 75;
@@ -509,11 +509,10 @@ public class GameManager {
         }
     }
 
+    /**
+     * main loop
+     */
     public void updateAnimation() {
-        /**
-         * main loop
-         */
-
         //get a time delay from start of animation
         long delay = (System.nanoTime() - this.startTime)/10000000;
 

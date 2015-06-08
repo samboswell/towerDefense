@@ -1,7 +1,10 @@
 package edu.carleton.leight;
 
 /**
- * Created by boswells on 6/8/15.
+ * Simple getter/setter for the waveCount int in GameManager. Used to figure
+ * out what wave the game is running.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
  */
 public class Waves {
     private int waveCount;

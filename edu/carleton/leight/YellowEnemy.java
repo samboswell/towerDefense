@@ -1,5 +1,10 @@
 package edu.carleton.leight;
 
+/**
+ * YellowEnemy extends Enemy and is used to create the Yellow Enemies
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 
 import javafx.scene.paint.Color;
 

@@ -7,21 +7,12 @@ package edu.carleton.leight;
  */
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 
 
 public class Main extends Application {
@@ -29,6 +20,9 @@ public class Main extends Application {
     public final static int stageYSize = 500;
     private Stage stage;
 
+    /**
+     * Starts the game and loads the homepage.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -51,7 +45,9 @@ public class Main extends Application {
         });
 
     }
-
+    /**
+     * Starts the game and loads the homepage.
+     */
     public void playGame() {
         Parent root;
         FXMLLoader loader2 =
@@ -67,7 +63,9 @@ public class Main extends Application {
             System.err.println(e.getMessage());
         }
     }
-
+    /**
+     * Starts the game and loads the homepage.
+     */
     public void aboutGame() {
         Parent root;
         FXMLLoader loader3 =
@@ -83,7 +81,9 @@ public class Main extends Application {
             System.err.println(e.getMessage());
         }
     }
-
+    /**
+     * Used to go back to the homePage from the aboutPage.
+     */
     public void backToMain() {
         try {
             start(stage);
@@ -92,6 +92,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Used when the game is over.
+     */
     public void endGame() {
         Parent root;
         FXMLLoader loader4 =

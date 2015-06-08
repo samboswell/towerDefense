@@ -1,6 +1,10 @@
 package edu.carleton.leight;
 
-
+/**
+ * BossEnemy extends Enemy and is used to create the Boss Enemies
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 import javafx.scene.paint.Color;
 public class BossEnemy extends Enemy {
     public static String name = "Boss Enemy";

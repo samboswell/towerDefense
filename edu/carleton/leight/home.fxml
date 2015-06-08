@@ -8,20 +8,20 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="play" layoutX="102.0" layoutY="172.0" mnemonicParsing="false" onAction="#onPlayPress" text="Play">
+      <Button fx:id="play" layoutX="143.0" layoutY="200.0" mnemonicParsing="false" onAction="#onPlayPress" prefHeight="28.0" prefWidth="57.0" text="Play">
          <font>
             <Font name="Ayuthaya" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="102.0" layoutY="261.0" mnemonicParsing="false" onAction="#onAboutPress" text="About">
+      <Button layoutX="143.0" layoutY="275.0" mnemonicParsing="false" onAction="#onAboutPress" text="About">
          <font>
             <Font name="Ayuthaya" size="13.0" />
          </font>
       </Button>
-      <Circle fill="#cd1b1b" layoutX="356.0" layoutY="236.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
-      <Label alignment="TOP_CENTER" layoutX="92.0" layoutY="29.0" text="Circle Defend'r" textAlignment="CENTER">
+      <Circle fill="#cd1b1b" layoutX="459.0" layoutY="250.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+      <Label alignment="TOP_CENTER" layoutX="142.0" layoutY="32.0" text="Circle Defend'r" textAlignment="CENTER">
          <font>
             <Font name="Comic Sans MS" size="57.0" />
          </font>

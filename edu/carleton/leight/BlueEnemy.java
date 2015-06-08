@@ -1,6 +1,10 @@
 package edu.carleton.leight;
 
-
+/**
+ * BlueEnemy extends Enemy and is used to create the Blue Enemies
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 import javafx.scene.paint.Color;
 
 public class BlueEnemy extends Enemy {
