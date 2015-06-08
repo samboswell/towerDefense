@@ -2,6 +2,12 @@ package edu.carleton.leight;
 
 import org.junit.Test;
 
+/**
+ * Tests the testible methods in GameManager. Since much of GameManager deals with
+ * controller properties, new tear-down methods have been created to test
+ * the model aspects of GameManager.
+ */
+
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -11,10 +17,10 @@ public class GameManagerTest {
     public void beginning() throws Exception {
 
     }
-//    @Test
-//    public void testGetGameScene() throws Exception {
-//    }
 
+    /**
+     * Tests the ability of the GameManager to access variables in the profile.
+     */
     @Test
     public void testGetProfile() throws Exception {
         Profile profile = new Profile(10, 100);
@@ -22,7 +28,11 @@ public class GameManagerTest {
         assertEquals(10, profile.getLives());
     }
 
-    public int changeWaves(int wave, int enemyCount) {
+    /**
+     * Tear-down version of createWaveButton in GameManager without the visual
+     * components. Acts as createWaveButton for all related tests.
+     */
+    public int createWave(int wave, int enemyCount) {
 
         if (wave == 0) {
             wave = 1;
@@ -49,29 +59,36 @@ public class GameManagerTest {
         return wave;
     }
 
+    /**
+     * Tests changing the wave Integer depending on the current wave integer
+     * and the enemyCount. enemyCount is the total number of enemies created.
+     */
     @Test
     public void testCreateWaveButton() throws Exception {
         //if input wave == 0, should come out as 1
         int enemyCount = 0;
         int wave = 0;
-        wave = changeWaves(wave, enemyCount);
+        wave = createWave(wave, enemyCount);
         assertEquals(1, wave);
 
         //if input wave == 1, and enemyCount > 9, wave == 2
         enemyCount = 10;
-        wave = changeWaves(wave, enemyCount);
+        wave = createWave(wave, enemyCount);
         assertEquals(2, wave);
 
         //if input wave == 2, but enemyCount < 29, wave == 2
 
         enemyCount = 20;
-        wave = changeWaves(wave, enemyCount);
+        wave = createWave(wave, enemyCount);
         assertEquals(2, wave);
     }
 
 
-
-    public ArrayList<Enemy> createEnemyList() {
+    /**
+     * Tear-down version of createEnemy in GameManager without the visual
+     * components. Acts as createEnemy for all related tests.
+     */
+    public ArrayList<Enemy> createEnemy() {
         int x = 100;
         int y = 800;
         int enemyCount = 0;
@@ -117,9 +134,13 @@ public class GameManagerTest {
         return enemiesAlive;
     }
 
+    /**
+     * Tests whether enemies created in createEnemies are in the list
+     * they should be in, and in the position they should be in the list.
+     */
     @Test
     public void testCreateEnemy() throws Exception {
-        ArrayList<Enemy> enemiesAlive = createEnemyList();
+        ArrayList<Enemy> enemiesAlive = createEnemy();
 
 
         for (Enemy enemy : enemiesAlive) {
@@ -136,29 +157,6 @@ public class GameManagerTest {
                     enemiesAlive.indexOf(enemy) % 2 == 1){
                 assertEquals(enemy.getName(), "Yellow Enemy");
             }
-            //Are there any enemies in the list that we didn't add? (Boss Enemy)
-            //assertNotEquals(enemy.getName(), "Boss Enemy");
-
         }
     }
-
-//    @Test
-//    public void testRemoveEnemyFromGame() throws Exception {
-//        ArrayList<Enemy> enemiesAlive = createEnemyList();
-//
-//        //remove all redEnemies from enemiesAlive
-//        for(Enemy enemy : enemiesAlive) {
-//            if (enemy.getName().equals("Red Enemy")) {
-//                enemiesAlive.remove(enemy);
-//            }
-//        }
-//
-//        //are there any redEnemies in enemiesAlive?
-//        for(Enemy enemy : enemiesAlive) {
-//            System.out.println(enemy.getName());
-//        }
-//
-//    }
-
-
 }
