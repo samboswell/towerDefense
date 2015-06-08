@@ -1,6 +1,10 @@
 package edu.carleton.leight;
 
-
+/**
+ * The Main class. It loads our FXML files and displays them.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

@@ -1,5 +1,10 @@
 package edu.carleton.leight;
-
+/**
+ * Controller for the About screen, the back button brings the user back to
+ * the home screen.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,5 +1,11 @@
 package edu.carleton.leight;
-
+/**
+ * A class for the backbone of the game. Creates the buttons on the screen, tells
+ * waves to go and what enemies go in the waves, and also deals with
+ * tower/enemy interaction. Animates projectiles for an added benefit.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 import javafx.animation.PathTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -42,6 +48,8 @@ public class GameManager {
     private Button upgradeBtn;
     private Main main;
 
+    public int enemyCount;
+
 
     public GameManager(Main main) {
         this.profile = new Profile(10, 100);
@@ -52,6 +60,8 @@ public class GameManager {
         this.root = new Group();
         this.gameScreen = new GameScreen(this.profile, this.root);
         this.main = main;
+
+        this.enemyCount = 0;
 
         //draw background of gameScreen
         this.gameScreen.drawPath(gameScreen.getGameGrid());
@@ -186,25 +196,30 @@ public class GameManager {
 
 
     public void createEnemy(String name, int x, int y) {
+
         if(name.equals("Red Enemy")) {
             //model
             Enemy enemy = new RedEnemy(x, y);
             this.enemiesAlive.add(enemy);
+            enemyCount ++;
         }
         if(name.equals("Blue Enemy")) {
             //model
             Enemy enemy = new BlueEnemy(x, y);
             this.enemiesAlive.add(enemy);
+            enemyCount ++;
         }
         if(name.equals("Yellow Enemy")) {
             //model
             Enemy enemy = new YellowEnemy(x, y);
             this.enemiesAlive.add(enemy);
+            enemyCount ++;
         }
         if(name.equals("Boss Enemy")) {
             //model
             Enemy enemy = new BossEnemy(x, y);
             this.enemiesAlive.add(enemy);
+            enemyCount ++;
         }
 
     }
@@ -246,15 +261,21 @@ public class GameManager {
         long delay = (System.nanoTime() - this.startTime)/10000000;
 
         if (wave.getWaveCount() == 1) {
-            sendWave1(delay);
+            sendWave(delay, 1);
         } else if (wave.getWaveCount() == 2) {
-            sendWave2(delay);
+            sendWave(delay, 2);
         } else if (wave.getWaveCount() == 3) {
-            sendWave3(delay);
+            sendWave(delay, 3);
         } else if (wave.getWaveCount() == 4) {
-            sendWave4(delay);
+            sendWave(delay, 4);
         } else if (wave.getWaveCount() == 5) {
-            sendWave5(delay);
+            sendWave(delay, 5);
+        }
+        else if (wave.getWaveCount() == 6) {
+            sendWave(delay, 6);
+        }
+        else if (wave.getWaveCount() == 7) {
+            sendWave(delay, 7);
         }
 
         updateEnemyAnimation();
@@ -269,45 +290,65 @@ public class GameManager {
     }
 
 
-    public void sendWave1(long delay) {
-        final int enemyDelay = 75;
-        if (enemiesAlive.size() + enemiesFinished.size() < 10 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+    public void sendWave(long delay, int waveNum) {
+        if (waveNum == 1) {
+            final int enemyDelay = 75;
+            for (int i = 0; i < 10; i++) {
+                if (delay % enemyDelay >= 0 && delay % enemyDelay <=1) {
+                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                }
+
+            }
         }
-    }
-
-    public void sendWave2(long delay) {
-        final int enemyDelay = 70;
-        if (enemiesAlive.size() + enemiesFinished.size() < 30 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Blue Enemy", 175, GRID_SIZE+50);
+        if (waveNum == 2) {
+            final int enemyDelay = 70;
+            for (int i = 0; i < 10; i++) {
+                if (delay % enemyDelay >= 0 && delay % enemyDelay <=1) {
+                    createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                    createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                }
+            }
         }
-    }
-
-    public void sendWave3(long delay) {
-        final int enemyDelay = 65;
-        if (enemiesAlive.size() + enemiesFinished.size() < 60 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Yellow Enemy", 175, GRID_SIZE+50);
+        if (waveNum == 3) {
+            final int enemyDelay = 65;
+            if (enemyCount < 60 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 4) {
+                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
         }
-    }
-
-    private void sendWave4(long delay) {
-        final int enemyDelay = 30;
-
-        if (enemiesAlive.size() + enemiesFinished.size() < 100 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Blue Enemy", 175, GRID_SIZE+50);
-            createEnemy("Yellow Enemy", 175, GRID_SIZE+50);
+        if (waveNum == 4) {
+            final int enemyDelay = 60;
+            if (enemyCount < 100 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 5) {
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
         }
-    }
-
-    public void sendWave5(long delay) {
-        final int enemyDelay = 60;
-        if (enemiesAlive.size() + enemiesFinished.size() < 101 &&
-                delay % enemyDelay >= 0 && delay % enemyDelay <= 2) {
-            createEnemy("Boss Enemy", 175, GRID_SIZE+50);
+        if (waveNum == 5) {
+            final int enemyDelay = 55;
+            if (enemyCount < 125 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 6) {
+                createEnemy("Red Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 6) {
+            final int enemyDelay = 50;
+            if (enemyCount < 150 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 7) {
+                createEnemy("Blue Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+                createEnemy("Yellow Enemy", 175, GRID_SIZE + 50);
+            }
+        }
+        if (waveNum == 7) {
+            final int enemyDelay = 45;
+            if (enemyCount < 175 &&
+                    delay % enemyDelay >= 0 && delay % enemyDelay <= 8) {
+                createEnemy("Boss Enemy", 175, GRID_SIZE + 50);
+            }
         }
     }
 
@@ -491,7 +532,7 @@ public class GameManager {
         // Enemy is killed, gold and points rewarded
         else {
             profile.setGold(profile.getGold() + enemy.getGold());
-            profile.setHighScore(profile.getHighScore() + enemy.getValue());
+            profile.setHighScore(profile.getHighScore() + enemy.getGold());
         }
         removeEnemyFromGame(enemy);
     }

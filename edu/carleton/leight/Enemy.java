@@ -1,5 +1,13 @@
 package edu.carleton.leight;
 
+/**
+ * Model for the enemies of the game. Gets and sets all the basic values for
+ * the enemies in the game.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
+
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -9,8 +17,6 @@ public class Enemy {
     private boolean isFinished;
     private int startHealth;
     private int health;
-    private int startSpeed;
-    private int speed;
     private int scoreValue;
     private int gold;
     private double xCoordinate;
@@ -20,13 +26,11 @@ public class Enemy {
 
     private Circle circle;
     
-    public Enemy (String name, int health, int size, int scoreValue, int gold, double xCoordinate, double yCoordinate, Color color) {
+    public Enemy (String name, int health, int size, int gold, double xCoordinate, double yCoordinate, Color color) {
         this.name = name;
         this.isFinished = false;
         this.health = health;
         this.size = size;
-        this.speed = 2;
-        this.scoreValue = scoreValue;
         this.gold = gold;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
@@ -41,12 +45,6 @@ public class Enemy {
         return this.health;
     }
     public int getSize() {return this.size;}
-    public int getSpeed() {
-        return this.speed;
-    }
-    public int getValue() {
-        return this.scoreValue;
-    }
     public int getGold() {
         return this.gold;
     }

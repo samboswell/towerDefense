@@ -1,5 +1,13 @@
 package edu.carleton.leight;
 
+/**
+ * The gameScreen class works with drawing labels and setting the grid  and
+ * path for the game. Purely visual.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
+
+
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,6 +21,9 @@ public class GameScreen {
     private Group root;
     private Label profileLabel;
     private Label statsLabel;
+
+    final public static int BLOCK_SIZE = 50;
+    final public static int GRID_SIZE = 15*BLOCK_SIZE;
 
     private int[][] gameGrid;
 

@@ -1,8 +1,13 @@
 package edu.carleton.leight;
 
+/**
+ * Model for the towers of the game. Gets and sets all the basic values for
+ * the towers. Also works on enemy detection in the tower's range.
+ *
+ * @authors Jonah Tuchow, Tristan Leigh, Sam Boswell
+ */
 
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
