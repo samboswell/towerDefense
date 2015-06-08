@@ -26,7 +26,7 @@ public class GameScreen {
         this.profileLabel = new Label();
         this.statsLabel = new Label();
     }
-    public void createTowerButtonImage() {
+    public void drawTowerButtonImage() {
 
         Image towerImage = new Image("edu/carleton/leight/TowerImage.png",
                 50,50,false,false);
@@ -73,7 +73,7 @@ public class GameScreen {
         this.root.getChildren().remove(this.statsLabel);
         Label statsLabel = new Label(statsString);
         statsLabel.setLayoutX(GameManager.GRID_SIZE+50);
-        statsLabel.setLayoutY(200);
+        statsLabel.setLayoutY(250);
         this.root.getChildren().add(statsLabel);
         this.statsLabel = statsLabel;
     }

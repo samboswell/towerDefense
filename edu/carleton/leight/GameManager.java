@@ -65,7 +65,7 @@ public class GameManager {
         //draw background of gameScreen
         this.gameScreen.drawPath(getGameGrid());
         this.gameScreen.drawSideBar();
-        this.gameScreen.createTowerButtonImage();
+        this.gameScreen.drawTowerButtonImage();
         //the build tower button must be in GameManager, because its action
         //depends on the current state of the game
         createTowerButton();
@@ -77,15 +77,6 @@ public class GameManager {
 
     public void initialize() {
         setUpAnimationTimer();
-
-        //add music to background
-        String uriString = new
-                File("edu/carleton/leight/Circle.mp3").toURI().toString();
-        MediaPlayer player = new MediaPlayer(new Media(uriString));
-//        player.setCycleCount(100);
-        player.setAutoPlay(true);
-        System.out.println(player.totalDurationProperty());
-        player.play();
     }
 
     public Scene getGameScene() {
@@ -169,7 +160,7 @@ public class GameManager {
 
         //view
         waveBtn.setLayoutX(GRID_SIZE+50);
-        waveBtn.setLayoutY(470);
+        waveBtn.setLayoutY(340);
         this.root.getChildren().add(waveBtn);
     }
 
@@ -435,7 +426,7 @@ public class GameManager {
         this.root.getChildren().remove(this.sellBtn);
         this.sellBtn = new Button("Sell");
         this.sellBtn.setLayoutX(GRID_SIZE+40);
-        this.sellBtn.setLayoutY(400);
+        this.sellBtn.setLayoutY(300);
         this.root.getChildren().add(sellBtn);
         this.sellBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -450,7 +441,7 @@ public class GameManager {
         this.root.getChildren().remove(this.upgradeBtn);
         this.upgradeBtn = new Button("Upgrade");
         this.upgradeBtn.setLayoutX(GRID_SIZE+80);
-        this.upgradeBtn.setLayoutY(400);
+        this.upgradeBtn.setLayoutY(300);
         this.root.getChildren().add(upgradeBtn);
         this.upgradeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
